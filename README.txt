@@ -1,12 +1,12 @@
-The Worship Calendar v1.62
+The Worship Calendar v1.63
 Plan • Schedule • Serve
 
-Built from v1.61.
+Built from v1.62.
 
-Changed:
-- Removed sample/default templates
-- Removed sample/default services
-- Removed sample rosters and availability
-- Removed wording that described the app as local/testing/demo/development
-- Clean slate start for admin setup
+Fixed:
+- Removed remaining Local Testing wording from login screen
+- Removed Local testing mode badge from app header/sidebar
+- Removed version number from the header tagline
+- Header now shows only: Plan • Schedule • Serve
+- Version remains v1.63
 - JavaScript syntax checked before packaging
