@@ -1,13 +1,12 @@
-The Worship Calendar v1.59
+The Worship Calendar v1.60
 Plan • Schedule • Serve
 
-Built from v1.58.
+Built from v1.59.
 
 Added:
-- Member GitHub Connection area on Availability tab
-- Members see only connection status: "No connection file uploaded" or "Connection file loaded"
-- Member import/replace GitHub Access Setup button
-- Member Submit Availability button saves changes to GitHub
-- Admin Submit Changes Online button appears across admin pages
-- GitHub details remain hidden from members
+- Team members can change their own email address
+- Change My Email Address button appears next to Change My Password
+- Admin Rosters tab includes Delete All Past Rosters
+- Past roster deletion removes rosters before today only
+- Future rosters are kept
 - JavaScript syntax checked before packaging
