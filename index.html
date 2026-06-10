@@ -37,7 +37,7 @@
 
 .compatible-ministry-group{margin:8px 0;padding:8px;border:1px solid #e3e8ef;border-radius:10px;background:#fff}
 .compatible-ministry-group b{display:block;margin-bottom:6px}
-</style></head><body>
+</style></head><body><div id="app"></div>
 <script>
 const VERSION="1.63",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-63-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
@@ -87,7 +87,7 @@ function cleanInstallV161(){
   localStorage.setItem("twc-v161-cleaned","yes");
   save();
 }
-function render(){cleanInstallV162();cleanInstallV161();ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br> <span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${syncBar()}${page()}</main></div>`)}
+function render(){cleanInstallV162();cleanInstallV161();ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge"></span><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${syncBar()}${page()}</main></div>`)}
 function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint">Sample testing data includes 3 to 5 team members for every role.</p>`}
@@ -647,7 +647,7 @@ function githubConnectionPanel(){
   return `<div class="githubConnectionBox"><b>GitHub Connection</b><p>Status: ${githubConnectionStatusText()}</p><button type="button" onclick="importGithubAccessSetupButton()">${hasGithubAccessSetup()?"Replace Connection File":"Import GitHub Access Setup"}</button></div>`;
 }
 function memberAvailabilitySubmitPanel(){
-  return `<div class="memberSubmitBox">${githubConnectionPanel()}<button class="primary" type="button" onclick="submitMemberAvailabilityOnline()">Submit Availability</button></div>`;
+  return `<div class="memberSubmitBox">${githubConnectionPanel()}<button class="primary" type="button" onclick="submitMemberAvailabilityOnline()">Submit Availability</button><span id="availabilitySubmitStatus" class="syncStatus"></span></div>`;
 }
 async function submitMemberAvailabilityOnline(){
   try{
