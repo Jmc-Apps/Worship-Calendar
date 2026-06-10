@@ -4,13 +4,7 @@
     "adminPassword": "admin123",
     "logo": ""
   },
-  "roles": [
-    {
-      "id": "61e8f3c1-a025-4601-ae32-3beb5c906c04",
-      "name": "2",
-      "ministryId": "d12f0dcd-482f-4218-a504-aca3a77c2c92"
-    }
-  ],
+  "roles": [],
   "templates": [],
   "services": [],
   "members": [
@@ -27,21 +21,6 @@
       "notes": "",
       "history": [],
       "maxPerMonth": 0
-    },
-    {
-      "id": "2416fc1c-df95-4912-b710-5bd2e8be80da",
-      "name": "Jonathan Mc Glashan",
-      "email": "jonathan@mcglashan.co.za",
-      "phone": "",
-      "password": "1234",
-      "roles": [],
-      "notes": "",
-      "history": [],
-      "maxPerMonth": 3,
-      "ministryIds": [
-        "default",
-        "d12f0dcd-482f-4218-a504-aca3a77c2c92"
-      ]
     }
   ],
   "availability": [],
@@ -53,10 +32,6 @@
     {
       "id": "default",
       "name": "Default Ministry"
-    },
-    {
-      "id": "d12f0dcd-482f-4218-a504-aca3a77c2c92",
-      "name": "1"
     }
   ],
   "github": {
@@ -65,7 +40,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-10T23:50:04.012Z",
+    "lastSync": "2026-06-10T23:51:15.383Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
