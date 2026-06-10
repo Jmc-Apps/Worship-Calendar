@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v1.69</title>
+<title>The Worship Calendar v1.70</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,72 +40,30 @@
 </style><script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="1.69",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-69-local";
+const VERSION="1.70",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-70-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
-const roleNames=["Worship Leader","Lead Vocal","Backing Vocal","Acoustic Guitar","Electric Guitar","Bass Guitar","Keyboard","Drums","Sound","Projection","Livestream"];
-const defaultRoles=[["Worship Leader",1,1],["Lead Vocal",1,2],["Backing Vocal",0,4],["Acoustic Guitar",0,2],["Electric Guitar",0,2],["Bass Guitar",1,1],["Keyboard",1,2],["Drums",1,2],["Sound",1,2],["Projection",1,3],["Livestream",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
+const roleNames=["","","","",""," Guitar","","","","",""];
+const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
 const firstNames=["James","Sarah","Michael","Rachel","Daniel","Emma","Peter","Naomi","David","Hannah","Joshua","Rebecca","Matthew","Grace","Luke","Anna","Mark","Leah","John","Megan","Caleb","Lisa","Andrew","Chloe","Simon","Kate","Nathan","Amy","Thomas","Mary","Ben","Julia","Ethan","Olivia","Noah","Abigail","Liam","Sophie","Isaac","Zoe","Aaron","Tara","Joel","Ruth","Eli","Hope","Jason","Lydia","Chris","Nina","Paul","Mia","Sam","Tessa","Ryan"];
-function seedMembers(){let out=[],i=0;defaultRoles.forEach((role,ri)=>{let count=3+(ri%3);for(let n=0;n<count;n++){let name=firstNames[i%firstNames.length]+" "+role.name.split(" ")[0];out.push({id:uid(),name,email:name.toLowerCase().replaceAll(" ",".")+"@example.com",phone:"",password:"",roles:[role.name],notes:" tester for "+role.name,history:[],maxPerMonth:3});i++;}});out.push({id:uid(),name:"Multi Role Example",email:"",phone:"",password:"",roles:["Worship Leader","Lead Vocal","Acoustic Guitar"],notes:"Can lead worship or cover vocals/guitar.",history:[],maxPerMonth:3});return out}
+function seedMembers(){let out=[],i=0;defaultRoles.forEach((role,ri)=>{let count=3+(ri%3);for(let n=0;n<count;n++){let name=firstNames[i%firstNames.length]+" "+role.name.split(" ")[0];out.push({id:uid(),name,email:name.toLowerCase().replaceAll(" ",".")+"@example.com",phone:"",password:"",roles:[role.name],notes:" tester for "+role.name,history:[],maxPerMonth:3});i++;}});out.push({id:uid(),name:"Multi Role Example",email:"",phone:"",password:"",roles:["","",""],notes:"Can lead worship or cover vocals/guitar.",history:[],maxPerMonth:3});return out}
 function nextWeekday(day){let d=new Date(),diff=(day-d.getDay()+7)%7||7;d.setDate(d.getDate()+diff);return d.toISOString().slice(0,10)}
 const DEFAULT={settings:{churchName:"Grace Bible Church",adminPassword:"admin123",logo:""},roles:defaultRoles,templates:[],services:[{id:uid(),name:"Sunday Morning",date:nextWeekday(0),time:"09:00",notes:"",template:"Sunday Morning"}],members:seedMembers(),availability:[],rosters:[],compatibleRoles:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||"null")||DEFAULT,user=JSON.parse(sessionStorage.getItem("twc-user")||"null"),tab="dashboard";
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function app(h){document.getElementById("app").innerHTML=h;save()}function setUser(u){user=u;tab=(u.role==="admin"?"dashboard":"availability");sessionStorage.setItem("twc-user",JSON.stringify(u));render()}function logo(){return `<img class="official-logo" src="assets/logo.png" alt="The Worship Calendar logo">`}
 
 
-function cleanInstallV162(){
-  if(localStorage.getItem("twc-v162-cleaned")==="yes")return;
-  // Remove sample/default templates, services, and rosters for a clean production starting point.
-  data.templates=[];
-  data.services=[];
-  data.rosters=[];
-  data.availability=[];
-  localStorage.setItem("twc-v162-cleaned","yes");
-  save();
-}
-function cleanInstallV161(){
-  if(localStorage.getItem("twc-v161-cleaned")==="yes")return;
-  // Clean only known demo/sample records, but preserve admin access.
-  data.members=(data.members||[]).filter(m=>{
-    let email=String(m.email||"").toLowerCase();
-    let name=String(m.name||"").toLowerCase();
-    if(email===""||email.includes("example.com"))return false;
-    if(name.includes("sample")||name.includes("demo")||name.includes("test member"))return false;
-    return true;
-  });
-  if(!data.members.some(m=>m.role==="admin"||m.email==="admin")){
-    data.members.unshift({id:"admin",name:"Administrator",email:"admin",password:"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0});
-  }
-  // Start new installs without demo ministries/roles. Preserve existing user-created records if app already has non-demo content.
-  let hasOnlyDefaultMinistries=(data.ministries||[]).length<=1 && ((data.ministries||[])[0]?.name||"").toLowerCase().includes("default");
-  let hasRoles=(data.roles||[]).some(r=>["worship leader","lead vocal","backing vocal","acoustic guitar","electric guitar","bass","drums","keyboard","sound","projection","livestream"].includes(String(r.name||"").toLowerCase()));
-  if(hasOnlyDefaultMinistries||hasRoles){
-    data.ministries=[];
-    data.roles=[];
-    data.compatibleRoles={};
-    data.templates=(data.templates||[]).map(t=>({...t,roleNames:[],roleMin:{},roleMax:{},roleTimes:{}}));
-    data.members.forEach(m=>{if(m.role!=="admin"){m.roles=[];m.ministryIds=[]}});
-  }
-  localStorage.setItem("twc-v161-cleaned","yes");
-  save();
-}
 
-function cleanSlateV164(){
-  if(localStorage.getItem("twc-v164-clean-slate")==="yes")return;
-  data.members=[{id:"admin",name:"Administrator",email:"admin",password:"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0}];
-  data.ministries=[];
-  data.roles=[];
-  data.templates=[];
-  data.services=[];
-  data.rosters=[];
-  data.availability=[];
-  data.compatibleRoles={};
-  localStorage.setItem("twc-v164-clean-slate","yes");
-  save();
-}
 
-function cleanSlateV168(){
+
+
+
+
+
+function cleanSlateV170(){
   try{
-    if(localStorage.getItem("twc-v168-clean-slate")==="yes")return;
+    if(localStorage.getItem("twc-v170-clean-slate")==="yes")return;
+    const keepGithub=data.github||{};
+    const keepGmail=data.gmail||{};
     data.members=[{id:"admin",name:"Administrator",email:"admin",password:"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0}];
     data.ministries=[];
     data.roles=[];
@@ -114,25 +72,27 @@ function cleanSlateV168(){
     data.rosters=[];
     data.availability=[];
     data.compatibleRoles={};
-    localStorage.setItem("twc-v168-clean-slate","yes");
+    data.github=keepGithub;
+    data.gmail=keepGmail;
+    localStorage.setItem("twc-v170-clean-slate","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("Clean slate reset failed",e)}
+  }catch(e){console.error("v1.70 clean slate reset failed",e)}
 }
-function render(){cleanSlateV168();cleanSlateV164();cleanInstallV162();cleanInstallV161();ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge"></span><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${syncBar()}${page()}</main></div>`)}
+function render(){cleanSlateV170();ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge"></span><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${syncBar()}${page()}</main></div>`)}
 function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
 function services(){return `<h1>Services</h1>${user.role==="admin"?`<div class="panel"><label>Service name<input id="svcName" placeholder="Service name" value="Sunday Morning"></label><label>Start date<input id="svcDate" type="date" value="${nextWeekday(0)}"></label><label>Service times <span class="small">(comma separated, e.g. 09:00, 11:00, 18:00)</span><input id="svcTimes" placeholder="09:00, 11:00" value="09:00"></label><label>Repeat for weeks <span class="small">(recurring services only)</span><input id="svcWeeks" type="number" min="1" value="8"></label><label>Template<select id="svcTemplate">${data.templates.map(t=>`<option>${esc(t.name)}</option>`).join("")}</select></label><label>Service type<select id="svcType"><option value="recurring">Weekly Recurring Service</option><option value="adhoc">One-Off Service</option></select></label><input id="svcNotes" placeholder="Notes"><div class="inline"><button class="primary" onclick="addService()">Add Service</button><button onclick="addRecurring()">Generate Weekly Series</button></div><p class="hint">Multiple times are stored as one service with one roster and one availability record. The same team serves all listed times.</p></div>`:""}<div class="calendar">${data.services.sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(s=>`<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<br><span class="small">Times: ${esc(serviceTimesText(s))} • ${esc(s.template||"")} • ${esc(s.type||"service")}</span>${user.role==="admin"?`<br><button onclick="delService('${s.id}')">Delete</button>`:""}</div>`).join("")}</div>`}
 
 function ensureMinistries(){
-  data.ministries = data.ministries || [{id:"default",name:"Default Ministry"}];
-  if(!data.ministries.length)data.ministries.push({id:"default",name:"Default Ministry"});
+  data.ministries = data.ministries || [{id:"default",name:""}];
+  if(!data.ministries.length)data.ministries.push({id:"default",name:""});
   data.roles.forEach(r=>{ if(!r.ministryId) r.ministryId = data.ministries[0].id; });
 }
 function getMinistryName(id){
   ensureMinistries();
   let m=data.ministries.find(x=>x.id===id);
-  return m?m.name:"Default Ministry";
+  return m?m.name:"";
 }
 function addMinistry(){
   ensureMinistries();
@@ -204,7 +164,7 @@ function compatibleRoleText(role){
 function compatibleRoleButtons(role){
   data.compatibleRoles=data.compatibleRoles||{};
   if(typeof ensureMinistries==="function")ensureMinistries();
-  let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:"Default Ministry"}];
+  let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:""}];
   let fallback=ministries[0]?.id||"default";
   return `<div class="compatible-groups">${ministries.map(min=>{
     let roles=data.roles.filter(other=>other.name!==role.name && (other.ministryId||fallback)===min.id);
@@ -478,7 +438,7 @@ function v152MinistryName(id){
   if(typeof getMinistryName==="function")return getMinistryName(id);
   if(typeof ministryName==="function")return ministryName(id);
   let m=(data.ministries||[]).find(x=>x.id===id);
-  return m?m.name:"Default Ministry";
+  return m?m.name:"";
 }
 function v152IsAvailable(memberId,serviceId){
   let rec=(data.availability||[]).find(a=>a.memberId===memberId&&a.serviceId===serviceId);
@@ -575,7 +535,7 @@ function makeRostersForRange(){
   },0);
 }
 function v152GroupedRosterHtml(roster,editable){
-  let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:"Default Ministry"}];
+  let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:""}];
   let groups={};
   (roster.assignments||[]).forEach(a=>{
     let mid=v152RoleMinistryId(a.roleName);
@@ -608,7 +568,7 @@ function v153MinistryName(id){
   if(typeof safeMinistryName==="function")return safeMinistryName(id);
   if(typeof getMinistryName==="function")return getMinistryName(id);
   let m=(data.ministries||[]).find(x=>x.id===id);
-  return m?m.name:"Default Ministry";
+  return m?m.name:"";
 }
 function v153MemberPersonalMinistryRoles(roster,memberId){
   let groups={};
@@ -1326,7 +1286,7 @@ function exportMinistryName(id){
   if(typeof getMinistryName==="function")return getMinistryName(id);
   if(typeof ministryName==="function")return ministryName(id);
   let m=(data.ministries||[]).find(x=>x.id===id);
-  return m?m.name:"Default Ministry";
+  return m?m.name:"";
 }
 function exportSelectedMinistryIds(list){
   let ids=[];
@@ -1356,7 +1316,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v1.69</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v1.70</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -1428,10 +1388,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v1.69-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v1.70-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v1.69 roster generation repair: final overrides */
+/* v1.70 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){

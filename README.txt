@@ -1,13 +1,14 @@
-The Worship Calendar v1.69
+The Worship Calendar v1.70
 Plan • Schedule • Serve
 
-Built from v1.68.
+Built from v1.69.
 
 Fixed:
-- GitHub uploads now exclude Gmail OAuth access token
-- GitHub uploads now exclude Gmail refresh token if present
-- GitHub uploads now exclude Gmail API key
-- GitHub token remains excluded from uploads
-- Gmail secrets are kept local-device only
-- Prevents GitHub secret-scanning 409 errors for Google OAuth tokens
+- Demo data removed again with a stronger v1.70 clean-slate reset
+- Older clean-slate flags no longer prevent cleanup
+- Keeps GitHub/Gmail settings while clearing demo operational data
+- Keeps only the administrator login:
+  username: admin
+  password: admin123
+- No demo members, ministries, roles, templates, services, rosters or availability
 - JavaScript syntax checked before packaging
