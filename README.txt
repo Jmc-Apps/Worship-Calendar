@@ -1,10 +1,13 @@
-The Worship Calendar v1.75
+The Worship Calendar v1.76
 Plan • Schedule • Serve
 
-Built from uploaded v1.74 source.
+Built from v1.75.
 
 Changed:
-- Version updated to v1.75 throughout the app
-- Demo/sample team member records removed on startup
-- Keeps admin login
+- Removed all demo/sample operational data
+- Removed demo team members and example accounts
+- Removed version number/badge from the header bar
+- Added Delete Member button in Members tab
+- Admin account cannot be deleted
+- Deleting a member removes availability and unassigns roster assignments
 - JavaScript syntax checked before packaging
