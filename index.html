@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v1.58</title>
+<title>The Worship Calendar v1.59</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -30,9 +30,13 @@
 
 .syncBar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0;padding:10px;border:1px solid #d6dde6;border-radius:12px;background:#f8fafc}
 .syncStatus{font-size:12px;color:#52616f}
+
+.githubConnectionBox{margin:10px 0;padding:12px;border:1px solid #d6dde6;border-radius:12px;background:#f8fafc}
+.githubConnectionBox b{display:block;margin-bottom:4px}
+.memberSubmitBox{margin:10px 0;padding:12px;border:1px solid #d6dde6;border-radius:12px;background:#f8fafc}
 </style></head><body><div id="app"></div>
 <script>
-const VERSION="1.58",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-58-local";
+const VERSION="1.59",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-59-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["Worship Leader","Lead Vocal","Backing Vocal","Acoustic Guitar","Electric Guitar","Bass Guitar","Keyboard","Drums","Sound","Projection","Livestream"];
 const defaultRoles=[["Worship Leader",1,1],["Lead Vocal",1,2],["Backing Vocal",0,4],["Acoustic Guitar",0,2],["Electric Guitar",0,2],["Bass Guitar",1,1],["Keyboard",1,2],["Drums",1,2],["Sound",1,2],["Projection",1,3],["Livestream",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -42,7 +46,7 @@ function nextWeekday(day){let d=new Date(),diff=(day-d.getDay()+7)%7||7;d.setDat
 const DEFAULT={settings:{churchName:"Grace Bible Church",adminPassword:"admin123",logo:""},roles:defaultRoles,templates:[{id:uid(),name:"Sunday Morning",roleNames:["Worship Leader","Lead Vocal","Backing Vocal","Bass Guitar","Keyboard","Drums","Sound","Projection"]},{id:uid(),name:"Youth Service",roleNames:["Worship Leader","Acoustic Guitar","Electric Guitar","Drums","Sound","Projection"]}],services:[{id:uid(),name:"Sunday Morning",date:nextWeekday(0),time:"09:00",notes:"",template:"Sunday Morning"}],members:seedMembers(),availability:[],rosters:[],compatibleRoles:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||"null")||DEFAULT,user=JSON.parse(sessionStorage.getItem("twc-user")||"null"),tab="dashboard";
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function app(h){document.getElementById("app").innerHTML=h;save()}function setUser(u){user=u;tab=(u.role==="admin"?"dashboard":"availability");sessionStorage.setItem("twc-user",JSON.stringify(u));render()}function logo(){return `<img class="official-logo" src="assets/logo.png" alt="The Worship Calendar logo">`}
-function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge">Local testing mode</span> <span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${page()}</main></div>`)}
+function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge">Local testing mode</span> <span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${syncBar()}${page()}</main></div>`)}
 function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} Local Testing</p><p class="hint">Admin: admin / admin123<br>Example: multi@example.com / member123</p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint">Sample testing data includes 3 to 5 team members for every role.</p>`}
@@ -283,7 +287,7 @@ function changeMyPassword(){
   save();
   alert("Your password has been changed.");
 }
-function availability(){let ms=user.role==="admin"?data.members:data.members.filter(m=>m.id===user.memberId);return `<h1>Availability</h1>${user.role!=="admin"?`<div class="panel"><button class="primary" type="button" onclick="changeMyPassword()">Change My Password</button></div>`:""}<p class="hint">Mobile-friendly calendar cards.</p>${ms.map(m=>`<div class="panel"><h3>${esc(m.name)}</h3><div class="calendar">${data.services.map(s=>{let cur=(data.availability.find(a=>a.memberId===m.id&&a.serviceId===s.id)||{status:"available"}).status;return `<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<select onchange="setAvail('${m.id}','${s.id}',this.value)">${["available","unavailable","unsure"].map(x=>`<option value="${x}" ${cur===x?"selected":""}>${x}</option>`).join("")}</select></div>`}).join("")}</div></div>`).join("")}`}
+function availability(){let ms=user.role==="admin"?data.members:data.members.filter(m=>m.id===user.memberId);return `<h1>Availability</h1>${user.role!=="admin"?memberAvailabilitySubmitPanel():""}${user.role!=="admin"?`<div class="panel"><button class="primary" type="button" onclick="changeMyPassword()">Change My Password</button></div>`:""}<p class="hint">Mobile-friendly calendar cards.</p>${ms.map(m=>`<div class="panel"><h3>${esc(m.name)}</h3><div class="calendar">${data.services.map(s=>{let cur=(data.availability.find(a=>a.memberId===m.id&&a.serviceId===s.id)||{status:"available"}).status;return `<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<select onchange="setAvail('${m.id}','${s.id}',this.value)">${["available","unavailable","unsure"].map(x=>`<option value="${x}" ${cur===x?"selected":""}>${x}</option>`).join("")}</select></div>`}).join("")}</div></div>`).join("")}`}
 
 function icsEscape(value){
   return String(value||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
@@ -551,6 +555,36 @@ function rosters(){
 function memberSelect(rid,i,mid){return `<select onchange="editAssign('${rid}',${i},this.value)"><option value="">Unfilled</option>${data.members.map(m=>`<option value="${m.id}" ${m.id===mid?"selected":""}>${esc(m.name)}</option>`).join("")}</select>`}
 
 
+
+function hasGithubAccessSetup(){
+  try{
+    let local=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
+    let g=data.github||{};
+    return !!((local&&local.token&&local.owner&&local.repo&&local.branch&&local.path)||(g.token&&g.owner&&g.repo&&g.branch&&g.path));
+  }catch(e){return false}
+}
+function githubConnectionStatusText(){
+  return hasGithubAccessSetup()?"Connection file loaded":"No connection file uploaded";
+}
+function githubConnectionPanel(){
+  return `<div class="githubConnectionBox"><b>GitHub Connection</b><p>Status: ${githubConnectionStatusText()}</p><button type="button" onclick="importGithubAccessSetupButton()">${hasGithubAccessSetup()?"Replace Connection File":"Import GitHub Access Setup"}</button></div>`;
+}
+function memberAvailabilitySubmitPanel(){
+  return `<div class="memberSubmitBox">${githubConnectionPanel()}<button class="primary" type="button" onclick="submitMemberAvailabilityOnline()">Submit Availability</button><span id="availabilitySubmitStatus" class="syncStatus"></span></div>`;
+}
+async function submitMemberAvailabilityOnline(){
+  try{
+    let el=document.getElementById("availabilitySubmitStatus");
+    if(el)el.textContent="Saving availability online…";
+    save();
+    await submitChangesOnline();
+    if(el)el.textContent="Availability saved online";
+  }catch(err){
+    let el=document.getElementById("availabilitySubmitStatus");
+    if(el)el.textContent="Availability save failed";
+    alert("Availability save failed: "+(err.message||err));
+  }
+}
 function ghLocalStorageKey(){return "twc-github-access-setup"}
 function saveGithubAccessLocal(g){if(g)localStorage.setItem(ghLocalStorageKey(),JSON.stringify(g))}
 function loadGithubAccessLocal(){try{return JSON.parse(localStorage.getItem(ghLocalStorageKey())||"null")}catch(e){return null}}
@@ -653,6 +687,7 @@ async function submitChangesOnline(){
     let g=ghValidate();
     let existing=await ghGetFile(g);
     let payload=ghExportData();
+    payload.github=payload.github||{};
     payload.github.lastSync=new Date().toISOString();
     let body={
       message:`The Worship Calendar sync ${new Date().toISOString()}`,
@@ -666,13 +701,15 @@ async function submitChangesOnline(){
       body:JSON.stringify(body)
     });
     if(!res.ok)throw new Error(`GitHub save failed: ${res.status} ${await res.text()}`);
+    data.github=data.github||{};
     data.github.lastSync=new Date().toISOString();
     save();
     ghStatus("Saved online");
+    return true;
   }catch(err){
     console.error(err);
     ghStatus("Failed to save: "+(err.message||err),true);
-    alert("GitHub sync failed: "+(err.message||err));
+    throw err;
   }
 }
 async function testGitHubConnection(){
@@ -710,8 +747,11 @@ async function loadFromGitHub(){
   }
 }
 function syncBar(){
-  let hasAccess=!!((data.github&&data.github.token)||(typeof loadGithubAccessLocal==="function"&&loadGithubAccessLocal()));
-  return `<div class="syncBar"><button class="primary" type="button" onclick="submitChangesOnline()">Submit Changes Online</button>${!hasAccess?`<button type="button" onclick="importGithubAccessSetupButton()">Import GitHub Access Setup</button>`:""}<span id="syncStatus" class="syncStatus">${data.github&&data.github.lastSync?`Last online save: ${esc(data.github.lastSync)}`:"Not synced online yet"}</span></div>`;
+  if(!user)return "";
+  if(user.role==="admin"){
+    return `<div class="syncBar"><button class="primary" type="button" onclick="submitChangesOnline().catch(err=>alert('GitHub sync failed: '+(err.message||err)))">Submit Changes Online</button><span id="syncStatus" class="syncStatus">${data.github&&data.github.lastSync?`Last online save: ${esc(data.github.lastSync)}`:"Not synced online yet"}</span></div>`;
+  }
+  return "";
 }
 function settings(){
   let g=ghConfig();
@@ -998,7 +1038,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v1.58</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v1.59</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -1070,10 +1110,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v1.58-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v1.59-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v1.58 roster generation repair: final overrides */
+/* v1.59 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
