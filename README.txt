@@ -1,4 +1,4 @@
-The Worship Calendar v1.66
+The Worship Calendar v1.67
 Plan • Schedule • Serve
 
 Built from v1.65.
