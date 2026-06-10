@@ -65,7 +65,14 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-10T22:36:36.109Z",
+    "lastSync": "2026-06-10T23:50:04.012Z",
     "tokenStored": "local-device-only"
+  },
+  "gmail": {
+    "clientId": "",
+    "sender": "",
+    "connectedAt": "",
+    "accessTokenStored": "local-device-only",
+    "apiKeyStored": "local-device-only"
   }
 }
