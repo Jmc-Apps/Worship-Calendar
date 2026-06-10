@@ -1,15 +1,12 @@
-The Worship Calendar v1.57
+The Worship Calendar v1.58
 Plan • Schedule • Serve
 
-Built from v1.56.
+Built from v1.57.
 
 Added:
-- GitHub Online Storage settings in Admin Settings
-- Admin can enter token, owner, repo, branch and data file path
-- Test GitHub connection
-- Load data from GitHub
-- Save/submit full app data to GitHub JSON file
-- Creates data file if missing and uses SHA when updating existing file
-- Submit Changes Online button added to app pages
-- Local storage remains as cache/backup
+- Export GitHub Access Setup JSON from Admin Settings
+- Import GitHub Access Setup JSON on member/admin devices
+- Imported GitHub settings are saved to localStorage on that device
+- Members can use Submit Changes Online after importing the setup file
+- GitHub token is excluded from app data uploaded to GitHub to avoid secret scanning blocks
 - JavaScript syntax checked before packaging
