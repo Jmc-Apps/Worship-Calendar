@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>The Worship Calendar v1.57</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
+
+@media print{
+  body{background:white;color:#000}
+  .topbar,.sidebar,.panel button,.no-print{display:none!important}
+  .layout{display:block}
+  .content{max-width:none;padding:0}
+  .print-export{display:block!important}
+  .print-page{page-break-after:always;padding:18px}
+  .print-day{border:1px solid #999;border-radius:8px;margin:10px 0;padding:10px}
+  .print-day h3{margin:0 0 6px 0}
+  table{font-size:12px}
+}
+.print-export{display:none}
+
+
+.official-logo{max-width:170px;max-height:130px;object-fit:contain}
+.topbar .official-logo{max-width:92px;max-height:72px}
+.loginCard .official-logo{max-width:230px;max-height:190px}
+.pdf-logo{max-height:70px;display:block;margin:0 auto 8px auto}
+
+@media print{.ministry-page-break{page-break-before:always;break-before:page;}}
+
+.syncBar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0;padding:10px;border:1px solid #d6dde6;border-radius:12px;background:#f8fafc}
+.syncStatus{font-size:12px;color:#52616f}
+</style></head><body><div id="app"></div>
+<script>
+const VERSION="1.57",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v1-57-local";
+const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
+const roleNames=["Worship Leader","Lead Vocal","Backing Vocal","Acoustic Guitar","Electric Guitar","Bass Guitar","Keyboard","Drums","Sound","Projection","Livestream"];
+const defaultRoles=[["Worship Leader",1,1],["Lead Vocal",1,2],["Backing Vocal",0,4],["Acoustic Guitar",0,2],["Electric Guitar",0,2],["Bass Guitar",1,1],["Keyboard",1,2],["Drums",1,2],["Sound",1,2],["Projection",1,3],["Livestream",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
+const firstNames=["James","Sarah","Michael","Rachel","Daniel","Emma","Peter","Naomi","David","Hannah","Joshua","Rebecca","Matthew","Grace","Luke","Anna","Mark","Leah","John","Megan","Caleb","Lisa","Andrew","Chloe","Simon","Kate","Nathan","Amy","Thomas","Mary","Ben","Julia","Ethan","Olivia","Noah","Abigail","Liam","Sophie","Isaac","Zoe","Aaron","Tara","Joel","Ruth","Eli","Hope","Jason","Lydia","Chris","Nina","Paul","Mia","Sam","Tessa","Ryan"];
+function seedMembers(){let out=[],i=0;defaultRoles.forEach((role,ri)=>{let count=3+(ri%3);for(let n=0;n<count;n++){let name=firstNames[i%firstNames.length]+" "+role.name.split(" ")[0];out.push({id:uid(),name,email:name.toLowerCase().replaceAll(" ",".")+"@example.com",phone:"",password:"member123",roles:[role.name],notes:"Sample tester for "+role.name,history:[],maxPerMonth:3});i++;}});out.push({id:uid(),name:"Multi Role Example",email:"multi@example.com",phone:"",password:"member123",roles:["Worship Leader","Lead Vocal","Acoustic Guitar"],notes:"Can lead worship or cover vocals/guitar.",history:[],maxPerMonth:3});return out}
+function nextWeekday(day){let d=new Date(),diff=(day-d.getDay()+7)%7||7;d.setDate(d.getDate()+diff);return d.toISOString().slice(0,10)}
+const DEFAULT={settings:{churchName:"Grace Bible Church",adminPassword:"admin123",logo:""},roles:defaultRoles,templates:[{id:uid(),name:"Sunday Morning",roleNames:["Worship Leader","Lead Vocal","Backing Vocal","Bass Guitar","Keyboard","Drums","Sound","Projection"]},{id:uid(),name:"Youth Service",roleNames:["Worship Leader","Acoustic Guitar","Electric Guitar","Drums","Sound","Projection"]}],services:[{id:uid(),name:"Sunday Morning",date:nextWeekday(0),time:"09:00",notes:"",template:"Sunday Morning"}],members:seedMembers(),availability:[],rosters:[],compatibleRoles:{}};
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||DEFAULT,user=JSON.parse(sessionStorage.getItem("twc-user")||"null"),tab="dashboard";
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function app(h){document.getElementById("app").innerHTML=h;save()}function setUser(u){user=u;tab=(u.role==="admin"?"dashboard":"availability");sessionStorage.setItem("twc-user",JSON.stringify(u));render()}function logo(){return `<img class="official-logo" src="assets/logo.png" alt="The Worship Calendar logo">`}
+function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span class="badge">Local testing mode</span> <span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${page()}</main></div>`)}
+function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} Local Testing</p><p class="hint">Admin: admin / admin123<br>Example: multi@example.com / member123</p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
+function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
+function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint">Sample testing data includes 3 to 5 team members for every role.</p>`}
+function services(){return `<h1>Services</h1>${user.role==="admin"?`<div class="panel"><label>Service name<input id="svcName" placeholder="Service name" value="Sunday Morning"></label><label>Start date<input id="svcDate" type="date" value="${nextWeekday(0)}"></label><label>Service times <span class="small">(comma separated, e.g. 09:00, 11:00, 18:00)</span><input id="svcTimes" placeholder="09:00, 11:00" value="09:00"></label><label>Repeat for weeks <span class="small">(recurring services only)</span><input id="svcWeeks" type="number" min="1" value="8"></label><label>Template<select id="svcTemplate">${data.templates.map(t=>`<option>${esc(t.name)}</option>`).join("")}</select></label><label>Service type<select id="svcType"><option value="recurring">Weekly Recurring Service</option><option value="adhoc">One-Off Service</option></select></label><input id="svcNotes" placeholder="Notes"><div class="inline"><button class="primary" onclick="addService()">Add Service</button><button onclick="addRecurring()">Generate Weekly Series</button></div><p class="hint">Multiple times are stored as one service with one roster and one availability record. The same team serves all listed times.</p></div>`:""}<div class="calendar">${data.services.sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(s=>`<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<br><span class="small">Times: ${esc(serviceTimesText(s))} • ${esc(s.template||"")} • ${esc(s.type||"service")}</span>${user.role==="admin"?`<br><button onclick="delService('${s.id}')">Delete</button>`:""}</div>`).join("")}</div>`}
+
+function ensureMinistries(){
+  data.ministries = data.ministries || [{id:"default",name:"Default Ministry"}];
+  if(!data.ministries.length)data.ministries.push({id:"default",name:"Default Ministry"});
+  data.roles.forEach(r=>{ if(!r.ministryId) r.ministryId = data.ministries[0].id; });
+}
+function getMinistryName(id){
+  ensureMinistries();
+  let m=data.ministries.find(x=>x.id===id);
+  return m?m.name:"Default Ministry";
+}
+function addMinistry(){
+  ensureMinistries();
+  let el=document.getElementById("newMinistryName");
+  let name=(el&&el.value||"").trim();
+  if(!name){alert("Please enter a ministry name.");return}
+  if(data.ministries.some(m=>m.name.toLowerCase()===name.toLowerCase())){alert("That ministry already exists.");return}
+  data.ministries.push({id:uid(),name});
+  save();render();
+}
+function editMinistry(id,value){
+  ensureMinistries();
+  let m=data.ministries.find(x=>x.id===id);
+  if(!m)return;
+  let name=(value||"").trim();
+  if(!name){alert("Ministry name cannot be blank.");render();return}
+  m.name=name;
+  save();render();
+}
+function deleteMinistry(id){
+  ensureMinistries();
+  if(id===data.ministries[0].id){alert("The default ministry cannot be deleted.");return}
+  let min=data.ministries.find(m=>m.id===id);
+  if(!min)return;
+  if(data.roles.some(r=>r.ministryId===id)){alert("Move or delete this ministry's roles first.");return}
+  if(!confirm(`Delete ministry "${min.name}"?`))return;
+  data.ministries=data.ministries.filter(m=>m.id!==id);
+  save();render();
+}
+function moveRoleMinistry(roleId,ministryId){
+  ensureMinistries();
+  let r=data.roles.find(x=>x.id===roleId);
+  if(!r)return;
+  r.ministryId=ministryId;
+  save();render();
+}
+function addRoleFromRolesTab(){
+  ensureMinistries();
+  let nameEl=document.getElementById("roleName");
+  let minEl=document.getElementById("roleMinistry");
+  let name=(nameEl&&nameEl.value||"").trim();
+  if(!name){alert("Please enter a role name.");return}
+  if(data.roles.some(r=>r.name.toLowerCase()===name.toLowerCase())){alert("That role already exists.");return}
+  data.roles.push({id:uid(),name,ministryId:(minEl&&minEl.value)||data.ministries[0].id});data.compatibleRoles=data.compatibleRoles||{};data.compatibleRoles[name]=data.compatibleRoles[name]||[];
+  data.templates.forEach(t=>{
+    t.roleNames=t.roleNames||[];
+    t.roleMin=t.roleMin||{};
+    t.roleMax=t.roleMax||{};
+    t.roleTimes=t.roleTimes||{};
+    t.roleMin[name]=1;
+    t.roleMax[name]=1;
+  });
+  save();render();
+}
+
+function compatibleList(roleName){
+  data.compatibleRoles=data.compatibleRoles||{};
+  return data.compatibleRoles[roleName]||[];
+}
+function rolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function compatibleRoleText(role){
+  let list=compatibleList(role.name);
+  return list.length?list.map(esc).join(", "):"<span class='small'>None</span>";
+}
+function compatibleRoleButtons(role){
+  data.compatibleRoles=data.compatibleRoles||{};
+  return `<div class="chips">${data.roles.filter(other=>other.name!==role.name).map(other=>`<button class="chip ${rolesCompatible(role.name,other.name)?"on":""}" onclick="toggleCompatibleRole('${esc(role.name)}','${esc(other.name)}')">${esc(other.name)}</button>`).join("")}</div>`;
+}
+function toggleCompatibleRole(a,b){
+  data.compatibleRoles=data.compatibleRoles||{};
+  data.compatibleRoles[a]=data.compatibleRoles[a]||[];
+  data.compatibleRoles[b]=data.compatibleRoles[b]||[];
+  let on=(data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+  if(on){
+    data.compatibleRoles[a]=data.compatibleRoles[a].filter(x=>x!==b);
+    data.compatibleRoles[b]=data.compatibleRoles[b].filter(x=>x!==a);
+  }else{
+    data.compatibleRoles[a].push(b);
+    data.compatibleRoles[b].push(a);
+  }
+  save();
+  render();
+}
+function roles(){
+  ensureMinistries();
+  let adminTools="";
+  if(user.role==="admin"){
+    adminTools=`<div class="panel"><h3>Add Ministry</h3><div class="inline"><input id="newMinistryName" placeholder="Ministry name" style="max-width:260px"><button class="primary" onclick="addMinistry()">Add Ministry</button></div></div>
+    <div class="panel"><h3>Add Role</h3><div class="inline"><input id="roleName" placeholder="Role name" style="max-width:240px"><select id="roleMinistry" style="max-width:260px">${data.ministries.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}</select><button class="primary" onclick="addRoleFromRolesTab()">Add role</button></div></div>`;
+  }
+  let panels=data.ministries.map(min=>{
+    let ministryRoles=data.roles.filter(r=>(r.ministryId||data.ministries[0].id)===min.id);
+    let rows=ministryRoles.map(r=>{
+      let roleCell=user.role==="admin"?`<input value="${esc(r.name)}" onchange="editRole('${r.id}','name',this.value)">`:esc(r.name);
+      let moveCell=user.role==="admin"?`<select onchange="moveRoleMinistry('${r.id}',this.value)">${data.ministries.map(m=>`<option value="${m.id}" ${m.id===(r.ministryId||data.ministries[0].id)?"selected":""}>${esc(m.name)}</option>`).join("")}</select>`:esc(typeof getMinistryName==="function"?getMinistryName(r.ministryId):min.name);
+      let compat=user.role==="admin"?compatibleRoleButtons(r):compatibleRoleText(r);
+      let actions=user.role==="admin"?`<button onclick="delRole('${r.id}')">Delete</button>`:"";
+      return `<tr><td>${roleCell}</td><td>${data.members.filter(m=>m.roles.includes(r.name)).length}</td><td>${moveCell}</td><td>${compat}</td><td>${actions}</td></tr>`;
+    }).join("");
+    if(!rows)rows=`<tr><td colspan="5"><span class="hint">No roles in this ministry yet.</span></td></tr>`;
+    let deleteButton=user.role==="admin"&&min.id!==data.ministries[0].id?`<button onclick="deleteMinistry('${min.id}')">Delete Ministry</button>`:"";
+    let title=user.role==="admin"?`<input value="${esc(min.name)}" onchange="editMinistry('${min.id}',this.value)">`:esc(min.name);
+    return `<div class="panel"><div class="row"><h3>${title}</h3>${deleteButton}</div><p class="hint">Compatible roles are roles that one member may perform at the same service.</p><table><tr><th>Role</th><th>Members</th><th>Ministry</th><th>Compatible Roles</th><th>Actions</th></tr>${rows}</table></div>`;
+  }).join("");
+  return `<h1>Roles & Ministries</h1><p class="hint">Each role belongs to one ministry. Use Compatible Roles to allow one member to serve in multiple roles at the same service.</p>${adminTools}${panels}`;
+}
+function templates(){
+  ensureMinistries();
+  return `<h1>Service Templates</h1>
+  <div class="panel"><input id="tplName" placeholder="Template name"><button class="primary" onclick="addTemplate()">Add template</button><p class="hint">Template roles are grouped by ministry. Set Min/Max and service times per role.</p></div>
+  ${data.templates.map(t=>`<div class="panel"><h3>${esc(t.name)}</h3>
+    <label>Service length in minutes<input type="number" min="1" value="${t.serviceLengthMinutes??90}" onchange="setTemplateServiceLength('${t.id}',this.value)"></label>
+    ${data.ministries.map(min=>{
+      let roles=data.roles.filter(r=>(r.ministryId||data.ministries[0].id)===min.id);
+      if(!roles.length)return "";
+      return `<h4>${esc(min.name)}</h4><table><tr><th>Use Role</th><th>Role</th><th>Min</th><th>Max</th><th>Times used</th></tr>${roles.map(r=>`<tr>
+        <td><button class="chip ${t.roleNames.includes(r.name)?"on":""}" onclick="toggleTemplateRole('${t.id}','${esc(r.name)}')">${t.roleNames.includes(r.name)?"Used":"Off"}</button></td>
+        <td>${esc(r.name)}</td>
+        <td><input type="number" min="0" value="${((t.roleMin||{})[r.name]??1)}" onchange="setTemplateRoleMin('${t.id}','${esc(r.name)}',this.value)"></td>
+        <td><input type="number" min="1" value="${((t.roleMax||{})[r.name]??1)}" onchange="setTemplateRoleMax('${t.id}','${esc(r.name)}',this.value)"></td>
+        <td><input placeholder="Blank = all times" value="${esc((t.roleTimes&&t.roleTimes[r.name])||"")}" onchange="setTemplateRoleTimes('${t.id}','${esc(r.name)}',this.value)"></td>
+      </tr>`).join("")}</table>`;
+    }).join("")}
+  </div>`).join("")}`;
+}
+
+function safeMemberMinistryIds(member){
+  ensureMinistries();
+  if(!member.ministryIds||!member.ministryIds.length)member.ministryIds=[data.ministries[0].id];
+  return member.ministryIds;
+}
+function safeMemberCanSelectRole(member,role){
+  return safeMemberMinistryIds(member).includes(role.ministryId||data.ministries[0].id);
+}
+function safeCleanMemberRoles(member){
+  member.roles=(member.roles||[]).filter(roleName=>{
+    let role=data.roles.find(r=>r.name===roleName);
+    return role && safeMemberCanSelectRole(member,role);
+  });
+}
+
+function setMaxPerMonth(mid,v){
+  let m=data.members.find(x=>x.id===mid);
+  if(m){m.maxPerMonth=Math.max(0,parseInt(v||"0",10));save();render();}
+}
+function toggleMemberMinistrySafe(memberId,ministryId){
+  let m=data.members.find(x=>x.id===memberId);
+  if(!m)return;
+  m.ministryIds=safeMemberMinistryIds(m);
+  if(m.ministryIds.includes(ministryId)){
+    if(m.ministryIds.length===1){alert("A member must belong to at least one ministry.");return}
+    m.ministryIds=m.ministryIds.filter(id=>id!==ministryId);
+  }else{
+    m.ministryIds.push(ministryId);
+  }
+  safeCleanMemberRoles(m);
+  save();
+  render();
+}
+function memberCanSelectRole(member,role){return safeMemberCanSelectRole(member,role)}
+
+function resetMemberPassword(mid){
+  let m=(data.members||[]).find(x=>x.id===mid);
+  if(!m){alert("Member not found.");return}
+  let suggested="worship"+Math.floor(1000+Math.random()*9000);
+  let newPass=prompt(`Enter new password for ${m.name}:`, suggested);
+  if(!newPass)return;
+  m.password=newPass;
+  save();
+  alert(`${m.name}'s password has been reset to: ${newPass}`);
+  render();
+}
+function members(){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let visible=user.role==="admin"?data.members:data.members.filter(m=>m.id===user.memberId);
+  let cards=visible.map(member=>{
+    if(typeof safeMemberMinistryIds==="function")safeMemberMinistryIds(member);
+    if(typeof safeCleanMemberRoles==="function")safeCleanMemberRoles(member);
+    let ministryIds=member.ministryIds||((data.ministries&&data.ministries[0])?[data.ministries[0].id]:[]);
+    let ministryHtml="";
+    if(user.role==="admin"){
+      ministryHtml=`<h4>Ministries</h4><div class="chips">${(data.ministries||[]).map(min=>`<button class="chip ${ministryIds.includes(min.id)?"on":""}" onclick="${typeof toggleMemberMinistrySafe==="function"?"toggleMemberMinistrySafe":"toggleMemberMinistry"}('${member.id}','${min.id}')">${esc(min.name)}</button>`).join("")}</div>`;
+    }else{
+      ministryHtml=`<p><b>Ministries:</b> ${ministryIds.map(id=>esc(typeof getMinistryName==="function"?getMinistryName(id):(typeof v153MinistryName==="function"?v153MinistryName(id):id))).join(", ")}</p>`;
+    }
+    let roleHtml=(data.ministries||[]).filter(min=>ministryIds.includes(min.id)).map(min=>{
+      let roles=(data.roles||[]).filter(r=>(r.ministryId||((data.ministries&&data.ministries[0]||{}).id))===min.id);
+      if(!roles.length)return "";
+      return `<h4>${esc(min.name)}</h4><div class="chips">${roles.map(role=>`<button class="chip ${(member.roles||[]).includes(role.name)?"on":""}" onclick="toggleRole('${member.id}','${esc(role.name)}')">${esc(role.name)}</button>`).join("")}</div>`;
+    }).join("");
+    return `<div class="panel">
+      <h3>${esc(member.name)}</h3>
+      <p>${esc(member.email)}</p>
+      ${user.role==="admin"?`<div class="inline"><button class="primary" type="button" onclick="resetMemberPassword('${member.id}')">Reset Password</button></div>`:""}
+      ${ministryHtml}
+      <label>Max services per month<input type="number" min="0" value="${member.maxPerMonth??3}" onchange="setMaxPerMonth('${member.id}',this.value)"></label>
+      ${user.role==="admin"?`<label>Admin notes<textarea onchange="setNotes('${member.id}',this.value)">${esc(member.notes||"")}</textarea></label>`:""}
+      <h4>Roles</h4>
+      ${roleHtml||`<p class="hint">No roles available for this member's ministries.</p>`}
+    </div>`;
+  }).join("");
+  return `<h1>${user.role==="admin"?"Members":"My Profile"}</h1><p class="hint">Members can belong to multiple ministries. Roles are grouped by ministry.</p>${cards}`;
+}
+
+function changeMyPassword(){
+  if(!user||user.role==="admin"){alert("This option is for member accounts.");return}
+  let member=(data.members||[]).find(m=>m.id===user.memberId);
+  if(!member){alert("Member profile not found.");return}
+  let current=prompt("Enter your current password:");
+  if(current===null)return;
+  if(current!==member.password){alert("Current password is incorrect.");return}
+  let next=prompt("Enter your new password:");
+  if(next===null)return;
+  next=next.trim();
+  if(next.length<4){alert("Password must be at least 4 characters.");return}
+  let confirmPass=prompt("Confirm your new password:");
+  if(confirmPass===null)return;
+  if(next!==confirmPass){alert("Passwords do not match.");return}
+  member.password=next;
+  save();
+  alert("Your password has been changed.");
+}
+function availability(){let ms=user.role==="admin"?data.members:data.members.filter(m=>m.id===user.memberId);return `<h1>Availability</h1>${user.role!=="admin"?`<div class="panel"><button class="primary" type="button" onclick="changeMyPassword()">Change My Password</button></div>`:""}<p class="hint">Mobile-friendly calendar cards.</p>${ms.map(m=>`<div class="panel"><h3>${esc(m.name)}</h3><div class="calendar">${data.services.map(s=>{let cur=(data.availability.find(a=>a.memberId===m.id&&a.serviceId===s.id)||{status:"available"}).status;return `<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<select onchange="setAvail('${m.id}','${s.id}',this.value)">${["available","unavailable","unsure"].map(x=>`<option value="${x}" ${cur===x?"selected":""}>${x}</option>`).join("")}</select></div>`}).join("")}</div></div>`).join("")}`}
+
+function icsEscape(value){
+  return String(value||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
+}
+function pad2(n){return String(n).padStart(2,"0")}
+function formatICSDateTimeLocal(dateStr,timeStr){
+  let t=(timeStr||"09:00").trim();
+  let parts=t.split(":");
+  let hh=pad2(parseInt(parts[0]||"0",10));
+  let mm=pad2(parseInt(parts[1]||"0",10));
+  return dateStr.replace(/-/g,"")+"T"+hh+mm+"00";
+}
+function addMinutesToTime(dateStr,timeStr,minutes){
+  let d=new Date(dateStr+"T"+(timeStr||"09:00")+":00");
+  d.setMinutes(d.getMinutes()+minutes);
+  return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate())+"T"+pad2(d.getHours())+pad2(d.getMinutes())+"00";
+}
+function utcStamp(){
+  let d=new Date();
+  return d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+"T"+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+"Z";
+}
+function foldICSLine(line){
+  let out="";
+  while(line.length>73){
+    out+=line.slice(0,73)+"\r\n ";
+    line=line.slice(73);
+  }
+  return out+line;
+}
+function downloadMyCalendar(){
+  const member=data.members.find(m=>m.id===user.memberId);
+  if(!member){alert("Member profile not found.");return}
+  const events=[];
+  data.rosters.filter(r=>r.published).forEach(r=>{
+    const roles=(r.assignments||[]).filter(a=>a.memberId===member.id).map(a=>a.roleName);
+    if(!roles.length)return;
+    const times=(r.times&&r.times.length?r.times:[r.time||"09:00"]).filter(Boolean);
+    times.forEach((t,i)=>{
+      events.push({
+        uid:`${r.id}-${member.id}-${i}@theworshipcalendar.local`,
+        date:r.date,
+        time:t,
+        summary:`${r.serviceName} - ${roles.join(", ")}`,
+        description:`Rostered via The Worship Calendar\\nRoles: ${roles.join(", ")}\\nService Times: ${serviceTimesText(r)}`,durationMinutes:getTemplateServiceLength((data.services.find(s=>s.id===r.serviceId)||{}).template)
+      });
+    });
+  });
+  if(!events.length){alert("No published rostered services found for your profile.");return}
+  let lines=[
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//The Worship Calendar//Roster Export//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH"
+  ];
+  const stamp=utcStamp();
+  events.forEach(ev=>{
+    lines.push("BEGIN:VEVENT");
+    lines.push("UID:"+icsEscape(ev.uid));
+    lines.push("DTSTAMP:"+stamp);
+    lines.push("DTSTART:"+formatICSDateTimeLocal(ev.date,ev.time));
+    lines.push("DTEND:"+addMinutesToTime(ev.date,ev.time,ev.durationMinutes||90));
+    lines.push("SUMMARY:"+icsEscape(ev.summary));
+    lines.push("DESCRIPTION:"+icsEscape(ev.description));
+    lines.push("END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+  const icsText=lines.map(foldICSLine).join("\r\n")+"\r\n";
+  const blob=new Blob([icsText],{type:"text/calendar;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="TheWorshipCalendar_My_Roster_v1.36.ics";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+
+function v152ServiceTimes(service){
+  return (service&&service.times&&service.times.length?service.times:[(service&&service.time)||""]).filter(Boolean);
+}
+function v152ServiceTimesText(service){
+  return v152ServiceTimes(service).join(", ");
+}
+function v152RoleMinistryId(roleName){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let role=(data.roles||[]).find(r=>r.name===roleName);
+  let fallback=(data.ministries&&data.ministries[0]&&data.ministries[0].id)||"default";
+  return role?(role.ministryId||fallback):fallback;
+}
+function v152MinistryName(id){
+  if(typeof getMinistryName==="function")return getMinistryName(id);
+  if(typeof ministryName==="function")return ministryName(id);
+  let m=(data.ministries||[]).find(x=>x.id===id);
+  return m?m.name:"Default Ministry";
+}
+function v152IsAvailable(memberId,serviceId){
+  let rec=(data.availability||[]).find(a=>a.memberId===memberId&&a.serviceId===serviceId);
+  return !rec||rec.status==="available";
+}
+function v152MonthKey(dateStr){return (dateStr||"").slice(0,7)}
+function v152AssignmentCount(memberId){
+  return (data.rosters||[]).reduce((n,r)=>n+(r.assignments||[]).filter(a=>a.memberId===memberId).length,0);
+}
+function v152MonthlyCount(memberId,month){
+  return (data.rosters||[]).reduce((n,r)=>v152MonthKey(r.date)===month?n+(r.assignments||[]).filter(a=>a.memberId===memberId).length:n,0);
+}
+function v152RolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function v152MemberCanDoRole(member,role){
+  if(!(member.roles||[]).includes(role.name))return false;
+  if(data.ministries&&data.ministries.length&&role.ministryId){
+    let ids=member.ministryIds||[data.ministries[0].id];
+    if(!ids.includes(role.ministryId))return false;
+  }
+  return true;
+}
+function v152CandidateOk(member,role,service,currentAssignments){
+  if(!v152IsAvailable(member.id,service.id))return false;
+  let limit=member.maxPerMonth??3;
+  if(limit<=0)return false;
+  if(v152MonthlyCount(member.id,v152MonthKey(service.date))>=limit)return false;
+  if(!v152MemberCanDoRole(member,role))return false;
+  let current=(currentAssignments||[]).filter(a=>a.memberId===member.id).map(a=>a.roleName);
+  if(current.includes(role.name))return false;
+  return current.length===0||current.every(r=>v152RolesCompatible(r,role.name));
+}
+function v152BuildRosterForService(serviceId){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let service=(data.services||[]).find(s=>s.id===serviceId);
+  if(!service)throw new Error("Service not found");
+  let template=(data.templates||[]).find(t=>t.name===service.template);
+  let roles=(data.roles||[]).filter(role=>!template||!template.roleNames||template.roleNames.includes(role.name));
+  let assignments=[];
+  roles.forEach(role=>{
+    let min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
+    let max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
+    min=Math.max(0,min||0);
+    max=Math.max(min,max||min||1);
+    for(let i=0;i<max;i++){
+      let person=(data.members||[])
+        .filter(m=>v152CandidateOk(m,role,service,assignments))
+        .sort((a,b)=>v152AssignmentCount(a.id)-v152AssignmentCount(b.id)||String(a.name).localeCompare(String(b.name)))[0];
+      if(person)assignments.push({roleName:role.name,memberId:person.id,memberName:person.name});
+    }
+    for(let i=assignments.filter(a=>a.roleName===role.name).length;i<min;i++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments};
+}
+function makeRoster(){
+  let serviceId=(document.getElementById("rosterSvc")||{}).value;
+  if(!serviceId){alert("Please select a service.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(r=>r.serviceId===serviceId)){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters.unshift(v152BuildRosterForService(serviceId));
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  let start=(document.getElementById("rosterStart")||{}).value;
+  let end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  let created=0,skipped=0,failed=0;
+  (data.services||[])
+    .filter(s=>s.date>=start&&s.date<=end)
+    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
+    .forEach(service=>{
+      if(data.rosters.some(r=>r.serviceId===service.id)){skipped++;return}
+      try{data.rosters.unshift(v152BuildRosterForService(service.id));created++}
+      catch(err){console.error(err);failed++}
+    });
+  save();
+  render();
+  setTimeout(()=>{
+    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
+    let el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
+function v152GroupedRosterHtml(roster,editable){
+  let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:"Default Ministry"}];
+  let groups={};
+  (roster.assignments||[]).forEach(a=>{
+    let mid=v152RoleMinistryId(a.roleName);
+    (groups[mid]=groups[mid]||[]).push(a);
+  });
+  return ministries.map(min=>{
+    let items=groups[min.id]||[];
+    if(!items.length)return "";
+    let rows=items.map(a=>{
+      let idx=(roster.assignments||[]).indexOf(a);
+      return `<tr><td>${esc(a.roleName)}</td><td>${esc(a.memberName)}</td><td>${editable?memberSelect(roster.id,idx,a.memberId):""}</td></tr>`;
+    }).join("");
+    return `<h4>${esc(min.name)}</h4><table><tr><th>Role</th><th>Assigned</th><th>Edit</th></tr>${rows}</table>`;
+  }).join("")||"<p class='hint'>No assignments yet.</p>";
+}
+
+function v153ServiceTimesText(service){
+  if(typeof v152ServiceTimesText==="function")return v152ServiceTimesText(service);
+  if(typeof serviceTimesText==="function")return serviceTimesText(service);
+  return (service&&service.times&&service.times.length?service.times:[(service&&service.time)||""]).filter(Boolean).join(", ");
+}
+function v153RoleMinistryId(roleName){
+  if(typeof v152RoleMinistryId==="function")return v152RoleMinistryId(roleName);
+  let role=(data.roles||[]).find(r=>r.name===roleName);
+  let fallback=(data.ministries&&data.ministries[0]&&data.ministries[0].id)||"default";
+  return role?(role.ministryId||fallback):fallback;
+}
+function v153MinistryName(id){
+  if(typeof v152MinistryName==="function")return v152MinistryName(id);
+  if(typeof safeMinistryName==="function")return safeMinistryName(id);
+  if(typeof getMinistryName==="function")return getMinistryName(id);
+  let m=(data.ministries||[]).find(x=>x.id===id);
+  return m?m.name:"Default Ministry";
+}
+function v153MemberPersonalMinistryRoles(roster,memberId){
+  let groups={};
+  (roster.assignments||[]).filter(a=>a.memberId===memberId).forEach(a=>{
+    let mid=v153RoleMinistryId(a.roleName);
+    (groups[mid]=groups[mid]||[]).push(a.roleName);
+  });
+  return groups;
+}
+function personalizedRoster(){
+  if(!user||user.role==="admin")return `<h1>Personalized Roster</h1><p class="hint">This tab is for team members.</p>`;
+  const member=(data.members||[]).find(m=>m.id===user.memberId);
+  if(!member)return `<h1>Personalized Roster</h1><p class="hint">Member profile not found.</p>`;
+  const items=(data.rosters||[])
+    .filter(r=>r.published)
+    .map(r=>({roster:r,groups:v153MemberPersonalMinistryRoles(r,member.id)}))
+    .filter(x=>Object.keys(x.groups).length)
+    .sort((a,b)=>(a.roster.date+(a.roster.time||((a.roster.times||[])[0])||"")).localeCompare(b.roster.date+(b.roster.time||((b.roster.times||[])[0])||"")));
+  return `<h1>Personalized Roster</h1><p class="hint">Only services where you are rostered are shown here.</p><button class="primary" type="button" onclick="downloadMyCalendar()">Add My Services to Calendar</button>${items.length?items.map(x=>`<div class="panel"><h3>${esc(x.roster.serviceName)}</h3><p><b>Date:</b> ${esc(x.roster.date)}<br><b>Times:</b> ${esc(v153ServiceTimesText(x.roster))}</p>${Object.entries(x.groups).map(([mid,roles])=>`<h4>${esc(v153MinistryName(mid))}</h4><ul>${roles.map(role=>`<li>${esc(role)}</li>`).join("")}</ul>`).join("")}</div>`).join(""):`<div class="panel"><p>You are not currently rostered on any published services.</p></div>`}`;
+}
+
+function rosters(){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let visible=user.role==="admin"?data.rosters:(data.rosters||[]).filter(r=>r.published);
+  let services=(data.services||[]).slice().sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
+  let adminTools=user.role==="admin"?`
+    <div class="panel"><h3>Generate Single Roster</h3><div class="inline"><select id="rosterSvc">${services.map(s=>`<option value="${s.id}">${esc(s.name)} — ${esc(s.date)} ${esc(v152ServiceTimesText(s))}</option>`).join("")}</select><button class="primary" type="button" onclick="makeRoster()">Generate Roster</button></div></div>
+    <div class="panel"><h3>Generate Rosters by Date Range</h3><div class="inline"><input id="rosterStart" type="date" style="max-width:180px"><input id="rosterEnd" type="date" style="max-width:180px"><button class="primary" type="button" onclick="makeRostersForRange()">Generate All in Range</button></div><p id="rangeResult" class="notice"></p></div>
+    <div class="panel"><h3>Export Rosters as PDF Calendar</h3><div class="inline"><input id="pdfStart" type="date" style="max-width:180px"><input id="pdfEnd" type="date" style="max-width:180px"><button class="primary" type="button" onclick="exportRostersPDF()">Export PDF Calendar</button></div></div>
+    <div class="panel danger"><h3>Reset Draft Rosters</h3><button type="button" onclick="resetDraftRosters()">Reset All Unpublished Rosters</button><p id="resetResult" class="notice"></p></div>`:"";
+  let cards=(visible||[]).slice().sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(r=>{
+    let issues=(typeof conflictsFor==="function")?conflictsFor(r):[];
+    let editable=user.role==="admin"&&!r.published;
+    return `<div class="panel ${issues.length?"warn":""}"><h3>${esc(r.serviceName)} — ${esc(r.date)} ${esc(v152ServiceTimesText(r))}</h3><p>Status: <b>${r.published?"Published":"Draft"}</b> ${r.published?'<span class="badge">Assignments locked</span>':""}</p>${user.role==="admin"?`<button type="button" onclick="publishRoster('${r.id}')">${r.published?"Unpublish to Edit":"Publish"}</button>`:""}${issues.map(x=>`<div class="row danger">⚠ ${esc(x)}</div>`).join("")}${v152GroupedRosterHtml(r,editable)}</div>`;
+  }).join("");
+  return `<h1>${user.role==="admin"?"Rosters":"Published Rosters"}</h1>${adminTools}${cards||"<div class='panel'><p>No rosters yet.</p></div>"}`;
+}
+function memberSelect(rid,i,mid){return `<select onchange="editAssign('${rid}',${i},this.value)"><option value="">Unfilled</option>${data.members.map(m=>`<option value="${m.id}" ${m.id===mid?"selected":""}>${esc(m.name)}</option>`).join("")}</select>`}
+
+function ghConfig(){
+  data.github=data.github||{token:"",owner:"",repo:"",branch:"main",path:"data/the-worship-calendar.json",enabled:false,lastSync:""};
+  return data.github;
+}
+function ghSet(field,value){
+  let g=ghConfig();
+  g[field]=value;
+  save();
+}
+function ghStatus(msg,isError){
+  let el=document.getElementById("syncStatus");
+  if(el)el.textContent=msg;
+  if(el)el.style.color=isError?"#b42318":"#52616f";
+}
+function ghValidate(){
+  let g=ghConfig();
+  if(!g.token||!g.owner||!g.repo||!g.branch||!g.path){
+    throw new Error("GitHub settings are incomplete. Admin must enter token, owner, repo, branch and data file path.");
+  }
+  return g;
+}
+function ghApiUrl(g){
+  return `https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}/contents/${g.path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(g.branch)}`;
+}
+function ghWriteUrl(g){
+  return `https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}/contents/${g.path.split("/").map(encodeURIComponent).join("/")}`;
+}
+function ghEncodeUnicode(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function ghDecodeUnicode(str){
+  return decodeURIComponent(escape(atob(str.replace(/\n/g,""))));
+}
+async function ghGetFile(g){
+  let res=await fetch(ghApiUrl(g),{headers:{Authorization:`Bearer ${g.token}`,Accept:"application/vnd.github+json"}});
+  if(res.status===404)return null;
+  if(!res.ok)throw new Error(`GitHub read failed: ${res.status} ${await res.text()}`);
+  return await res.json();
+}
+function ghExportData(){
+  let copy=JSON.parse(JSON.stringify(data));
+  copy.github=copy.github||{};
+  return copy;
+}
+async function submitChangesOnline(){
+  try{
+    save();
+    ghStatus("Saving online…");
+    let g=ghValidate();
+    let existing=await ghGetFile(g);
+    let payload=ghExportData();
+    payload.github.lastSync=new Date().toISOString();
+    let body={
+      message:`The Worship Calendar sync ${new Date().toISOString()}`,
+      content:ghEncodeUnicode(JSON.stringify(payload,null,2)),
+      branch:g.branch
+    };
+    if(existing&&existing.sha)body.sha=existing.sha;
+    let res=await fetch(ghWriteUrl(g),{
+      method:"PUT",
+      headers:{Authorization:`Bearer ${g.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    });
+    if(!res.ok)throw new Error(`GitHub save failed: ${res.status} ${await res.text()}`);
+    data.github.lastSync=new Date().toISOString();
+    save();
+    ghStatus("Saved online");
+  }catch(err){
+    console.error(err);
+    ghStatus("Failed to save: "+(err.message||err),true);
+    alert("GitHub sync failed: "+(err.message||err));
+  }
+}
+async function testGitHubConnection(){
+  try{
+    ghStatus("Testing GitHub connection…");
+    let g=ghValidate();
+    let res=await fetch(`https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}`,{headers:{Authorization:`Bearer ${g.token}`,Accept:"application/vnd.github+json"}});
+    if(!res.ok)throw new Error(`Connection failed: ${res.status} ${await res.text()}`);
+    ghStatus("GitHub connection OK");
+    alert("GitHub connection OK.");
+  }catch(err){
+    console.error(err);
+    ghStatus("Connection failed: "+(err.message||err),true);
+    alert("GitHub connection failed: "+(err.message||err));
+  }
+}
+async function loadFromGitHub(){
+  try{
+    ghStatus("Loading from GitHub…");
+    let g=ghValidate();
+    let file=await ghGetFile(g);
+    if(!file){alert("Data file does not exist yet. Use Submit Changes Online to create it.");ghStatus("GitHub file not found");return}
+    let loaded=JSON.parse(ghDecodeUnicode(file.content));
+    let currentGithub=data.github;
+    data=loaded;
+    data.github=data.github||currentGithub;
+    data.github.token=currentGithub.token||data.github.token;
+    save();
+    ghStatus("Loaded from GitHub");
+    render();
+  }catch(err){
+    console.error(err);
+    ghStatus("Load failed: "+(err.message||err),true);
+    alert("Load from GitHub failed: "+(err.message||err));
+  }
+}
+function syncBar(){
+  return `<div class="syncBar"><button class="primary" type="button" onclick="submitChangesOnline()">Submit Changes Online</button><span id="syncStatus" class="syncStatus">${data.github&&data.github.lastSync?`Last online save: ${esc(data.github.lastSync)}`:"Not synced online yet"}</span></div>`;
+}
+function settings(){
+  let g=ghConfig();
+  return `<h1>Settings</h1>
+  <div class="panel"><h3>GitHub Online Storage</h3>
+    <p class="danger">Security warning: You are choosing to store the GitHub token in this app configuration. Use a fine-grained token restricted to this repository only.</p>
+    <label>GitHub Token<input type="password" value="${esc(g.token||"")}" onchange="ghSet('token',this.value)"></label>
+    <label>Repo Owner<input value="${esc(g.owner||"")}" onchange="ghSet('owner',this.value)"></label>
+    <label>Repo Name<input value="${esc(g.repo||"")}" onchange="ghSet('repo',this.value)"></label>
+    <label>Branch<input value="${esc(g.branch||"main")}" onchange="ghSet('branch',this.value)"></label>
+    <label>Data File Path<input value="${esc(g.path||"data/the-worship-calendar.json")}" onchange="ghSet('path',this.value)"></label>
+    <div class="inline"><button type="button" onclick="testGitHubConnection()">Test Connection</button><button type="button" onclick="loadFromGitHub()">Load From GitHub</button><button class="primary" type="button" onclick="submitChangesOnline()">Save To GitHub</button></div>
+    <p class="hint">Members do not see this settings page. They only use username and password. The Submit Changes Online button uses this saved configuration.</p>
+  </div>`;
+}
+
+function login(e){e.preventDefault();let email=loginEmail.value.trim(),pass=loginPass.value;if(email==="admin"&&pass===data.settings.adminPassword)return setUser({role:"admin",name:"Administrator"});let m=data.members.find(x=>x.email.toLowerCase()===email.toLowerCase()&&x.password===pass);if(m)return setUser({role:"member",memberId:m.id,name:m.name});msg.textContent="Login failed."}
+function register(e){e.preventDefault();let m={id:uid(),name:regName.value,email:regEmail.value,phone:"",password:regPass.value,roles:[],notes:"",history:[],maxPerMonth:3,ministryIds:[(data.ministries&&data.ministries[0]&&data.ministries[0].id)||"default"]};data.members.push(m);setUser({role:"member",memberId:m.id,name:m.name})}
+function logout(){user=null;sessionStorage.removeItem("twc-user");render()}function getServiceTimes(){return (svcTimes.value||"09:00").split(",").map(t=>t.trim()).filter(Boolean)}
+function serviceTimesText(s){return (s.times&&s.times.length?s.times:[s.time||""]).filter(Boolean).join(", ")}
+function addService(){data.services.push({id:uid(),name:svcName.value,date:svcDate.value,times:getServiceTimes(),time:getServiceTimes()[0]||"09:00",notes:svcNotes.value,template:svcTemplate.value,type:svcType.value||"adhoc"});render()}
+function addRecurring(){let base=new Date(svcDate.value),times=getServiceTimes(),weeks=Math.max(1,parseInt(svcWeeks.value||"8",10));for(let i=0;i<weeks;i++){let d=new Date(base);d.setDate(d.getDate()+i*7);data.services.push({id:uid(),name:svcName.value,date:d.toISOString().slice(0,10),times:[...times],time:times[0]||"09:00",notes:svcNotes.value,template:svcTemplate.value,type:"recurring"})}render()}
+function delService(id){data.services=data.services.filter(s=>s.id!==id);render()}
+function editRole(id,field,value){
+  let r=data.roles.find(x=>x.id===id);
+  if(!r)return;
+  let oldName=r.name;
+  if(field==="name"){
+    let newName=(value||"").trim();
+    if(!newName){alert("Role name cannot be blank.");render();return}
+    if(data.roles.some(x=>x.id!==id && x.name.toLowerCase()===newName.toLowerCase())){alert("That role already exists.");render();return}
+    r.name=newName;
+    data.members.forEach(m=>{m.roles=(m.roles||[]).map(role=>role===oldName?newName:role)});
+    if(data.compatibleRoles&&data.compatibleRoles[oldName]){data.compatibleRoles[newName]=data.compatibleRoles[oldName];delete data.compatibleRoles[oldName]}if(data.compatibleRoles){Object.keys(data.compatibleRoles).forEach(k=>{data.compatibleRoles[k]=data.compatibleRoles[k].map(x=>x===oldName?newName:x)})}if(data.compatibleRoles){delete data.compatibleRoles[role.name];Object.keys(data.compatibleRoles).forEach(k=>{data.compatibleRoles[k]=data.compatibleRoles[k].filter(x=>x!==role.name)})}data.templates.forEach(t=>{
+      t.roleNames=(t.roleNames||[]).map(role=>role===oldName?newName:role);
+      if(t.roleTimes&&t.roleTimes[oldName]!==undefined){t.roleTimes[newName]=t.roleTimes[oldName];delete t.roleTimes[oldName]}
+      if(t.roleMin&&t.roleMin[oldName]!==undefined){t.roleMin[newName]=t.roleMin[oldName];delete t.roleMin[oldName]}
+      if(t.roleMax&&t.roleMax[oldName]!==undefined){t.roleMax[newName]=t.roleMax[oldName];delete t.roleMax[oldName]}
+    });
+  }
+  save();
+  render();
+}
+function addRole(){addRoleFromRolesTab()}
+function delRole(id){
+  let role=data.roles.find(r=>r.id===id);
+  if(!role)return;
+  if(!confirm(`Delete role "${role.name}"?`))return;
+  data.roles=data.roles.filter(r=>r.id!==id);
+  data.members.forEach(m=>{m.roles=(m.roles||[]).filter(x=>x!==role.name)});
+  data.templates.forEach(t=>{
+    t.roleNames=(t.roleNames||[]).filter(x=>x!==role.name);
+    if(t.roleTimes)delete t.roleTimes[role.name];
+    if(t.roleMin)delete t.roleMin[role.name];
+    if(t.roleMax)delete t.roleMax[role.name];
+  });
+  render();
+}
+function addTemplate(){let roleNames=data.roles.map(r=>r.name);let roleMin={},roleMax={};roleNames.forEach(n=>{roleMin[n]=1;roleMax[n]=1});data.templates.push({id:uid(),name:tplName.value||"New Template",roleNames,roleMin,roleMax,roleTimes:{},serviceLengthMinutes:90});render()}function toggleTemplateRole(tid,role){let t=data.templates.find(x=>x.id===tid);t.roleNames=t.roleNames.includes(role)?t.roleNames.filter(r=>r!==role):[...t.roleNames,role];render()}
+function setTemplateServiceLength(tid,value){
+  let t=data.templates.find(x=>x.id===tid);
+  if(!t)return;
+  t.serviceLengthMinutes=Math.max(1,parseInt(value||"90",10));
+  save();
+  render();
+}
+function getTemplateServiceLength(templateName){
+  let t=data.templates.find(x=>x.name===templateName);
+  return Math.max(1,parseInt((t&&t.serviceLengthMinutes)||90,10));
+}
+function setTemplateRoleMin(tid,role,value){let t=data.templates.find(x=>x.id===tid);t.roleMin=t.roleMin||{};t.roleMin[role]=parseInt(value||1,10);save()}function setTemplateRoleMax(tid,role,value){let t=data.templates.find(x=>x.id===tid);t.roleMax=t.roleMax||{};t.roleMax[role]=parseInt(value||1,10);save()}function setTemplateRoleTimes(tid,role,value){let t=data.templates.find(x=>x.id===tid);if(!t)return;t.roleTimes=t.roleTimes||{};t.roleTimes[role]=value.trim();save();render()}
+function templateAllowsRoleAtTime(templateName,role,time){let t=data.templates.find(x=>x.name===templateName);if(!t)return true;if(!t.roleNames.includes(role))return false;if(!t.roleTimes||!t.roleTimes[role])return true;let times=t.roleTimes[role].split(",").map(x=>x.trim()).filter(Boolean);return times.length===0||times.includes(time)}
+function toggleRole(mid,role){let m=data.members.find(x=>x.id===mid);m.roles=m.roles.includes(role)?m.roles.filter(r=>r!==role):[...m.roles,role];render()}function resetMemberPassword(mid){
+  let m=data.members.find(x=>x.id===mid);
+  if(!m)return;
+  let suggested="worship"+Math.floor(1000+Math.random()*9000);
+  let newPass=prompt(`Enter new password for ${m.name}:`, suggested);
+  if(!newPass)return;
+  m.password=newPass;
+  save();
+  alert(`${m.name}'s password has been reset to: ${newPass}`);
+  render();
+}
+function setNotes(mid,v){data.members.find(x=>x.id===mid).notes=v;save()}function setMaxPerMonth(mid,v){let m=data.members.find(x=>x.id===mid);if(m){m.maxPerMonth=Math.max(0,parseInt(v||"0",10));save();render()}}function setAvail(mid,sid,status){data.availability=data.availability.filter(a=>!(a.memberId===mid&&a.serviceId===sid));data.availability.push({memberId:mid,serviceId:sid,status});render()}
+function monthKey(dateStr){return (dateStr||"").slice(0,7)}
+function getAssignmentCount(mid){return data.rosters.reduce((n,r)=>n+r.assignments.filter(a=>a.memberId===mid).length,0)}
+function getMonthlyAssignmentCount(mid,month){return data.rosters.reduce((n,r)=>monthKey(r.date)===month?n+r.assignments.filter(a=>a.memberId===mid).length:n,0)}
+function memberCanServeThisMonth(member,sid){let service=data.services.find(s=>s.id===sid);let limit=member.maxPerMonth??3;if(limit<=0)return false;return getMonthlyAssignmentCount(member.id,monthKey(service?.date))<limit}
+function memberAssignedRoles(assignments,memberId){return assignments.filter(a=>a.memberId===memberId).map(a=>a.roleName)}
+
+
+function twcServiceTimes(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
+function twcServiceTimesText(s){return twcServiceTimes(s).join(", ")}
+function twcIsAvailable(mid,sid){
+  let a=(data.availability||[]).find(x=>x.memberId===mid&&x.serviceId===sid);
+  return !a||a.status==="available";
+}
+function twcMonthKey(dateStr){return (dateStr||"").slice(0,7)}
+function twcMonthlyAssignmentCount(mid,month){
+  return (data.rosters||[]).reduce((n,r)=>twcMonthKey(r.date)===month?n+(r.assignments||[]).filter(a=>a.memberId===mid).length:n,0);
+}
+function twcCanServeMonth(member,service){
+  let limit=member.maxPerMonth??3;
+  if(limit<=0)return false;
+  return twcMonthlyAssignmentCount(member.id,twcMonthKey(service.date))<limit;
+}
+function twcRolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function twcAssignedRoles(assignments,mid){
+  return (assignments||[]).filter(a=>a.memberId===mid).map(a=>a.roleName);
+}
+function twcMemberCanSelectRole(member,role){
+  if(typeof safeMemberCanSelectRole==="function")return safeMemberCanSelectRole(member,role);
+  if(typeof memberCanSelectRole==="function")return memberCanSelectRole(member,role);
+  if(!data.ministries||!role.ministryId)return true;
+  let ids=member.ministryIds||[(data.ministries[0]||{}).id];
+  return ids.includes(role.ministryId||((data.ministries[0]||{}).id));
+}
+function twcGetAssignmentCount(mid){
+  return (data.rosters||[]).reduce((n,r)=>n+(r.assignments||[]).filter(a=>a.memberId===mid).length,0);
+}
+function twcCandidateOk(member,role,service,assignments){
+  if(!twcIsAvailable(member.id,service.id))return false;
+  if(!twcCanServeMonth(member,service))return false;
+  if(!(member.roles||[]).includes(role.name))return false;
+  if(!twcMemberCanSelectRole(member,role))return false;
+  let current=twcAssignedRoles(assignments,member.id);
+  if(current.includes(role.name))return false;
+  return current.length===0||current.every(r=>twcRolesCompatible(r,role.name));
+}
+function buildRosterForService(sid){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let s=(data.services||[]).find(x=>x.id===sid);
+  if(!s)throw new Error("Service not found");
+  let tpl=(data.templates||[]).find(t=>t.name===s.template);
+  let roleList=(data.roles||[]).filter(role=>!tpl||!(tpl.roleNames)||tpl.roleNames.includes(role.name));
+  let assignments=[];
+  roleList.forEach(role=>{
+    let roleMin=(tpl&&tpl.roleMin&&tpl.roleMin[role.name]!==undefined)?parseInt(tpl.roleMin[role.name],10):(role.min??1);
+    let roleMax=(tpl&&tpl.roleMax&&tpl.roleMax[role.name]!==undefined)?parseInt(tpl.roleMax[role.name],10):(role.max??1);
+    roleMin=Math.max(0,roleMin||0);
+    roleMax=Math.max(roleMin,roleMax||roleMin||1);
+    for(let k=0;k<roleMax;k++){
+      let c=(data.members||[])
+        .filter(m=>twcCandidateOk(m,role,s,assignments))
+        .sort((a,b)=>twcGetAssignmentCount(a.id)-twcGetAssignmentCount(b.id)||a.name.localeCompare(b.name))[0];
+      if(c)assignments.push({roleName:role.name,memberId:c.id,memberName:c.name});
+    }
+    for(let k=assignments.filter(a=>a.roleName===role.name).length;k<roleMin;k++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+  return {id:uid(),serviceId:sid,serviceName:s.name,date:s.date,time:s.time,times:s.times||[s.time],published:false,assignments};
+}
+function isAvailable(mid,sid){let a=data.availability.find(x=>x.memberId===mid&&x.serviceId===sid);return !a||a.status==="available"}function makeRoster(){
+  let sel=document.getElementById("rosterSvc");
+  let sid=sel&&sel.value;
+  if(!sid){alert("Please select a service.");return}
+  if((data.rosters||[]).some(r=>r.serviceId===sid)){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters=data.rosters||[];
+    data.rosters.unshift(buildRosterForService(sid));
+    render();
+  }catch(e){
+    console.error(e);
+    alert("Could not generate roster: "+(e.message||e));
+  }
+}
+function makeRostersForRange(){
+  let startEl=document.getElementById("rosterStart"),endEl=document.getElementById("rosterEnd");
+  let start=startEl&&startEl.value,end=endEl&&endEl.value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  let created=0,skipped=0,failed=0;
+  (data.services||[])
+    .filter(s=>s.date>=start&&s.date<=end)
+    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
+    .forEach(s=>{
+      if(data.rosters.some(r=>r.serviceId===s.id)){skipped++;return}
+      try{
+        data.rosters.unshift(buildRosterForService(s.id));
+        created++;
+      }catch(e){
+        console.error(e);
+        failed++;
+      }
+    });
+  render();
+  setTimeout(()=>{
+    let el=document.getElementById("rangeResult");
+    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
+function conflictsFor(r){let out=[],counts={},seen={};r.assignments.forEach(a=>{counts[a.roleName]=(counts[a.roleName]||0)+(+!!a.memberId);if(a.memberId)seen[a.memberId]=(seen[a.memberId]||0)+1;let av=data.availability.find(x=>x.serviceId===r.serviceId&&x.memberId===a.memberId);if(av&&av.status==="unavailable")out.push(`${a.memberName} is marked unavailable for ${a.roleName}`)});data.roles.forEach(role=>{let n=counts[role.name]||0;if(n<role.min)out.push(`${role.name} missing minimum: ${n}/${role.min}`);if(n>role.max)out.push(`${role.name} over maximum: ${n}/${role.max}`)});Object.entries(seen).forEach(([mid,n])=>{
+  if(n>1)out.push(`${data.members.find(m=>m.id===mid)?.name||"Member"} assigned ${n} times`);
+  let m=data.members.find(x=>x.id===mid);
+  let monthly=getMonthlyAssignmentCount(mid,monthKey(r.date));
+  if(m&&monthly>(m.maxPerMonth??3))out.push(`${m.name} exceeds monthly serving limit: ${monthly}/${m.maxPerMonth??3}`);
+});
+let sameRoleCheck={};
+r.assignments.forEach(a=>{
+  if(!a.memberId)return;
+  let key=a.memberId+"|"+a.roleName;
+  sameRoleCheck[key]=(sameRoleCheck[key]||0)+1;
+  if(sameRoleCheck[key]>1)out.push(`${a.memberName} is assigned to ${a.roleName} more than once`);
+});
+return out}function editAssign(rid,i,mid){
+  let r=data.rosters.find(x=>x.id===rid);
+  if(r&&r.published){alert("Published rosters are locked. Unpublish this roster before editing assignments.");render();return}
+  let targetRole=r.assignments[i].roleName;
+  if(mid&&r.assignments.some((a,idx)=>idx!==i&&a.memberId===mid&&a.roleName===targetRole)){
+    alert("This member is already assigned to this role for this service.");
+    render();
+    return;
+  }
+  let m=data.members.find(x=>x.id===mid);
+  r.assignments[i].memberId=mid;
+  r.assignments[i].memberName=m?m.name:"Unfilled";
+  render();
+}function resetDraftRosters(){let count=data.rosters.filter(r=>!r.published).length;if(!count){alert("There are no unpublished draft rosters to reset.");return}if(!confirm(`Delete ${count} unpublished draft roster(s)? Published rosters will be kept.`))return;data.rosters=data.rosters.filter(r=>r.published);save();render();setTimeout(()=>{let el=document.getElementById("resetResult");if(el)el.textContent=`Removed ${count} unpublished draft roster(s).`},0)}function publishRoster(id){let r=data.rosters.find(x=>x.id===id);r.published=!r.published;render()}function appLogoUrl(){return new URL('assets/logo.png', window.location.href).href}
+function monthLabel(dateStr){let d=new Date(dateStr+"T00:00:00");return d.toLocaleString(undefined,{month:"short",year:"2-digit"})}
+function dayLabel(dateStr){let d=new Date(dateStr+"T00:00:00");return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric"})}
+function roleClass(role){let r=role.toLowerCase();if(r.includes("sound")||r.includes("livestream"))return "role-sound";if(r.includes("visual")||r.includes("projection"))return "role-visual";return ""}
+
+function ministryPageBreakWrapper(title,content,isFirst){
+  return `<div class="${isFirst?'':'ministry-page-break'}"><h2>${title}</h2>${content}</div>`;
+}
+
+function monthLabel(dateStr){
+  let d=new Date(dateStr+"T00:00:00");
+  return d.toLocaleString(undefined,{month:"short",year:"2-digit"});
+}
+function dayLabel(dateStr){
+  let d=new Date(dateStr+"T00:00:00");
+  return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric"});
+}
+function roleClass(role){
+  let r=role.toLowerCase();
+  if(r.includes("sound")||r.includes("livestream"))return "role-sound";
+  if(r.includes("visual")||r.includes("projection"))return "role-visual";
+  return "";
+}
+function exportRoleMinistryId(roleName){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let role=data.roles.find(r=>r.name===roleName);
+  let fallback=(data.ministries&&data.ministries[0]&&data.ministries[0].id)||"default";
+  return role?(role.ministryId||fallback):fallback;
+}
+function exportMinistryName(id){
+  if(typeof getMinistryName==="function")return getMinistryName(id);
+  if(typeof ministryName==="function")return ministryName(id);
+  let m=(data.ministries||[]).find(x=>x.id===id);
+  return m?m.name:"Default Ministry";
+}
+function exportSelectedMinistryIds(list){
+  let ids=[];
+  list.forEach(r=>(r.assignments||[]).forEach(a=>{
+    let mid=exportRoleMinistryId(a.roleName);
+    if(!ids.includes(mid))ids.push(mid);
+  }));
+  let ordered=(data.ministries||[]).map(m=>m.id).filter(id=>ids.includes(id));
+  ids.forEach(id=>{if(!ordered.includes(id))ordered.push(id)});
+  return ordered;
+}
+
+function buildPdfPageHeader(ministryName,startDate,endDate){
+  let logo=(data.logo||"");
+  return `<div class="pdf-header">${logo?`<img class="pdf-logo" src="${logo}">`:''}<div><div class="pdf-title">The Worship Calendar</div><div>${ministryName}</div><div>${startDate} - ${endDate}</div></div></div>`;
+}
+
+function pdfLogoSrc(){
+  return data.logo || "assets/logo.png";
+}
+function buildPdfPageHeader(ministryName,startDate,endDate){
+  return `<div class="pdf-header"><img class="pdf-logo" src="${pdfLogoSrc()}" onerror="this.style.display='none'"><div><div class="pdf-title">The Worship Calendar</div><div class="pdf-subtitle">${esc(ministryName)}</div><div class="pdf-range">${esc(startDate)} - ${esc(endDate)}</div></div></div>`;
+}
+function exportRostersPDF(){
+  let start=pdfStart.value,end=pdfEnd.value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
+  if(!list.length){alert("No rosters found in that date range.");return}
+  let ministries=exportSelectedMinistryIds(list);
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v1.57</title><style>
+@page{size:A4 landscape;margin:8mm}
+body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
+button{margin-bottom:10px;padding:8px 12px}
+.pdf-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;border-bottom:2px solid #333;padding-bottom:8px}
+.pdf-logo{height:58px;max-width:120px;object-fit:contain}
+.pdf-title{font-size:20px;font-weight:bold;text-transform:uppercase}
+.pdf-subtitle{font-size:16px;font-weight:bold}
+.pdf-range{font-size:12px;color:#333}
+.ministry-page{break-before:page;page-break-before:always}
+.ministry-page.first{break-before:auto;page-break-before:auto}
+.month-section{break-inside:avoid;page-break-inside:avoid;margin-bottom:16px}
+.roster-table{width:100%;border-collapse:collapse;table-layout:fixed;page-break-inside:avoid;break-inside:avoid}
+.roster-table th,.roster-table td{border:2px solid #111;text-align:center;vertical-align:middle;padding:4px;font-size:11px;line-height:1.25;word-wrap:break-word}
+.month-row th{font-size:18px;text-align:left;background:white;border:3px solid #111;padding:6px}
+.roster-table th.role-head{width:115px;background:#e7f3f7}
+.roster-table th.date-head{background:#d9eef3;font-weight:bold;text-transform:uppercase}
+.roster-table th.time-head{background:#d9eef3;font-size:10px}
+.role-cell{text-align:left!important;font-weight:bold;text-transform:uppercase;background:#d9eef3}
+.role-sound{background:#ffc000!important}
+.role-visual{background:#92d050!important}
+.name-cell{background:#d9eef3;min-height:24px}
+.name-cell.role-sound{background:#ffc000!important}
+.name-cell.role-visual{background:#92d050!important}
+@media print{button{display:none}body{padding:0}.ministry-page{page-break-before:always;break-before:page}.ministry-page.first{page-break-before:auto;break-before:auto}.roster-table th,.roster-table td{font-size:9px;padding:3px}.month-row th{font-size:15px}}
+</style></head><body><button onclick="window.print()">Print / Save as PDF</button>`;
+  ministries.forEach((ministryId,ministryIndex)=>{
+    let ministryName=exportMinistryName(ministryId);
+    let monthGroups={};
+    list.forEach(r=>{
+      let filteredAssignments=(r.assignments||[]).filter(a=>exportRoleMinistryId(a.roleName)===ministryId);
+      if(!filteredAssignments.length)return;
+      let month=monthLabel(r.date);
+      (monthGroups[month]=monthGroups[month]||[]).push({...r,assignments:filteredAssignments});
+    });
+    if(!Object.keys(monthGroups).length)return;
+    htmlDoc+=`<section class="ministry-page ${ministryIndex===0?"first":""}">${buildPdfPageHeader(ministryName,start,end)}`;
+    Object.keys(monthGroups).forEach(month=>{
+      let rosters=monthGroups[month];
+      let roleOrder=[];
+      rosters.forEach(r=>(r.assignments||[]).forEach(a=>{if(!roleOrder.includes(a.roleName))roleOrder.push(a.roleName)}));
+      let totalCols=1+rosters.reduce((n,r)=>n+(r.times&&r.times.length?r.times.length:1),0);
+      htmlDoc+=`<div class="month-section"><table class="roster-table"><tr class="month-row"><th colspan="${totalCols}">${esc(month)}</th></tr><tr><th class="role-head"></th>`;
+      rosters.forEach(r=>{htmlDoc+=`<th class="date-head" colspan="${(r.times&&r.times.length?r.times.length:1)}">${esc(dayLabel(r.date))}</th>`});
+      htmlDoc+=`</tr><tr><th class="role-head"></th>`;
+      rosters.forEach(r=>{let times=(r.times&&r.times.length?r.times:[r.time||""]);times.forEach(t=>{htmlDoc+=`<th class="time-head">${esc(t)}</th>`})});
+      htmlDoc+=`</tr>`;
+      roleOrder.forEach(role=>{
+        let cls=roleClass(role);
+        htmlDoc+=`<tr><td class="role-cell ${cls}">${esc(role)}</td>`;
+        rosters.forEach(r=>{
+          let times=(r.times&&r.times.length?r.times:[r.time||""]);
+          let people=(r.assignments||[]).filter(a=>a.roleName===role).map(a=>a.memberName).filter(n=>n&&n!=="Unfilled");
+          let names=people.length?people.join("<br>"):"";
+          times.forEach(t=>{
+            let allowed=typeof templateAllowsRoleAtTime==="function"?templateAllowsRoleAtTime((data.services.find(s=>s.id===r.serviceId)||{}).template||"",role,t):true;
+            htmlDoc+=`<td class="name-cell ${cls}">${allowed?names:""}</td>`;
+          });
+        });
+        htmlDoc+=`</tr>`;
+      });
+      htmlDoc+=`</table></div>`;
+    });
+    htmlDoc+=`</section>`;
+  });
+  htmlDoc+=`</body></html>`;
+  let w=window.open("","_blank");
+  w.document.open();
+  w.document.write(htmlDoc);
+  w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v1.57-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
+
+/* v1.57 roster generation repair: final overrides */
+function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
+function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
+function twc51Available(memberId,serviceId){
+  let a=(data.availability||[]).find(x=>x.memberId===memberId&&x.serviceId===serviceId);
+  return !a||a.status==="available";
+}
+function twc51AssignmentCount(memberId){
+  return (data.rosters||[]).reduce((n,r)=>n+(r.assignments||[]).filter(a=>a.memberId===memberId).length,0);
+}
+function twc51MonthlyCount(memberId,month){
+  return (data.rosters||[]).reduce((n,r)=>twc51Month(r.date)===month?n+(r.assignments||[]).filter(a=>a.memberId===memberId).length:n,0);
+}
+function twc51RolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function twc51RoleAllowedForMember(member,role){
+  if(!(member.roles||[]).includes(role.name))return false;
+  if(data.ministries&&data.ministries.length&&role.ministryId){
+    let ids=member.ministryIds||[data.ministries[0].id];
+    if(!ids.includes(role.ministryId))return false;
+  }
+  return true;
+}
+function twc51Candidate(member,role,service,assignments){
+  if(!twc51Available(member.id,service.id))return false;
+  let limit=member.maxPerMonth??3;
+  if(limit<=0)return false;
+  if(twc51MonthlyCount(member.id,twc51Month(service.date))>=limit)return false;
+  if(!twc51RoleAllowedForMember(member,role))return false;
+  let already=(assignments||[]).filter(a=>a.memberId===member.id).map(a=>a.roleName);
+  if(already.includes(role.name))return false;
+  return already.length===0||already.every(r=>twc51RolesCompatible(r,role.name));
+}
+function buildRosterForService(serviceId){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  data.rosters=data.rosters||[];
+  let service=(data.services||[]).find(s=>s.id===serviceId);
+  if(!service)throw new Error("Service not found");
+  let template=(data.templates||[]).find(t=>t.name===service.template);
+  let roles=(data.roles||[]).filter(role=>!template||!template.roleNames||template.roleNames.includes(role.name));
+  let assignments=[];
+  roles.forEach(role=>{
+    let min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
+    let max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
+    min=Math.max(0,min||0);
+    max=Math.max(min,max||min||1);
+    for(let i=0;i<max;i++){
+      let candidate=(data.members||[])
+        .filter(m=>twc51Candidate(m,role,service,assignments))
+        .sort((a,b)=>twc51AssignmentCount(a.id)-twc51AssignmentCount(b.id)||String(a.name).localeCompare(String(b.name)))[0];
+      if(candidate)assignments.push({roleName:role.name,memberId:candidate.id,memberName:candidate.name});
+    }
+    let filled=assignments.filter(a=>a.roleName===role.name).length;
+    for(let i=filled;i<min;i++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments};
+}
+function makeRoster(){
+  let select=document.getElementById("rosterSvc");
+  let serviceId=select&&select.value;
+  if(!serviceId){alert("Please select a service.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(r=>r.serviceId===serviceId)){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters.unshift(buildRosterForService(serviceId));
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  let start=(document.getElementById("rosterStart")||{}).value;
+  let end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  let created=0,skipped=0,failed=0;
+  (data.services||[])
+    .filter(s=>s.date>=start&&s.date<=end)
+    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
+    .forEach(service=>{
+      if(data.rosters.some(r=>r.serviceId===service.id)){skipped++;return}
+      try{
+        data.rosters.unshift(buildRosterForService(service.id));
+        created++;
+      }catch(err){
+        console.error(err);
+        failed++;
+      }
+    });
+  save();
+  render();
+  setTimeout(()=>{
+    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
+    let el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
+
+</script></body></html>
