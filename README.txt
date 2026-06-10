@@ -1,10 +1,13 @@
-The Worship Calendar v1.71
+The Worship Calendar v1.72
 Plan • Schedule • Serve
 
-Built from v1.70.
+Built from v1.71.
 
 Fixed:
-- Removed version number from the header tagline
-- Removed empty title-bar badge/bubble
-- Version remains available as the separate version badge only
+- Removed demo/sample/seed data from the source defaults
+- Starts with only the administrator account:
+  username: admin
+  password: admin123
+- No demo members, ministries, roles, templates, services, rosters or availability
+- No sample services or worship team records
 - JavaScript syntax checked before packaging
