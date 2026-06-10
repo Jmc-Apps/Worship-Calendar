@@ -1,12 +1,11 @@
-The Worship Calendar v1.65
+The Worship Calendar v1.66
 Plan • Schedule • Serve
 
-Built from v1.64.
+Built from v1.65.
 
-Added:
-- Gmail API Settings section under Admin Settings
-- Google Client ID, API Key and Authorized Gmail Sender fields
-- Connect Gmail, Test Gmail Connection and Disconnect Gmail buttons
-- Email Personalized Rosters button in Admin Rosters tab
-- Sends one personalized published roster email per member through Gmail API
+Fixed:
+- Gmail Test Connection no longer calls /users/me/profile
+- Prevents Gmail scope error caused by testing the wrong endpoint
+- Gmail test now verifies that an access token is present
+- Gmail sending still uses gmail.send permission
 - JavaScript syntax checked before packaging
