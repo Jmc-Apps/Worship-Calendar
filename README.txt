@@ -1,11 +1,14 @@
-The Worship Calendar v1.67
+The Worship Calendar v1.68
 Plan • Schedule • Serve
 
-Built from v1.65.
+Built from v1.67.
 
 Fixed:
-- Gmail Test Connection no longer calls /users/me/profile
-- Prevents Gmail scope error caused by testing the wrong endpoint
-- Gmail test now verifies that an access token is present
-- Gmail sending still uses gmail.send permission
+- Clean-slate startup restored properly
+- Demo/sample data removed by default
+- Keeps only the administrator login:
+  username: admin
+  password: admin123
+- No demo members, ministries, roles, templates, services, rosters or availability
+- Version updated to v1.68
 - JavaScript syntax checked before packaging
