@@ -1,13 +1,11 @@
-The Worship Calendar v1.72
+The Worship Calendar v1.73
 Plan • Schedule • Serve
 
-Built from v1.71.
+Built from stable v1.71.
 
 Fixed:
-- Removed demo/sample/seed data from the source defaults
-- Starts with only the administrator account:
-  username: admin
-  password: admin123
-- No demo members, ministries, roles, templates, services, rosters or availability
-- No sample services or worship team records
-- JavaScript syntax checked before packaging
+- Repaired buttons broken by v1.72.
+- Removed every-render data reset.
+- Demo cleanup runs only once on startup.
+- Keeps only the admin login by default.
+- JavaScript syntax checked before packaging.
