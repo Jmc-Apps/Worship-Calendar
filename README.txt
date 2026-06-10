@@ -1,16 +1,10 @@
-The Worship Calendar v1.74
+The Worship Calendar v1.75
 Plan • Schedule • Serve
 
-Built from v1.73.
+Built from uploaded v1.74 source.
 
-Included:
-- Keeps the v1.73 repaired button structure
-- Keeps Gmail API roster email features
-- Keeps GitHub sync secret exclusions
-- Keeps header/tagline cleanup
-- Applies safe one-time clean-slate startup
-- Removes demo/sample members, ministries, roles, templates, services, rosters and availability
-- Keeps only the administrator login:
-  username: admin
-  password: admin123
+Changed:
+- Version updated to v1.75 throughout the app
+- Demo/sample team member records removed on startup
+- Keeps admin login
 - JavaScript syntax checked before packaging
