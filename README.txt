@@ -1,11 +1,12 @@
-The Worship Calendar v1.61
+The Worship Calendar v1.62
 Plan • Schedule • Serve
 
-Built from v1.60.
+Built from v1.61.
 
 Changed:
-- Removed login screen example credential text
-- Added Change Admin Password under Settings
-- Removed pre-populated demo members, ministries and roles for clean installations
-- Compatible Roles selections are grouped by ministry
+- Removed sample/default templates
+- Removed sample/default services
+- Removed sample rosters and availability
+- Removed wording that described the app as local/testing/demo/development
+- Clean slate start for admin setup
 - JavaScript syntax checked before packaging
