@@ -1,13 +1,16 @@
-The Worship Calendar v1.76
+The Worship Calendar v1.77
 Plan • Schedule • Serve
 
-Built from v1.75.
+Built from v1.76.
 
-Changed:
-- Removed all demo/sample operational data
-- Removed demo team members and example accounts
-- Removed version number/badge from the header bar
-- Added Delete Member button in Members tab
-- Admin account cannot be deleted
-- Deleting a member removes availability and unassigns roster assignments
+Added:
+- Confirmation messages before delete actions
+- Delete Member confirmation
+- Delete Ministry confirmation
+- Delete Role confirmation
+- Delete Template confirmation
+- Delete Service confirmation
+- Delete Roster confirmation
+- Delete All Past Rosters confirmation
+- Delete Availability confirmation where delete functions exist
 - JavaScript syntax checked before packaging
