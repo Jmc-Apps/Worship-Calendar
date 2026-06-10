@@ -6,77 +6,77 @@
   },
   "roles": [
     {
-      "id": "4eff72ee-0a94-4d8a-92c0-c877586c5ff2",
+      "id": "799d8a8c-f381-43b1-9063-7fc2b0f63427",
       "name": "Worship Leader",
       "min": 1,
       "max": 1,
       "ministryId": "default"
     },
     {
-      "id": "3c5e36f1-a662-42b8-8caf-55554844b0df",
+      "id": "9f8cae8c-ec8f-4394-9a05-df7a5e356052",
       "name": "Lead Vocal",
       "min": 1,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "d13240b0-e861-4b1e-8fa6-db5653b32e0e",
+      "id": "95bd323b-004e-4a37-9a52-7db90837edbc",
       "name": "Backing Vocal",
       "min": 0,
       "max": 4,
       "ministryId": "default"
     },
     {
-      "id": "afae0e42-a763-44ca-ae75-140c7dee7002",
+      "id": "3443dd9b-c208-4de7-8d25-148851562432",
       "name": "Acoustic Guitar",
       "min": 0,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "7444c8bf-9707-4673-b9ed-e590765c2edf",
+      "id": "84ebb8cc-ac10-4b03-86df-420d40cf19f0",
       "name": "Electric Guitar",
       "min": 0,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "e98f81d4-fc67-4a4f-89e9-ab8d7fcea041",
+      "id": "b8595ddf-8bbd-405e-8efb-aa03b3549050",
       "name": "Bass Guitar",
       "min": 1,
       "max": 1,
       "ministryId": "default"
     },
     {
-      "id": "854d4a33-2698-424a-8d06-581a0d17b00f",
+      "id": "7bbce561-d434-4a32-9a29-d927f22fd176",
       "name": "Keyboard",
       "min": 1,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "68845998-8c87-44ed-ae64-74bc7a7eaab7",
+      "id": "6dad091b-8501-42e1-a2d6-50be38c436d7",
       "name": "Drums",
       "min": 1,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "88f94daa-6611-4eed-a5ad-20c7faf42378",
+      "id": "4308a117-09bd-4f68-801e-15ebc932a2a6",
       "name": "Sound",
       "min": 1,
       "max": 2,
       "ministryId": "default"
     },
     {
-      "id": "68e8650e-67e2-407e-a246-946b6dbe1376",
+      "id": "62715e14-9359-436d-aefd-d6c60ded814c",
       "name": "Projection",
       "min": 1,
       "max": 3,
       "ministryId": "default"
     },
     {
-      "id": "54cbaa39-26b4-4997-9708-afe7f49cc44b",
+      "id": "182883e3-5529-4bc8-9380-7704edb872ea",
       "name": "Livestream",
       "min": 0,
       "max": 2,
@@ -85,7 +85,7 @@
   ],
   "templates": [
     {
-      "id": "f7d35215-38d9-4b81-a5f1-f5a8bb809d7e",
+      "id": "56a7869f-cfaa-47a2-9585-ab52c1807ee2",
       "name": "Sunday Morning",
       "roleNames": [
         "Worship Leader",
@@ -99,7 +99,7 @@
       ]
     },
     {
-      "id": "4ec4c884-b71c-40b9-8620-5653e197d0a8",
+      "id": "3242a378-ca81-49ed-a3e7-1795065b678d",
       "name": "Youth Service",
       "roleNames": [
         "Worship Leader",
@@ -113,7 +113,7 @@
   ],
   "services": [
     {
-      "id": "17cc9908-9e6a-49ce-a6fe-c489011218d9",
+      "id": "8174b1a5-e57c-4ea4-87ee-3d89466b831c",
       "name": "Sunday Morning",
       "date": "2026-06-14",
       "time": "09:00",
@@ -123,20 +123,23 @@
   ],
   "members": [
     {
-      "id": "b4d71576-c97b-47e4-abfe-8dbf719f1674",
+      "id": "084a7da7-02f5-4161-a30f-fcf464c0ec4d",
       "name": "James Worship",
       "email": "james.worship@example.com",
       "phone": "",
-      "password": "member123",
+      "password": "1",
       "roles": [
         "Worship Leader"
       ],
       "notes": "Sample tester for Worship Leader",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 2,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "388b5352-247d-44f7-9af6-e04b26eca469",
+      "id": "8e1e4de5-3586-4d31-b21d-cbe4b95f055c",
       "name": "Sarah Worship",
       "email": "sarah.worship@example.com",
       "phone": "",
@@ -146,10 +149,13 @@
       ],
       "notes": "Sample tester for Worship Leader",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "8d19258b-95b1-433a-b2bb-29d8a11a7fe1",
+      "id": "494d512d-843b-4780-8dbb-cc362011a7af",
       "name": "Michael Worship",
       "email": "michael.worship@example.com",
       "phone": "",
@@ -159,10 +165,13 @@
       ],
       "notes": "Sample tester for Worship Leader",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "3c253e1e-40f6-47c2-bd0b-6b8778daf6db",
+      "id": "3a8de620-d67e-4daf-8737-26c0d942e5a8",
       "name": "Rachel Lead",
       "email": "rachel.lead@example.com",
       "phone": "",
@@ -172,10 +181,13 @@
       ],
       "notes": "Sample tester for Lead Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "17c93404-1251-4020-a53d-f685723dc0a7",
+      "id": "fdefe63a-e466-4881-98e4-c7f37cfef261",
       "name": "Daniel Lead",
       "email": "daniel.lead@example.com",
       "phone": "",
@@ -185,10 +197,13 @@
       ],
       "notes": "Sample tester for Lead Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "06ee038a-070f-44f6-b5d1-7108327f4866",
+      "id": "9b894ff7-0d80-461e-ad37-bf08e7871d7d",
       "name": "Emma Lead",
       "email": "emma.lead@example.com",
       "phone": "",
@@ -198,10 +213,13 @@
       ],
       "notes": "Sample tester for Lead Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "5a377edf-9e89-4a9a-8a14-8854053b49a5",
+      "id": "7e073afa-c4db-4a38-b47a-02cb0c0f84ca",
       "name": "Peter Lead",
       "email": "peter.lead@example.com",
       "phone": "",
@@ -211,10 +229,13 @@
       ],
       "notes": "Sample tester for Lead Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "1a324ae6-e639-44ad-bcc9-d8ec0d72d638",
+      "id": "a3dd3ade-4c7f-4795-bd7a-fe7d24d815d8",
       "name": "Naomi Backing",
       "email": "naomi.backing@example.com",
       "phone": "",
@@ -224,10 +245,13 @@
       ],
       "notes": "Sample tester for Backing Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "37e7a8f9-11e6-411d-94ab-60d58ce74aae",
+      "id": "27577f25-8f17-4fe5-b44c-30d549c93977",
       "name": "David Backing",
       "email": "david.backing@example.com",
       "phone": "",
@@ -237,10 +261,13 @@
       ],
       "notes": "Sample tester for Backing Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "b9fd1a99-ff96-4201-b642-543269c2c967",
+      "id": "ef2f0fa9-0ffa-4070-bcdc-cb5f58ea57d5",
       "name": "Hannah Backing",
       "email": "hannah.backing@example.com",
       "phone": "",
@@ -250,10 +277,13 @@
       ],
       "notes": "Sample tester for Backing Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "d7c6ea23-d945-4ac0-902c-ff2b87d82a1a",
+      "id": "1596dcc1-1998-4c8c-912e-80fddb2dc32d",
       "name": "Joshua Backing",
       "email": "joshua.backing@example.com",
       "phone": "",
@@ -263,10 +293,13 @@
       ],
       "notes": "Sample tester for Backing Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "1f8bbad1-8bee-496b-b049-07b82a1ce1a1",
+      "id": "3c0005ad-603b-459c-a380-006d5245e3e8",
       "name": "Rebecca Backing",
       "email": "rebecca.backing@example.com",
       "phone": "",
@@ -276,10 +309,13 @@
       ],
       "notes": "Sample tester for Backing Vocal",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "16ac205f-847d-4fac-a1e1-70919e8e13a8",
+      "id": "bd5a0857-9429-4b50-8984-c1b0376f8afa",
       "name": "Matthew Acoustic",
       "email": "matthew.acoustic@example.com",
       "phone": "",
@@ -289,10 +325,13 @@
       ],
       "notes": "Sample tester for Acoustic Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "5e6cf90e-4e11-4c57-a600-14c8651a45da",
+      "id": "a614c24b-442f-4690-8c78-e2d6b229fe15",
       "name": "Grace Acoustic",
       "email": "grace.acoustic@example.com",
       "phone": "",
@@ -302,10 +341,13 @@
       ],
       "notes": "Sample tester for Acoustic Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "ab53f558-513e-436d-90bf-5839b89e1b30",
+      "id": "fa95af27-4bcf-4dfb-b06e-c6db1c74f1e0",
       "name": "Luke Acoustic",
       "email": "luke.acoustic@example.com",
       "phone": "",
@@ -315,10 +357,13 @@
       ],
       "notes": "Sample tester for Acoustic Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "0582b9de-5ecb-4f99-91cc-c7ea3e3ec3b6",
+      "id": "47d31bc3-0e53-4259-b6f5-429630774d89",
       "name": "Anna Electric",
       "email": "anna.electric@example.com",
       "phone": "",
@@ -328,10 +373,13 @@
       ],
       "notes": "Sample tester for Electric Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "cf14d17e-0dc5-4a21-a1fb-baa8606fb692",
+      "id": "98b01d1d-0472-4d89-9f1c-c5439cf01860",
       "name": "Mark Electric",
       "email": "mark.electric@example.com",
       "phone": "",
@@ -341,10 +389,13 @@
       ],
       "notes": "Sample tester for Electric Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "4c55aa31-aa21-4939-9907-1c1fbd675072",
+      "id": "f01bbfa1-bb57-4b92-be37-76aaf8401ff1",
       "name": "Leah Electric",
       "email": "leah.electric@example.com",
       "phone": "",
@@ -354,10 +405,13 @@
       ],
       "notes": "Sample tester for Electric Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "6d0239a0-438e-4e7c-aa7d-85e268c1ebd0",
+      "id": "697511a2-7460-4cd7-a091-7545f563dff2",
       "name": "John Electric",
       "email": "john.electric@example.com",
       "phone": "",
@@ -367,10 +421,13 @@
       ],
       "notes": "Sample tester for Electric Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "5e187e87-7f50-45c9-9b6c-fd828c4471ca",
+      "id": "99ee78ca-4437-4a69-a8ba-93068605cf56",
       "name": "Megan Bass",
       "email": "megan.bass@example.com",
       "phone": "",
@@ -380,10 +437,13 @@
       ],
       "notes": "Sample tester for Bass Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "80316a92-3aca-4c22-9e18-e1da0681cbe5",
+      "id": "8a9d00ed-841c-440f-a977-a98f6bbc628e",
       "name": "Caleb Bass",
       "email": "caleb.bass@example.com",
       "phone": "",
@@ -393,10 +453,13 @@
       ],
       "notes": "Sample tester for Bass Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "8474b25d-8977-43c7-ac65-96b92561de81",
+      "id": "9ff2bfc1-8802-46bb-86bc-b91b36ff618b",
       "name": "Lisa Bass",
       "email": "lisa.bass@example.com",
       "phone": "",
@@ -406,10 +469,13 @@
       ],
       "notes": "Sample tester for Bass Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "6e91850b-a2cf-4b6f-9de6-dc89b37f47cd",
+      "id": "2afa498f-8809-4737-b8ef-215133c8aac1",
       "name": "Andrew Bass",
       "email": "andrew.bass@example.com",
       "phone": "",
@@ -419,10 +485,13 @@
       ],
       "notes": "Sample tester for Bass Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "b0589d51-6364-4e2b-b7f1-2b68bfe041be",
+      "id": "f3a45bca-b248-4be3-9f82-195a29b3c381",
       "name": "Chloe Bass",
       "email": "chloe.bass@example.com",
       "phone": "",
@@ -432,10 +501,13 @@
       ],
       "notes": "Sample tester for Bass Guitar",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "0bed90bb-0b35-4589-a0f7-2c66af5ea69e",
+      "id": "de54ba52-c405-4c25-b9f2-7d168ec3ea69",
       "name": "Simon Keyboard",
       "email": "simon.keyboard@example.com",
       "phone": "",
@@ -445,10 +517,13 @@
       ],
       "notes": "Sample tester for Keyboard",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "49ca1a29-a5fe-4aef-b7b5-7bd38f91c6c0",
+      "id": "8b3dad70-49ba-4676-b0f2-3befac1f6d7e",
       "name": "Kate Keyboard",
       "email": "kate.keyboard@example.com",
       "phone": "",
@@ -458,10 +533,13 @@
       ],
       "notes": "Sample tester for Keyboard",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "fbeb00c7-511e-4cd8-ace1-0e06e2bc0f5d",
+      "id": "993eda6a-1c92-417d-a5a4-06cf3d9b5a16",
       "name": "Nathan Keyboard",
       "email": "nathan.keyboard@example.com",
       "phone": "",
@@ -471,10 +549,13 @@
       ],
       "notes": "Sample tester for Keyboard",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "998d4d40-6017-4834-856d-a9c8bbe4983e",
+      "id": "a60dc45b-9853-4a0c-b9d7-4ae2e9d26150",
       "name": "Amy Drums",
       "email": "amy.drums@example.com",
       "phone": "",
@@ -484,10 +565,13 @@
       ],
       "notes": "Sample tester for Drums",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "f1c59876-cb11-402f-87fc-a8c5c68b8c09",
+      "id": "2db8647f-fc7c-4be3-85c4-938891ac006a",
       "name": "Thomas Drums",
       "email": "thomas.drums@example.com",
       "phone": "",
@@ -497,10 +581,13 @@
       ],
       "notes": "Sample tester for Drums",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "2db43ab1-a3e0-4023-a899-e724eeb7cbaf",
+      "id": "d4c4d120-d347-4b8b-bfe3-662973bd241e",
       "name": "Mary Drums",
       "email": "mary.drums@example.com",
       "phone": "",
@@ -510,10 +597,13 @@
       ],
       "notes": "Sample tester for Drums",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "13ab25c8-8e69-4675-a3c8-56fc6d82aa4b",
+      "id": "e7b06b30-0d9d-4b9f-bca3-7bb0f9f1aad4",
       "name": "Ben Drums",
       "email": "ben.drums@example.com",
       "phone": "",
@@ -523,10 +613,13 @@
       ],
       "notes": "Sample tester for Drums",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "2cb51e32-41ce-4e99-8f79-6e27bcf244f7",
+      "id": "e8257ac2-01a7-4b14-b7c5-9fe5e23f3623",
       "name": "Julia Sound",
       "email": "julia.sound@example.com",
       "phone": "",
@@ -536,10 +629,13 @@
       ],
       "notes": "Sample tester for Sound",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "5dd3f252-671d-4243-9b62-5d9f406a0f85",
+      "id": "45cfb5b2-134c-4f7e-860e-02b51fc7cd44",
       "name": "Ethan Sound",
       "email": "ethan.sound@example.com",
       "phone": "",
@@ -549,10 +645,13 @@
       ],
       "notes": "Sample tester for Sound",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "c47527fe-82e3-432d-b754-681a609450b7",
+      "id": "e84e932f-561c-48d9-91ee-12075ff1bd6c",
       "name": "Olivia Sound",
       "email": "olivia.sound@example.com",
       "phone": "",
@@ -562,10 +661,13 @@
       ],
       "notes": "Sample tester for Sound",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "06e3057e-3e31-46cc-ba2e-0fdc687cac58",
+      "id": "747a7f6e-b304-475b-80e7-539177bb64f8",
       "name": "Noah Sound",
       "email": "noah.sound@example.com",
       "phone": "",
@@ -575,10 +677,13 @@
       ],
       "notes": "Sample tester for Sound",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "8d4e91e0-ce8c-47db-ae23-7353783c87c9",
+      "id": "dcdaa7f7-6f4b-4c36-be67-60f7d7bf661c",
       "name": "Abigail Sound",
       "email": "abigail.sound@example.com",
       "phone": "",
@@ -588,10 +693,13 @@
       ],
       "notes": "Sample tester for Sound",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "f8f4e35e-9dc5-43ea-af7f-08d7ca41cd40",
+      "id": "a2f234f5-a3cf-44f2-aaf3-482e98cc96af",
       "name": "Liam Projection",
       "email": "liam.projection@example.com",
       "phone": "",
@@ -601,10 +709,13 @@
       ],
       "notes": "Sample tester for Projection",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "7fae35eb-7e48-4897-baa9-b25256655ca1",
+      "id": "272bd9cc-258a-4c0d-aaba-715bc2c1b4a5",
       "name": "Sophie Projection",
       "email": "sophie.projection@example.com",
       "phone": "",
@@ -614,10 +725,13 @@
       ],
       "notes": "Sample tester for Projection",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "031fb75f-357f-4576-9c25-b06c409f413f",
+      "id": "d74ec80f-9192-4e08-b0d0-4bd44ff4932c",
       "name": "Isaac Projection",
       "email": "isaac.projection@example.com",
       "phone": "",
@@ -627,10 +741,13 @@
       ],
       "notes": "Sample tester for Projection",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "623be93d-2bd2-4677-9810-a22077bd9086",
+      "id": "3225f4b9-02b6-4ed9-80cb-8e2fea910b3f",
       "name": "Zoe Livestream",
       "email": "zoe.livestream@example.com",
       "phone": "",
@@ -640,10 +757,13 @@
       ],
       "notes": "Sample tester for Livestream",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "b9f3e661-c4db-46f1-8085-7e2a3a6f1170",
+      "id": "e24efc0a-543a-48ed-8d37-3e9185d85b98",
       "name": "Aaron Livestream",
       "email": "aaron.livestream@example.com",
       "phone": "",
@@ -653,10 +773,13 @@
       ],
       "notes": "Sample tester for Livestream",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "24426ed6-7f39-49eb-92af-5b39b6337c89",
+      "id": "4c4aad64-77ba-42f6-925c-93983f2c5b8b",
       "name": "Tara Livestream",
       "email": "tara.livestream@example.com",
       "phone": "",
@@ -666,10 +789,13 @@
       ],
       "notes": "Sample tester for Livestream",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "49532d35-3c37-4b0c-85a8-0d90a847a258",
+      "id": "1360a989-3184-4e9f-a1f7-bebf785ddbae",
       "name": "Joel Livestream",
       "email": "joel.livestream@example.com",
       "phone": "",
@@ -679,10 +805,13 @@
       ],
       "notes": "Sample tester for Livestream",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     },
     {
-      "id": "a301bbcb-500f-4d6a-8d03-4fe9a86081bb",
+      "id": "7514b6d5-4c36-450e-9b8c-9e17b83584e9",
       "name": "Multi Role Example",
       "email": "multi@example.com",
       "phone": "",
@@ -694,11 +823,113 @@
       ],
       "notes": "Can lead worship or cover vocals/guitar.",
       "history": [],
-      "maxPerMonth": 3
+      "maxPerMonth": 3,
+      "ministryIds": [
+        "default"
+      ]
     }
   ],
   "availability": [],
-  "rosters": [],
+  "rosters": [
+    {
+      "id": "012dd299-2fbc-4b7d-8bd9-8bdce4e229d6",
+      "serviceId": "8174b1a5-e57c-4ea4-87ee-3d89466b831c",
+      "serviceName": "Sunday Morning",
+      "date": "2026-06-14",
+      "time": "09:00",
+      "times": [
+        "09:00"
+      ],
+      "published": true,
+      "assignments": [
+        {
+          "roleName": "Worship Leader",
+          "memberId": "084a7da7-02f5-4161-a30f-fcf464c0ec4d",
+          "memberName": "James Worship"
+        },
+        {
+          "roleName": "Lead Vocal",
+          "memberId": "fdefe63a-e466-4881-98e4-c7f37cfef261",
+          "memberName": "Daniel Lead"
+        },
+        {
+          "roleName": "Lead Vocal",
+          "memberId": "9b894ff7-0d80-461e-ad37-bf08e7871d7d",
+          "memberName": "Emma Lead"
+        },
+        {
+          "roleName": "Backing Vocal",
+          "memberId": "27577f25-8f17-4fe5-b44c-30d549c93977",
+          "memberName": "David Backing"
+        },
+        {
+          "roleName": "Backing Vocal",
+          "memberId": "ef2f0fa9-0ffa-4070-bcdc-cb5f58ea57d5",
+          "memberName": "Hannah Backing"
+        },
+        {
+          "roleName": "Backing Vocal",
+          "memberId": "1596dcc1-1998-4c8c-912e-80fddb2dc32d",
+          "memberName": "Joshua Backing"
+        },
+        {
+          "roleName": "Backing Vocal",
+          "memberId": "a3dd3ade-4c7f-4795-bd7a-fe7d24d815d8",
+          "memberName": "Naomi Backing"
+        },
+        {
+          "roleName": "Bass Guitar",
+          "memberId": "2afa498f-8809-4737-b8ef-215133c8aac1",
+          "memberName": "Andrew Bass"
+        },
+        {
+          "roleName": "Keyboard",
+          "memberId": "8b3dad70-49ba-4676-b0f2-3befac1f6d7e",
+          "memberName": "Kate Keyboard"
+        },
+        {
+          "roleName": "Keyboard",
+          "memberId": "993eda6a-1c92-417d-a5a4-06cf3d9b5a16",
+          "memberName": "Nathan Keyboard"
+        },
+        {
+          "roleName": "Drums",
+          "memberId": "a60dc45b-9853-4a0c-b9d7-4ae2e9d26150",
+          "memberName": "Amy Drums"
+        },
+        {
+          "roleName": "Drums",
+          "memberId": "e7b06b30-0d9d-4b9f-bca3-7bb0f9f1aad4",
+          "memberName": "Ben Drums"
+        },
+        {
+          "roleName": "Sound",
+          "memberId": "dcdaa7f7-6f4b-4c36-be67-60f7d7bf661c",
+          "memberName": "Abigail Sound"
+        },
+        {
+          "roleName": "Sound",
+          "memberId": "45cfb5b2-134c-4f7e-860e-02b51fc7cd44",
+          "memberName": "Ethan Sound"
+        },
+        {
+          "roleName": "Projection",
+          "memberId": "d74ec80f-9192-4e08-b0d0-4bd44ff4932c",
+          "memberName": "Isaac Projection"
+        },
+        {
+          "roleName": "Projection",
+          "memberId": "a2f234f5-a3cf-44f2-aaf3-482e98cc96af",
+          "memberName": "Liam Projection"
+        },
+        {
+          "roleName": "Projection",
+          "memberId": "272bd9cc-258a-4c0d-aaba-715bc2c1b4a5",
+          "memberName": "Sophie Projection"
+        }
+      ]
+    }
+  ],
   "compatibleRoles": {},
   "ministries": [
     {
@@ -712,7 +943,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-10T13:43:36.182Z",
+    "lastSync": "2026-06-10T14:13:02.786Z",
     "tokenStored": "local-device-only"
   }
 }
