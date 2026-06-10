@@ -1,11 +1,12 @@
-The Worship Calendar v1.63
+The Worship Calendar v1.64
 Plan • Schedule • Serve
 
-Rebuilt from v1.62 using a safer text-only cleanup.
+Built from v1.63.
 
 Fixed:
-- Removed remaining Local Testing wording
-- Removed Local testing mode badge text
-- Removed version number from the header tagline
-- App structure left unchanged from v1.62
+- Removed seeded demo data from the source/runtime start-up
+- Starts with no demo members, ministries, roles, templates, services, rosters or availability
+- Keeps only the administrator login:
+  username: admin
+  password: admin123
 - JavaScript syntax checked before packaging
