@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.23</title>
+<title>The Worship Calendar v2.24</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -42,7 +42,7 @@
 </style><script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.23",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-23-local";
+const VERSION="2.24",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-24-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -86,7 +86,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.23 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.24 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -106,7 +106,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.23 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.24 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -192,9 +192,113 @@ function twcRemoveDemoData(){
   data.templates=(data.templates||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
+
+/* v2.24 safe welcome screen before login */
+let twcLoginScreenReady=false;
+
+function twcWelcomeScreen(){
+  app(`<div class="login"><div class="loginCard">${logo()}
+    <h1>${APP}</h1>
+    <h2>${TAG}</h2>
+    <p class="badge">v${VERSION}</p>
+    <p class="hint">Click Login to load the latest church data before signing in.</p>
+    <button id="twcWelcomeLoginBtn" class="primary" type="button" onclick="twcStartLoginFlow()">Login</button>
+    <p id="twcWelcomeStatus" class="notice"></p>
+  </div></div>`);
+}
+
+function twcSetWelcomeStatus(message,isError){
+  let el=document.getElementById("twcWelcomeStatus");
+  if(el){
+    el.textContent=message||"";
+    el.style.color=isError?"#b42318":"#52616f";
+  }
+}
+
+function twcHasGithubSettingsForLogin(){
+  try{
+    let local=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
+    let g=(data&&data.github)||local||{};
+    return !!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
+  }catch(e){
+    let g=(data&&data.github)||{};
+    return !!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
+  }
+}
+
+async function twcLoadGithubDataForLogin(){
+  if(!twcHasGithubSettingsForLogin())return false;
+  if(typeof ghConfig!=="function"||typeof ghGetFile!=="function"||typeof ghDecodeUnicode!=="function")return false;
+
+  let g=ghConfig();
+  if(!g||!g.token||!g.owner||!g.repo||!g.branch||!g.path)return false;
+
+  let file=await ghGetFile(g);
+  if(!file||!file.content)return false;
+
+  let loaded=JSON.parse(ghDecodeUnicode(file.content));
+
+  let currentGithub=data.github||{};
+  let currentGmail=data.gmail||{};
+  let localGithub=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
+  let localGmail=typeof loadGmailLocalConfig==="function"?loadGmailLocalConfig():null;
+
+  data=loaded;
+  data.github=data.github||{};
+  ["token","owner","repo","branch","path"].forEach(k=>{
+    data.github[k]=(currentGithub&&currentGithub[k])||(localGithub&&localGithub[k])||data.github[k]||"";
+  });
+
+  data.gmail=data.gmail||{};
+  ["clientId","apiKey","sender","accessToken","connectedAt"].forEach(k=>{
+    data.gmail[k]=(currentGmail&&currentGmail[k])||(localGmail&&localGmail[k])||data.gmail[k]||"";
+  });
+
+  if(typeof saveGithubAccessLocal==="function"){
+    saveGithubAccessLocal({
+      token:data.github.token||"",
+      owner:data.github.owner||"",
+      repo:data.github.repo||"",
+      branch:data.github.branch||"main",
+      path:data.github.path||"data/the-worship-calendar.json"
+    });
+  }
+  if(typeof saveGmailLocalConfig==="function")saveGmailLocalConfig();
+  if(typeof save==="function")save();
+
+  return true;
+}
+
+async function twcStartLoginFlow(){
+  let btn=document.getElementById("twcWelcomeLoginBtn");
+  if(btn)btn.disabled=true;
+  twcSetWelcomeStatus("Loading latest church data…",false);
+
+  try{
+    let loaded=await twcLoadGithubDataForLogin();
+    if(loaded){
+      twcSetWelcomeStatus("Latest church data loaded.",false);
+    }else{
+      twcSetWelcomeStatus("Could not load online data. Opening login with local cached data.",true);
+    }
+  }catch(err){
+    console.error("Login data load failed",err);
+    twcSetWelcomeStatus("Could not load online data. Opening login with local cached data.",true);
+  }
+
+  setTimeout(()=>{
+    twcLoginScreenReady=true;
+    loginPage();
+  },250);
+}
 function render(){
-  twcRemoveDemoData();
-  if(!user&&!twcHasApiSettingsOnDevice()){twcRenderApiGate();return;}ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
+  if(typeof twcRemoveDemoData==="function")twcRemoveDemoData();
+  ensureMinistries();
+  if(!user){
+    if(!twcLoginScreenReady)return twcWelcomeScreen();
+    return loginPage();
+  }
+  app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
 
 function isSystemAdmin(member){return isHardcodedProtectedAdmin(member);}
 
@@ -270,9 +374,7 @@ function normalizeAdminAccount(){
   return admin;
 }
 
-async function loginPage(){
-  if(e&&e.preventDefault)e.preventDefault();
-  await twcSafeRefreshFromGithubBeforeLogin();app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><p id="msg" class="notice"></p></div></div>`)}
+function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,emailTeam:emailTeamPage,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
 function services(){return `<h1>Services</h1>${user.role==="admin"?`<div class="panel"><label>Service name<input id="svcName" placeholder="Service name" value="Sunday Morning"></label><label>Start date<input id="svcDate" type="date" value="${nextWeekday(0)}"></label><label>Service times <span class="small">(comma separated, e.g. 09:00, 11:00, 18:00)</span><input id="svcTimes" placeholder="09:00, 11:00" value="09:00"></label><label>Repeat for weeks <span class="small">(recurring services only)</span><input id="svcWeeks" type="number" min="1" value="8"></label><label>Template<select id="svcTemplate">${data.templates.map(t=>`<option>${esc(t.name)}</option>`).join("")}</select></label><label>Service type<select id="svcType"><option value="recurring">Weekly Recurring Service</option><option value="adhoc">One-Off Service</option></select></label><input id="svcNotes" placeholder="Notes"><div class="inline"><button class="primary" onclick="addService()">Add Service</button><button onclick="addRecurring()">Generate Weekly Series</button></div><p class="hint">Multiple times are stored as one service with one roster and one availability record. The same team serves all listed times.</p></div>`:""}<div class="calendar">${data.services.sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(s=>`<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<br><span class="small">Times: ${esc(serviceTimesText(s))} • ${esc(s.template||"")} • ${esc(s.type||"service")}</span>${user.role==="admin"?`<br><button onclick="delService('${s.id}')">Delete</button>`:""}</div>`).join("")}</div>`}
@@ -1979,7 +2081,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.23</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.24</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2051,10 +2153,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.23-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.24-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.23 roster generation repair: final overrides */
+/* v2.24 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2178,7 +2280,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.23 real login-details email workflow overrides */
+/* v2.24 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2366,7 +2468,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.23 Members tab login-details email button */
+/* v2.24 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2393,40 +2495,6 @@ function twcSendLoginDetailsFromMembers(memberId){
       console.error(err);
       alert("Could not send login details email: "+(err.message||err));
     });
-}
-
-
-/* v2.23 safe GitHub refresh-before-login */
-async function twcSafeRefreshFromGithubBeforeLogin(){
-  try{
-    let hasSettings=false;
-    try{
-      let local=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
-      let g=(data&&data.github)||local||{};
-      hasSettings=!!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
-    }catch(e){
-      let g=(data&&data.github)||{};
-      hasSettings=!!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
-    }
-    if(!hasSettings)return false;
-
-    if(typeof loadFromGithub==="function"){
-      await loadFromGithub();
-      return true;
-    }
-    if(typeof loadGithubData==="function"){
-      await loadGithubData();
-      return true;
-    }
-    if(typeof refreshFromGitHubAfterLogin==="function"){
-      await refreshFromGitHubAfterLogin();
-      return true;
-    }
-    return false;
-  }catch(err){
-    console.warn("GitHub refresh before login failed; using local cached data.",err);
-    return false;
-  }
 }
 
 </script></body></html>

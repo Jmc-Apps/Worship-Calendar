@@ -1,9 +1,10 @@
-The Worship Calendar v2.23
+The Worship Calendar v2.24
 Plan • Schedule • Serve
 
-Safe rebuild:
-- Login screen markup/render logic left unchanged from v2.22.
-- When Login is clicked, app tries to refresh GitHub data first.
-- If GitHub refresh fails, login continues using local cached data.
-- This avoids the blank login screen issue.
+Fixed:
+- App now opens to a Welcome screen instead of the login form.
+- Welcome screen has a Login button.
+- Clicking Login loads latest GitHub data first.
+- After the load attempt, the normal login screen opens.
+- Login screen render logic no longer performs automatic background refresh.
 - JavaScript syntax checked before packaging.
