@@ -194,7 +194,7 @@ function twcRemoveDemoData(){
 }
 function render(){
   twcRemoveDemoData();
-  if(!user&&!twcHasApiSettingsOnDevice()){twcRenderApiGate();return;}ensureMinistries();if(!user){setTimeout(()=>twcLoadGithubBeforeLogin(),100);} if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
+  if(!user&&!twcHasApiSettingsOnDevice()){twcRenderApiGate();return;}ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
 
 function isSystemAdmin(member){return isHardcodedProtectedAdmin(member);}
 
@@ -272,7 +272,7 @@ function normalizeAdminAccount(){
 
 async function loginPage(){
   if(e&&e.preventDefault)e.preventDefault();
-  await twcLoadGithubBeforeLogin();app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><p id="msg" class="notice"></p></div></div>`)}
+  await twcSafeRefreshFromGithubBeforeLogin();app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,emailTeam:emailTeamPage,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
 function services(){return `<h1>Services</h1>${user.role==="admin"?`<div class="panel"><label>Service name<input id="svcName" placeholder="Service name" value="Sunday Morning"></label><label>Start date<input id="svcDate" type="date" value="${nextWeekday(0)}"></label><label>Service times <span class="small">(comma separated, e.g. 09:00, 11:00, 18:00)</span><input id="svcTimes" placeholder="09:00, 11:00" value="09:00"></label><label>Repeat for weeks <span class="small">(recurring services only)</span><input id="svcWeeks" type="number" min="1" value="8"></label><label>Template<select id="svcTemplate">${data.templates.map(t=>`<option>${esc(t.name)}</option>`).join("")}</select></label><label>Service type<select id="svcType"><option value="recurring">Weekly Recurring Service</option><option value="adhoc">One-Off Service</option></select></label><input id="svcNotes" placeholder="Notes"><div class="inline"><button class="primary" onclick="addService()">Add Service</button><button onclick="addRecurring()">Generate Weekly Series</button></div><p class="hint">Multiple times are stored as one service with one roster and one availability record. The same team serves all listed times.</p></div>`:""}<div class="calendar">${data.services.sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(s=>`<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<br><span class="small">Times: ${esc(serviceTimesText(s))} • ${esc(s.template||"")} • ${esc(s.type||"service")}</span>${user.role==="admin"?`<br><button onclick="delService('${s.id}')">Delete</button>`:""}</div>`).join("")}</div>`}
@@ -2396,60 +2396,37 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.23 force GitHub refresh before login */
-let twcPreLoginRefreshDone=false;
-let twcPreLoginRefreshRunning=false;
+/* v2.23 safe GitHub refresh-before-login */
+async function twcSafeRefreshFromGithubBeforeLogin(){
+  try{
+    let hasSettings=false;
+    try{
+      let local=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
+      let g=(data&&data.github)||local||{};
+      hasSettings=!!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
+    }catch(e){
+      let g=(data&&data.github)||{};
+      hasSettings=!!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
+    }
+    if(!hasSettings)return false;
 
-function twcHasGithubReadSettings(){
-  try{
-    let local=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
-    let g=(data&&data.github)||local||{};
-    return !!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
-  }catch(e){
-    let g=(data&&data.github)||{};
-    return !!(g&&g.token&&g.owner&&g.repo&&g.branch&&g.path);
-  }
-}
-function twcSetLoginRefreshMessage(message,isError){
-  let el=document.getElementById("twcLoginRefreshStatus");
-  if(el){
-    el.textContent=message||"";
-    el.style.color=isError?"#b42318":"#52616f";
-  }
-}
-async function twcLoadGithubBeforeLogin(){
-  if(twcPreLoginRefreshRunning)return false;
-  if(!twcHasGithubReadSettings()){
-    twcSetLoginRefreshMessage("No GitHub settings found on this device.",true);
-    return false;
-  }
-  twcPreLoginRefreshRunning=true;
-  twcSetLoginRefreshMessage("Loading latest church data from GitHub…",false);
-  try{
     if(typeof loadFromGithub==="function"){
       await loadFromGithub();
-    }else if(typeof loadGithubData==="function"){
-      await loadGithubData();
-    }else if(typeof refreshFromGitHubAfterLogin==="function"){
-      await refreshFromGitHubAfterLogin();
-    }else if(typeof loadGithubOnline==="function"){
-      await loadGithubOnline();
-    }else{
-      throw new Error("No GitHub load function found.");
+      return true;
     }
-    twcPreLoginRefreshDone=true;
-    twcSetLoginRefreshMessage("Latest church data loaded.",false);
-    return true;
-  }catch(err){
-    console.error("Pre-login GitHub refresh failed",err);
-    twcSetLoginRefreshMessage("Could not load latest GitHub data. Login may use cached data.",true);
+    if(typeof loadGithubData==="function"){
+      await loadGithubData();
+      return true;
+    }
+    if(typeof refreshFromGitHubAfterLogin==="function"){
+      await refreshFromGitHubAfterLogin();
+      return true;
+    }
     return false;
-  }finally{
-    twcPreLoginRefreshRunning=false;
+  }catch(err){
+    console.warn("GitHub refresh before login failed; using local cached data.",err);
+    return false;
   }
-}
-function twcLoginRefreshStatusHtml(){
-  return `<div id="twcLoginRefreshStatus" class="hint"></div>`;
 }
 
 </script></body></html>
