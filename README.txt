@@ -1,10 +1,10 @@
-The Worship Calendar v2.21
+The Worship Calendar v2.22
 Plan • Schedule • Serve
 
-Fixed:
-- Removed old placeholder queued-email workflow.
-- Password reset now prompts and sends the real Gmail API email with API Backup attachment.
-- New member creation now prompts and sends the real Gmail API email with API Backup attachment.
-- Delete User no longer triggers login-details email prompts.
-- Login-details email success/error messages now show the real send result.
+Added:
+- Members tab now has a Send Login Details button for each non-protected member.
+- Button confirms before sending.
+- Email uses the existing Gmail API login-details workflow.
+- Email includes username, password, App URL and API Backup JSON attachment.
+- Protected hardcoded admin account is excluded.
 - JavaScript syntax checked before packaging.
