@@ -1,13 +1,11 @@
-The Worship Calendar v2.09
+The Worship Calendar v2.10
 Plan • Schedule • Serve
 
-Built from v2.08.
+Built from v2.09 rollback.
 
 Fixed:
-- Only the protected system admin cannot be deleted.
-- Only the protected system admin cannot lose admin role.
-- Other admin users can be demoted by admins.
-- Other admin users can be deleted by admins.
-- Email Team button/tab now routes to Email Team instead of Dashboard.
-- ZIP filename and root folder both use TheWorshipCalendar_v2.09.
+- Admin members now receive Email Team emails.
+- Admin members now remain eligible for roster-related emails when assigned.
+- Only the protected system admin account is excluded from team email recipients.
+- ZIP filename and root folder both use TheWorshipCalendar_v2.10.
 - JavaScript syntax checked before packaging.
