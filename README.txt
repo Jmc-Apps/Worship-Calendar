@@ -1,10 +1,10 @@
-The Worship Calendar v2.20
+The Worship Calendar v2.21
 Plan • Schedule • Serve
 
-Added:
-- New member workflow can email login details using Gmail API.
-- Password reset workflow can email updated login details using Gmail API.
-- Login details emails include username, password, App URL and setup instructions.
-- Emails attach TheWorshipCalendar-API-Backup.json.
-- API backup includes church name, app URL, GitHub settings and Gmail settings.
+Fixed:
+- Removed old placeholder queued-email workflow.
+- Password reset now prompts and sends the real Gmail API email with API Backup attachment.
+- New member creation now prompts and sends the real Gmail API email with API Backup attachment.
+- Delete User no longer triggers login-details email prompts.
+- Login-details email success/error messages now show the real send result.
 - JavaScript syntax checked before packaging.
