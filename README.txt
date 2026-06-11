@@ -1,11 +1,12 @@
-The Worship Calendar v1.78
+The Worship Calendar v1.80
 Plan • Schedule • Serve
 
-Rebuilt safely from v1.77.
+Built from v1.79.
 
-Fixed:
-- Removed version number from the visible header tagline.
-- Hid standalone empty version badge without removing page structure.
-- Added GitHub refresh on login when setup exists.
-- Falls back to local cached data if refresh fails.
-- JavaScript syntax checked before packaging.
+Added:
+- Safe background GitHub refresh after admin/member login
+- Login renders immediately and is not blocked by GitHub
+- Shows refresh status message
+- Falls back to local cached data if refresh fails
+- Preserves local GitHub/Gmail secrets
+- JavaScript syntax checked before packaging
