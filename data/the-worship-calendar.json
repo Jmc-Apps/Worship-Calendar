@@ -1,6 +1,6 @@
 {
   "settings": {
-    "churchName": "Grace Bible Church",
+    "churchName": "Gonubie Baptist Church",
     "adminPassword": "admin123",
     "logo": ""
   },
@@ -40,7 +40,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T00:18:27.329Z",
+    "lastSync": "2026-06-11T12:09:03.700Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
