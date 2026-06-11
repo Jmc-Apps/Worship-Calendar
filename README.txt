@@ -1,11 +1,10 @@
-The Worship Calendar v2.17
+The Worship Calendar v2.18
 Plan • Schedule • Serve
 
-Added:
-- If API settings are not stored on the device, the login screen is blocked.
-- New devices must import the API Backup before login is shown.
+Safe rebuild:
+- If API settings are missing, show an Import API Backup screen before login.
+- Login screen should no longer go blank.
 - No demo data fallback.
-- After API Backup import, the app attempts to load church data from GitHub.
-- Login self-registration remains removed.
-- ZIP filename and root folder both use TheWorshipCalendar_v2.17.
+- After API import, the app attempts to load GitHub data.
+- ZIP filename and root folder both use TheWorshipCalendar_v2.18.
 - JavaScript syntax checked before packaging.
