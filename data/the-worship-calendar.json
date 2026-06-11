@@ -265,7 +265,7 @@
       "name": "Jonathan Mc Glashan",
       "email": "jonathan@mcglashan.co.za",
       "password": "Jono1959",
-      "role": "admin",
+      "role": "member",
       "ministryIds": [
         "default",
         "4d3677e7-ab19-4929-8e4d-150b57363cda"
@@ -343,7 +343,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T18:53:10.014Z",
+    "lastSync": "2026-06-11T18:54:21.882Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
