@@ -1,10 +1,9 @@
-The Worship Calendar v2.22
+The Worship Calendar v2.23
 Plan • Schedule • Serve
 
-Added:
-- Members tab now has a Send Login Details button for each non-protected member.
-- Button confirms before sending.
-- Email uses the existing Gmail API login-details workflow.
-- Email includes username, password, App URL and API Backup JSON attachment.
-- Protected hardcoded admin account is excluded.
+Fixed:
+- Login screen now attempts to load latest data from GitHub before validating passwords.
+- Login button also forces a GitHub refresh before checking username/password.
+- This helps newly created users and reset passwords work on other devices.
+- Shows a small login refresh status message.
 - JavaScript syntax checked before packaging.
