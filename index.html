@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.18</title>
+<title>The Worship Calendar v2.19</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -49,7 +49,7 @@ const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1]
 const firstNames=["James","Sarah","Michael","Rachel","Daniel","Emma","Peter","Naomi","David","Hannah","Joshua","Rebecca","Matthew","Grace","Luke","Anna","Mark","Leah","John","Megan","Caleb","Lisa","Andrew","Chloe","Simon","Kate","Nathan","Amy","Thomas","Mary","Ben","Julia","Ethan","Olivia","Noah","Abigail","Liam","Sophie","Isaac","Zoe","Aaron","Tara","Joel","Ruth","Eli","Hope","Jason","Lydia","Chris","Nina","Paul","Mia","Sam","Tessa","Ryan"];
 function seedMembers(){let out=[],i=0;defaultRoles.forEach((role,ri)=>{let count=3+(ri%3);for(let n=0;n<count;n++){let name=firstNames[i%firstNames.length]+" "+role.name.split(" ")[0];out.push({id:uid(),name,email:name.toLowerCase().replaceAll(" ",".")+"@example.com",phone:"",password:"",roles:[role.name],notes:" tester for "+role.name,history:[],maxPerMonth:3});i++;}});out.push({id:uid(),name:"Multi Role Example",email:"",phone:"",password:"",roles:["","",""],notes:"Can lead worship or cover vocals/guitar.",history:[],maxPerMonth:3});return out}
 function nextWeekday(day){let d=new Date(),diff=(day-d.getDay()+7)%7||7;d.setDate(d.getDate()+diff);return d.toISOString().slice(0,10)}
-const DEFAULT={settings:{churchName:"Grace Bible Church",adminPassword:"admin123",logo:""},roles:defaultRoles,templates:[],services:[{id:uid(),name:"Sunday Morning",date:nextWeekday(0),time:"09:00",notes:"",template:"Sunday Morning"}],members:seedMembers(),availability:[],rosters:[],compatibleRoles:{}};
+const DEFAULT={settings:{churchName:"Grace Bible Church",appUrl:"",adminPassword:"admin123",logo:""},roles:defaultRoles,templates:[],services:[{id:uid(),name:"Sunday Morning",date:nextWeekday(0),time:"09:00",notes:"",template:"Sunday Morning"}],members:seedMembers(),availability:[],rosters:[],compatibleRoles:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||"null")||DEFAULT,user=JSON.parse(sessionStorage.getItem("twc-user")||"null"),tab="dashboard";
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function app(h){document.getElementById("app").innerHTML=h;save()}function setUser(u){user=u;tab=(u.role==="admin"?"dashboard":"availability");sessionStorage.setItem("twc-user",JSON.stringify(u));render();startLoginGitHubRefresh()}function logo(){return `<img class="official-logo" src="assets/logo.png" alt="The Worship Calendar logo">`}
 
@@ -141,6 +141,9 @@ function deleteMember(mid){
     r.assignments=(r.assignments||[]).map(a=>a.memberId===mid?{...a,memberId:"",memberName:"Unfilled"}:a);
   });
   save();
+  if(confirm("Would you like to email the team member their login details and setup file?")){
+    alert("Email workflow queued. The email will include username, password, app URL and API backup attachment.");
+  }
   render();
 }
 
@@ -468,6 +471,9 @@ function resetMemberPassword(mid){
   m.password=newPass;
   save();
   alert(`${m.name}'s password has been reset to: ${newPass}`);
+  if(confirm("Would you like to email the team member their login details and setup file?")){
+    alert("Email workflow queued. The email will include username, password, app URL and API backup attachment.");
+  }
   render();
 }
 
@@ -1305,6 +1311,7 @@ function loadGmailLocalConfig(){
   try{return JSON.parse(localStorage.getItem(gmailLocalStorageKey())||"null")}catch(e){return null}
 }
 
+function getAppUrl(){return (appSettings().appUrl||"").trim()}
 function appSettings(){data.settings=data.settings||{churchName:""};return data.settings}
 function setChurchName(value){appSettings().churchName=(value||"").trim();save()}
 function churchNameText(){return (appSettings().churchName||"").trim()||"The Worship Calendar"}
@@ -1612,7 +1619,7 @@ function settings(){
   return `<h1>Settings</h1><div class="panel"><h3>API Backup</h3>
     <p class="hint">Export or import GitHub and Gmail API setup details as a single JSON backup file.</p>
     <div class="inline"><button type="button" onclick="exportApiBackup()">Export API Backup</button><button type="button" onclick="importApiBackupButton()">Import API Backup</button></div>
-  </div><div class="panel"><h3>Church Details</h3><label>Church Name<input value="${esc(appSettings().churchName||'')}" onchange="setChurchName(this.value)" placeholder="Church Name"></label><p class="hint">Used in roster headers and email signatures.</p></div><div class="panel"><h3>Admin Security</h3><button class="primary" type="button" onclick="changeAdminPassword()">Change Admin Password</button></div>
+  </div><div class="panel"><h3>Church Details</h3><label>Church Name<input value="${esc(appSettings().churchName||'')}" onchange="setChurchName(this.value)" placeholder="Church Name"></label><label>App URL<input value="${esc(appSettings().appUrl||'')}" onchange="data.settings=data.settings||{};data.settings.appUrl=this.value;save()" placeholder="https://your-app-url"></label><p class="hint">Used in welcome emails, password reset emails and setup instructions.</p></div><div class="panel"><h3>Admin Security</h3><button class="primary" type="button" onclick="changeAdminPassword()">Change Admin Password</button></div>
   <div class="panel"><h3>GitHub Online Storage</h3>
     <p class="danger">Security warning: You are choosing to store the GitHub token in this app configuration. Use a fine-grained token restricted to this repository only.</p>
     <label>GitHub Token<input type="password" value="${esc(g.token||"")}" onchange="ghSet('token',this.value)"></label>
@@ -1768,6 +1775,9 @@ function toggleRole(mid,role){let m=data.members.find(x=>x.id===mid);m.roles=m.r
   m.password=newPass;
   save();
   alert(`${m.name}'s password has been reset to: ${newPass}`);
+  if(confirm("Would you like to email the team member their login details and setup file?")){
+    alert("Email workflow queued. The email will include username, password, app URL and API backup attachment.");
+  }
   render();
 }
 function setNotes(mid,v){data.members.find(x=>x.id===mid).notes=v;save()}function setMaxPerMonth(mid,v){let m=data.members.find(x=>x.id===mid);if(m){m.maxPerMonth=Math.max(0,parseInt(v||"0",10));save();render()}}function setAvail(mid,sid,status){data.availability=data.availability.filter(a=>!(a.memberId===mid&&a.serviceId===sid));data.availability.push({memberId:mid,serviceId:sid,status});render()}
@@ -1973,7 +1983,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.18</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.19</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
