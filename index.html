@@ -94,7 +94,7 @@ function cleanAllDemoDataOnceV176(){
     if(localStorage.getItem("twc-v176-demo-data-cleaned")==="yes")return;
     const keepGithub=data.github||{};
     const keepGmail=data.gmail||{};
-    let _admin=twcProtectSystemAdmin(); data.members=[_admin];
+    let _adminPreserve=getSystemAdmin(); data.members=[_adminPreserve];
     data.ministries=[];
     data.roles=[];
     data.templates=[];
@@ -126,7 +126,7 @@ function confirmDeleteAction(type){
 function deleteMember(mid){
   let member=(data.members||[]).find(m=>m.id===mid);
   if(!member){alert("Member not found.");return}
-  if(twcIsSystemAdmin(member)){alert("The default system admin cannot be deleted.");return}
+  if(isSystemAdmin(member)){alert("The default system admin cannot be deleted.");return}
   if(member.role==="admin"&&adminMembers().length<=1){alert("You cannot delete the last remaining admin.");return}
   if(!confirmDeleteAction("member"))return;
   data.members=(data.members||[]).filter(m=>m.id!==mid);
@@ -139,7 +139,7 @@ function deleteMember(mid){
 }
 function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
 
-function twcIsSystemAdmin(m){
+function isSystemAdmin(m){
   return !!(m&&(m.id==="admin"||String(m.email||"").toLowerCase()==="admin"));
 }
 function isAdminMemberRecord(m){
@@ -150,7 +150,7 @@ function adminMembers(){
 }
 function ensureSystemAdminProtected(){
   data.members=data.members||[];
-  let admin=data.members.find(m=>twcIsSystemAdmin(m));
+  let admin=data.members.find(m=>isSystemAdmin(m));
   if(!admin){
     admin={id:"admin",name:"Administrator",email:"admin",password:"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0};
     data.members.unshift(admin);
@@ -163,7 +163,7 @@ function ensureSystemAdminProtected(){
   admin.ministryIds=admin.ministryIds||[];
 }
 function setMemberAdminRole(memberId,isAdmin){
-  twcProtectSystemAdmin();
+  normalizeAdminAccount();
   let member=(data.members||[]).find(m=>m.id===memberId);
   if(!member){alert("Member not found.");return}
   if((member.id==="admin"||String(member.email||"").toLowerCase()==="admin")&&!isAdmin){
@@ -181,23 +181,14 @@ function setMemberAdminRole(memberId,isAdmin){
 
 function adminRoleControl(member){
   if(!user||user.role!=="admin")return "";
-  if(twcIsSystemAdmin(member))return `<span class="badge">System Administrator</span><span class="hint">Protected</span>`;
+  if(isSystemAdmin(member))return `<span class="badge">System Administrator</span><span class="hint">Protected</span>`;
   return `<label class="chip"><input type="checkbox" ${member.role==="admin"?"checked":""} onchange="setMemberAdminRole('${member.id}',this.checked)"> Admin Role</label>`;
 }
 
-
-
-function loginPage(){
-  twcProtectSystemAdmin();app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
-function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
-function dashboard(){let conflicts=data.roster
-function twcIsSystemAdmin(m){
-  return !!(m&&(m.id==="admin"||String(m.email||"").toLowerCase()==="admin"));
-}
-function twcProtectSystemAdmin(){
+function getSystemAdmin(){
   data.members=data.members||[];
   data.settings=data.settings||{};
-  let admin=data.members.find(m=>twcIsSystemAdmin(m));
+  let admin=data.members.find(m=>m.id==="admin"||String(m.email||"").toLowerCase()==="admin");
   if(!admin){
     admin={id:"admin",name:"Administrator",email:"admin",password:data.settings.adminPassword||"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0};
     data.members.unshift(admin);
@@ -208,11 +199,23 @@ function twcProtectSystemAdmin(){
   admin.role="admin";
   admin.roles=admin.roles||[];
   admin.ministryIds=admin.ministryIds||[];
+  admin.history=admin.history||[];
   if(!admin.password)admin.password=data.settings.adminPassword||"admin123";
   data.settings.adminPassword=admin.password;
   return admin;
 }
-s.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
+
+function normalizeAdminAccount(){
+  let admin=getSystemAdmin();
+  admin.role="admin";
+  data.settings=data.settings||{};
+  data.settings.adminPassword=admin.password;
+  return admin;
+}
+
+function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" placeholder="Username or email"><input id="loginPass" type="password"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
+function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
+function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
 function services(){return `<h1>Services</h1>${user.role==="admin"?`<div class="panel"><label>Service name<input id="svcName" placeholder="Service name" value="Sunday Morning"></label><label>Start date<input id="svcDate" type="date" value="${nextWeekday(0)}"></label><label>Service times <span class="small">(comma separated, e.g. 09:00, 11:00, 18:00)</span><input id="svcTimes" placeholder="09:00, 11:00" value="09:00"></label><label>Repeat for weeks <span class="small">(recurring services only)</span><input id="svcWeeks" type="number" min="1" value="8"></label><label>Template<select id="svcTemplate">${data.templates.map(t=>`<option>${esc(t.name)}</option>`).join("")}</select></label><label>Service type<select id="svcType"><option value="recurring">Weekly Recurring Service</option><option value="adhoc">One-Off Service</option></select></label><input id="svcNotes" placeholder="Notes"><div class="inline"><button class="primary" onclick="addService()">Add Service</button><button onclick="addRecurring()">Generate Weekly Series</button></div><p class="hint">Multiple times are stored as one service with one roster and one availability record. The same team serves all listed times.</p></div>`:""}<div class="calendar">${data.services.sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||""))).map(s=>`<div class="day"><b>${esc(s.date)}</b><br>${esc(s.name)}<br><span class="small">Times: ${esc(serviceTimesText(s))} • ${esc(s.template||"")} • ${esc(s.type||"service")}</span>${user.role==="admin"?`<br><button onclick="delService('${s.id}')">Delete</button>`:""}</div>`).join("")}</div>`}
 
 function ensureMinistries(){
@@ -1126,7 +1129,7 @@ function syncBar(){
 
 function changeAdminPassword(){
   if(!user||user.role!=="admin"){alert("Admin only.");return}
-  let admin=twcProtectSystemAdmin();
+  let admin=normalizeAdminAccount();
   let current=prompt("Enter current admin password:");
   if(current===null)return;
   if(current!==admin.password){alert("Current password is incorrect.");return}
@@ -1483,17 +1486,13 @@ function settings(){
 
 function login(e){
   if(e&&e.preventDefault)e.preventDefault();
-  twcProtectSystemAdmin();
+  normalizeAdminAccount();
 
   let email=(loginEmail&&loginEmail.value?loginEmail.value:"").trim();
   let pass=(loginPass&&loginPass.value)||"";
 
   let member=(data.members||[]).find(x=>String(x.email||"").toLowerCase()===email.toLowerCase()&&x.password===pass);
 
-  // Backward compatibility: old admin password location
-  if(!member&&String(email).toLowerCase()==="admin"&&data.settings&&pass===data.settings.adminPassword){
-    member=getSystemAdmin();
-  }
 
   if(member){
     if(member.id==="admin"||String(member.email||"").toLowerCase()==="admin")member.role="admin";
