@@ -1,7 +1,7 @@
 {
   "settings": {
     "churchName": "Gonubie Baptist Church",
-    "adminPassword": "admin123",
+    "adminPassword": "1405",
     "logo": ""
   },
   "roles": [
@@ -135,7 +135,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T13:27:00.546Z",
+    "lastSync": "2026-06-11T13:28:43.084Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
