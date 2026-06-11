@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.0</title>
+<title>The Worship Calendar v2.011</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -42,7 +42,7 @@
 </style><script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.0",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-0-local";
+const VERSION="2.01",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-01-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -86,7 +86,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.0 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.01 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -106,7 +106,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.0 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.01 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -262,7 +262,7 @@ function roles(){
       let moveCell=user.role==="admin"?`<select onchange="moveRoleMinistry('${r.id}',this.value)">${data.ministries.map(m=>`<option value="${m.id}" ${m.id===(r.ministryId||data.ministries[0].id)?"selected":""}>${esc(m.name)}</option>`).join("")}</select>`:esc(typeof getMinistryName==="function"?getMinistryName(r.ministryId):min.name);
       let compat=user.role==="admin"?compatibleRoleButtons(r):compatibleRoleText(r);
       let actions=user.role==="admin"?`<button onclick="delRole('${r.id}')">Delete</button>`:"";
-      return `<tr><td>${roleCell}</td><td>${data.members.filter(m=>m.roles.includes(r.name)).length}</td><td>${moveCell}</td><td>${compat}</td><td>${actions}</td></tr>`;
+      return `<tr><td>${roleCell}</td><td>${teamMembers().filter(m=>m.roles.includes(r.name)).length}</td><td>${moveCell}</td><td>${compat}</td><td>${actions}</td></tr>`;
     }).join("");
     if(!rows)rows=`<tr><td colspan="5"><span class="hint">No roles in this ministry yet.</span></td></tr>`;
     let deleteButton=user.role==="admin"&&min.id!==data.ministries[0].id?`<button onclick="deleteMinistry('${min.id}')">Delete Ministry</button>`:"";
@@ -335,6 +335,91 @@ function resetMemberPassword(mid){
   m.password=newPass;
   save();
   alert(`${m.name}'s password has been reset to: ${newPass}`);
+  render();
+}
+
+function isAdminMember(m){
+  return !!(m&&(m.role==="admin"||String(m.email||"").toLowerCase()==="admin"));
+}
+function teamMembers(){
+  return (data.members||[]).filter(m=>!isAdminMember(m));
+}
+function showAddMemberForm(){
+  window.twcShowAddMemberForm=true;
+  render();
+}
+function hideAddMemberForm(){
+  window.twcShowAddMemberForm=false;
+  render();
+}
+function addMemberFormHtml(){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let ministries=data.ministries||[];
+  return `<div class="panel"><h3>Add New Member</h3>
+    <label>Full Name<input id="newMemberName" placeholder="Full Name"></label>
+    <label>Email Address<input id="newMemberEmail" placeholder="email@example.com"></label>
+    <label>Password<input id="newMemberPassword" type="password" placeholder="Password"></label>
+    <label>Maximum Services Per Month<input id="newMemberMax" type="number" min="0" placeholder="Optional"></label>
+    <label>Notes<textarea id="newMemberNotes" rows="3" placeholder="Optional notes"></textarea></label>
+    <h4>Ministries</h4>
+    ${ministries.length?`<div class="chips">${ministries.map(m=>`<label class="chip"><input type="checkbox" class="newMemberMinistry" value="${m.id}" onchange="refreshNewMemberRoles()"> ${esc(m.name)}</label>`).join("")}</div>`:`<p class="hint">No ministries configured yet.</p>`}
+    <h4>Roles</h4>
+    <div id="newMemberRolesBox">${newMemberRolesHtml([])}</div>
+    <div class="inline"><button class="primary" type="button" onclick="saveNewMember()">Save Member</button><button type="button" onclick="hideAddMemberForm()">Cancel</button></div>
+  </div>`;
+}
+function newMemberRolesHtml(selectedMinistries){
+  let roles=data.roles||[];
+  if(selectedMinistries&&selectedMinistries.length){
+    roles=roles.filter(r=>selectedMinistries.includes(r.ministryId||""));
+  }else{
+    roles=[];
+  }
+  if(!roles.length)return `<p class="hint">Select ministries first to choose roles.</p>`;
+  let byMin={};
+  roles.forEach(r=>{
+    let mid=r.ministryId||"";
+    byMin[mid]=byMin[mid]||[];
+    byMin[mid].push(r);
+  });
+  return Object.keys(byMin).map(mid=>{
+    let min=(data.ministries||[]).find(m=>m.id===mid);
+    let minName=(typeof ministryNameById==="function"?ministryNameById(mid):(min?min.name:"Ministry"));
+    return `<div class="compatible-ministry-group"><b>${esc(minName)}</b><div class="chips">${byMin[mid].map(r=>`<label class="chip"><input type="checkbox" class="newMemberRole" value="${esc(r.name)}"> ${esc(r.name)}</label>`).join("")}</div></div>`;
+  }).join("");
+}
+function refreshNewMemberRoles(){
+  let selected=[...document.querySelectorAll(".newMemberMinistry:checked")].map(x=>x.value);
+  let box=document.getElementById("newMemberRolesBox");
+  if(box)box.innerHTML=newMemberRolesHtml(selected);
+}
+function saveNewMember(){
+  let name=((document.getElementById("newMemberName")||{}).value||"").trim();
+  let email=((document.getElementById("newMemberEmail")||{}).value||"").trim();
+  let password=((document.getElementById("newMemberPassword")||{}).value||"").trim();
+  let max=((document.getElementById("newMemberMax")||{}).value||"").trim();
+  let notes=((document.getElementById("newMemberNotes")||{}).value||"").trim();
+  if(!name){alert("Full Name is required.");return}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert("Please enter a valid email address.");return}
+  if((data.members||[]).some(m=>String(m.email||"").toLowerCase()===email.toLowerCase())){alert("That email address already exists.");return}
+  if(!password){alert("Password is required.");return}
+  let ministryIds=[...document.querySelectorAll(".newMemberMinistry:checked")].map(x=>x.value);
+  let roles=[...document.querySelectorAll(".newMemberRole:checked")].map(x=>x.value);
+  data.members=data.members||[];
+  data.members.push({
+    id:typeof uid==="function"?uid():"m"+Date.now(),
+    name,
+    email,
+    password,
+    role:"member",
+    ministryIds,
+    roles,
+    notes,
+    history:[],
+    maxPerMonth:Number(max)||0
+  });
+  save();
+  window.twcShowAddMemberForm=false;
   render();
 }
 function members(){
@@ -1018,7 +1103,7 @@ async function emailRosterReminder(rosterId){
     let g=typeof gmailConfig==="function"?gmailConfig():{};
     if(!g.accessToken){alert("Please connect Gmail in Settings first.");return}
     let ids=[...new Set((r.assignments||[]).filter(a=>a.memberId).map(a=>a.memberId))];
-    let members=(data.members||[]).filter(m=>ids.includes(m.id)&&m.email);
+    let members=teamMembers().filter(m=>ids.includes(m.id)&&m.email);
     if(!members.length){alert("No assigned members with email addresses found.");return}
     if(!confirm(`Send reminder emails to ${members.length} member(s) for this service?`))return;
     let sent=0,failed=0,errors=[];
@@ -1055,7 +1140,7 @@ async function sendEmailTeam(){
     let msgText=((document.getElementById("emailTeamMessage")||{}).value||"").trim();
     if(!msgText){alert("Please type a message to send.");return}
     let subject=((document.getElementById("emailTeamSubject")||{}).value||"").trim()||`Message from ${churchNameText()}`;
-    let members=(data.members||[]).filter(m=>m.role!=="admin"&&m.email&&memberInAnySelectedMinistry(m,selected));
+    let members=teamMembers().filter(m=>m.email&&memberInAnySelectedMinistry(m,selected));
     let unique=[];let seen=new Set();
     members.forEach(m=>{if(!seen.has(m.email)){seen.add(m.email);unique.push(m)}});
     if(!unique.length){alert("No members with email addresses found in the selected ministries.");return}
@@ -1201,7 +1286,7 @@ async function emailPersonalizedRosters(){
   try{
     let g=gmailConfig();
     if(!g.accessToken){alert("Please connect Gmail in Settings first.");return}
-    let members=(data.members||[]).filter(m=>m.role!=="admin"&&m.email);
+    let members=teamMembers().filter(m=>m.email);
     if(!members.length){alert("No member email addresses found.");return}
     if(!confirm(`Send personalized roster emails to ${members.length} member(s)?`))return;
     let sent=0,failed=0,errors=[];
@@ -1594,7 +1679,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.0</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.011</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -1666,10 +1751,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.0-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.01-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.0 roster generation repair: final overrides */
+/* v2.01 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
