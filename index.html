@@ -106,7 +106,7 @@ function deleteMember(mid){
   save();
   render();
 }
-function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${loginRefreshNotice()}${page()}</main></div>`)}
+function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
 function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
@@ -732,7 +732,7 @@ function importGithubAccessSetupButton(){
 
 async function refreshFromGitHubOnLogin(){
   try{
-    if(typeof ghConfig!=="function"||typeof ghGetFile!=="function"||typeof ghDecodeUnicode!=="function")return true;
+    if(typeof ghConfig!=="function"||typeof ghGetFile!=="function"||typeof ghDecodeUnicode!=="function")return false;
     let g=ghConfig();
     if(!g||!g.token||!g.owner||!g.repo||!g.branch||!g.path){
       window.twcLoginRefreshStatus="No connection file uploaded";
@@ -747,18 +747,19 @@ async function refreshFromGitHubOnLogin(){
     let loaded=JSON.parse(ghDecodeUnicode(file.content));
     let currentGithub=data.github||{};
     let currentGmail=data.gmail||{};
-    let currentLocalGithub=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
-    let currentLocalGmail=typeof loadGmailLocalConfig==="function"?loadGmailLocalConfig():null;
+    let localGithub=typeof loadGithubAccessLocal==="function"?loadGithubAccessLocal():null;
+    let localGmail=typeof loadGmailLocalConfig==="function"?loadGmailLocalConfig():null;
 
     data=loaded;
     data.github=data.github||{};
     ["token","owner","repo","branch","path"].forEach(k=>{
-      data.github[k]=(currentGithub&&currentGithub[k])||(currentLocalGithub&&currentLocalGithub[k])||data.github[k]||"";
+      data.github[k]=(currentGithub&&currentGithub[k])||(localGithub&&localGithub[k])||data.github[k]||"";
     });
     data.gmail=data.gmail||{};
     ["clientId","apiKey","sender","accessToken","connectedAt"].forEach(k=>{
-      data.gmail[k]=(currentGmail&&currentGmail[k])||(currentLocalGmail&&currentLocalGmail[k])||data.gmail[k]||"";
+      data.gmail[k]=(currentGmail&&currentGmail[k])||(localGmail&&localGmail[k])||data.gmail[k]||"";
     });
+
     if(typeof saveGithubAccessLocal==="function"){
       saveGithubAccessLocal({token:data.github.token||"",owner:data.github.owner||"",repo:data.github.repo||"",branch:data.github.branch||"main",path:data.github.path||"data/the-worship-calendar.json"});
     }
@@ -766,8 +767,8 @@ async function refreshFromGitHubOnLogin(){
     if(typeof save==="function")save();
     window.twcLoginRefreshStatus="Data refreshed from GitHub";
     return true;
-  }catch(err){
-    console.error("Login GitHub refresh failed",err);
+  }catch(e){
+    console.error("Login GitHub refresh failed",e);
     window.twcLoginRefreshStatus="Could not refresh from GitHub. Showing local cached data.";
     return false;
   }
