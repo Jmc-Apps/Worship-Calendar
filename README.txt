@@ -1,10 +1,10 @@
-The Worship Calendar v2.18
+The Worship Calendar v2.20
 Plan • Schedule • Serve
 
-Safe rebuild:
-- If API settings are missing, show an Import API Backup screen before login.
-- Login screen should no longer go blank.
-- No demo data fallback.
-- After API import, the app attempts to load GitHub data.
-- ZIP filename and root folder both use TheWorshipCalendar_v2.18.
+Added:
+- New member workflow can email login details using Gmail API.
+- Password reset workflow can email updated login details using Gmail API.
+- Login details emails include username, password, App URL and setup instructions.
+- Emails attach TheWorshipCalendar-API-Backup.json.
+- API backup includes church name, app URL, GitHub settings and Gmail settings.
 - JavaScript syntax checked before packaging.
