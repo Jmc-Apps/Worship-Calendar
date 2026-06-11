@@ -1,12 +1,13 @@
-The Worship Calendar v1.81
+The Worship Calendar v2.0
 Plan • Schedule • Serve
 
-Built from v1.80.
+Built from v1.81.
 
 Added:
-- Church Name setting in Settings
-- Church name used in email signatures/subjects
-- Admin-only Email Roster Reminder button under each service roster
-- New admin-only Email Team tab
-- Email Team can send a bulk Gmail API email to selected ministries
+- Export API Backup button
+- Import API Backup button
+- Single JSON backup for GitHub and Gmail API setup
+- Church name included in API backup
+- Church Name field placeholder is now "Church Name"
+- Saved church name remains visible until changed
 - JavaScript syntax checked before packaging
