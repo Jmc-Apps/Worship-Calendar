@@ -1,10 +1,10 @@
-The Worship Calendar v2.24
+The Worship Calendar v2.25
 Plan • Schedule • Serve
 
-Fixed:
-- App now opens to a Welcome screen instead of the login form.
-- Welcome screen has a Login button.
-- Clicking Login loads latest GitHub data first.
-- After the load attempt, the normal login screen opens.
-- Login screen render logic no longer performs automatic background refresh.
+Added:
+- Edit Member button in Members tab.
+- Edit form for name, email, password, max services per month, notes, ministries and roles.
+- Protected admin can be edited but cannot receive ministry/role assignments.
+- Optional checkbox to email updated login details after saving.
+- Maximum Services Per Month placeholder clarifies blank means Unlimited.
 - JavaScript syntax checked before packaging.
