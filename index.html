@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.011</title>
+<title>The Worship Calendar v2.02</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -42,7 +42,7 @@
 </style><script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.01",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-01-local";
+const VERSION="2.02",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-02-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -86,7 +86,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.01 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.02 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -106,7 +106,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.01 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.02 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -126,8 +126,9 @@ function confirmDeleteAction(type){
 function deleteMember(mid){
   let member=(data.members||[]).find(m=>m.id===mid);
   if(!member){alert("Member not found.");return}
-  if(member.role==="admin"||member.email==="admin"){alert("The administrator account cannot be deleted.");return}
-  if(!confirm("Are you sure you want to delete this member?\\nThis action cannot be undone."))return;
+  if(isSystemAdmin(member)){alert("The default system admin cannot be deleted.");return}
+  if(member.role==="admin"&&adminMembers().length<=1){alert("You cannot delete the last remaining admin.");return}
+  if(!confirmDeleteAction("member"))return;
   data.members=(data.members||[]).filter(m=>m.id!==mid);
   data.availability=(data.availability||[]).filter(a=>a.memberId!==mid);
   (data.rosters||[]).forEach(r=>{
@@ -137,6 +138,55 @@ function deleteMember(mid){
   render();
 }
 function render(){ensureMinistries();if(!user)return loginPage();app(`<header class="topbar"><div class="inline">${logo()}<div><b>${APP}</b><br><span>${TAG} • v${VERSION}</span><br><span id="appVersionBadge" class="badge">v${VERSION}</span></div></div><button onclick="logout()">Log out</button></header><div class="layout"><nav class="sidebar">${(user.role==="admin"?["dashboard","services","roles","templates","members","availability","rosters","emailTeam","settings"]:["availability","personalizedRoster","rosters"]).map(t=>`<button class="${tab===t?"active":""}" onclick="tab='${t}';render()">${t==="emailTeam"?"Email Team":t==="personalizedRoster"?"Personalized Roster":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</nav><main class="content">${loginRefreshNotice()}${syncBar()}${page()}</main></div>`)}
+
+function isSystemAdmin(m){
+  return !!(m&&(m.id==="admin"||String(m.email||"").toLowerCase()==="admin"));
+}
+function isAdminMemberRecord(m){
+  return !!(m&&m.role==="admin");
+}
+function adminMembers(){
+  return (data.members||[]).filter(m=>m.role==="admin");
+}
+function ensureSystemAdminProtected(){
+  data.members=data.members||[];
+  let admin=data.members.find(m=>isSystemAdmin(m));
+  if(!admin){
+    admin={id:"admin",name:"Administrator",email:"admin",password:"admin123",role:"admin",roles:[],ministryIds:[],notes:"",history:[],maxPerMonth:0};
+    data.members.unshift(admin);
+  }
+  admin.id="admin";
+  admin.email=admin.email||"admin";
+  admin.name=admin.name||"Administrator";
+  admin.role="admin";
+  admin.roles=admin.roles||[];
+  admin.ministryIds=admin.ministryIds||[];
+}
+function setMemberAdminRole(memberId,isAdmin){
+  ensureSystemAdminProtected();
+  let member=(data.members||[]).find(m=>m.id===memberId);
+  if(!member){alert("Member not found.");return}
+  if(isSystemAdmin(member)&&!isAdmin){
+    alert("The default system admin cannot be removed as admin.");
+    return;
+  }
+  if(!isAdmin&&member.role==="admin"&&adminMembers().length<=1){
+    alert("You cannot remove the last remaining admin.");
+    return;
+  }
+  member.role=isAdmin?"admin":"member";
+  if(isAdmin){
+    member.roles=member.roles||[];
+    member.ministryIds=member.ministryIds||[];
+  }
+  save();
+  render();
+}
+function adminRoleControl(member){
+  if(!user||user.role!=="admin")return "";
+  if(isSystemAdmin(member))return `<span class="badge">System Administrator</span><span class="hint">Protected</span>`;
+  return `<label class="chip"><input type="checkbox" ${member.role==="admin"?"checked":""} onchange="setMemberAdminRole('${member.id}',this.checked)"> Admin Role</label>`;
+}
 function loginPage(){app(`<div class="login"><div class="loginCard">${logo()}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION} </p><p class="hint"><br></p><form onsubmit="login(event)"><input id="loginEmail" value="admin" placeholder="Username or email"><input id="loginPass" type="password" value="admin123"><button class="primary">Log in</button></form><hr><h3>Create Member Profile</h3><form onsubmit="register(event)"><input id="regName" placeholder="Full name"><input id="regEmail" placeholder="Email"><input id="regPass" type="password" placeholder="Password"><button>Create profile</button></form><p id="msg" class="notice"></p></div></div>`)}
 function page(){if(user&&user.role!=="admin"&&!["availability","personalizedRoster","rosters"].includes(tab))tab="availability";return ({dashboard,services,roles,templates,members,availability,personalizedRoster,rosters,settings}[tab]||dashboard)()}function card(t,v){return `<div class="card"><small>${esc(t)}</small><strong>${esc(v)}</strong></div>`}
 function dashboard(){let conflicts=data.rosters.reduce((a,r)=>a+conflictsFor(r).length,0),up=[...data.services].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];return `<h1>Dashboard</h1><div class="cards">${card("Upcoming Service",up?`${up.name} ${up.date} ${up.time}`:"None")}${card("Team Members",data.members.length)}${card("Roles",data.roles.length)}${card("Roster Warnings",conflicts)}</div><p class="hint"> testing data includes 3 to 5 team members for every role.</p>`}
@@ -411,7 +461,7 @@ function saveNewMember(){
     name,
     email,
     password,
-    role:"member",
+    role:member.role==="admin"?"admin":"member",
     ministryIds,
     roles,
     notes,
@@ -443,7 +493,7 @@ function members(){
     return `<div class="panel">
       <h3>${esc(member.name)}</h3>
       <p>${esc(member.email)}</p>
-      ${user.role==="admin"?`<div class="inline"><button class="primary" type="button" onclick="resetMemberPassword('${member.id}')">Reset Password</button>${member.role!=="admin"?`<button type="button" onclick="deleteMember('${member.id}')">Delete Member</button>`:""}</div>`:""}
+      ${user.role==="admin"?`<div class="inline"><button class="primary" type="button" onclick="resetMemberPassword('${member.id}')">Reset Password</button>${member.role!=="admin"?`<button type="button" onclick="deleteMember('${member.id}')">Delete Member</button>${adminRoleControl(member)}`:""}</div>`:""}
       ${ministryHtml}
       <label>Max services per month<input type="number" min="0" value="${member.maxPerMonth??3}" onchange="setMaxPerMonth('${member.id}',this.value)"></label>
       ${user.role==="admin"?`<label>Admin notes<textarea onchange="setNotes('${member.id}',this.value)">${esc(member.notes||"")}</textarea></label>`:""}
@@ -1052,8 +1102,9 @@ function syncBar(){
 }
 
 function changeAdminPassword(){
+  ensureSystemAdminProtected();
   if(!user||user.role!=="admin"){alert("Admin only.");return}
-  let admin=(data.members||[]).find(m=>m.role==="admin"||m.email==="admin");
+  let admin=(data.members||[]).find(m=>isSystemAdmin(m));
   if(!admin){alert("Admin account not found.");return}
   let current=prompt("Enter current admin password:");
   if(current===null)return;
@@ -1066,6 +1117,7 @@ function changeAdminPassword(){
   if(confirmPass===null)return;
   if(next!==confirmPass){alert("Passwords do not match.");return}
   admin.password=next;
+  admin.role="admin";
   save();
   alert("Admin password updated successfully.");
 }
@@ -1679,7 +1731,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.011</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.02</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -1751,10 +1803,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.01-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.02-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.01 roster generation repair: final overrides */
+/* v2.02 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){

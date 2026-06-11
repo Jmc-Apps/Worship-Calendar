@@ -1,12 +1,13 @@
-The Worship Calendar v2.01
+The Worship Calendar v2.02
 Plan • Schedule • Serve
 
-Built from v2.0.
+Built from v2.01.
 
-Changed:
-- Admin account is hidden from the team member list in Members.
-- Admin is excluded from team email and roster reminder recipients where those filters are used.
-- Added Add Member button/form in Members tab.
-- New members require name, email and password.
-- New member email addresses must be unique.
+Fixed:
+- Changed admin password still logs in as admin.
+- Login now respects saved member.role === "admin".
+- Admins can promote/demote other users as admin.
+- Default system admin cannot be deleted.
+- Default system admin cannot lose admin role.
+- Last remaining admin cannot be removed.
 - JavaScript syntax checked before packaging.
