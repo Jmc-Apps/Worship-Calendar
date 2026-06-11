@@ -1,9 +1,11 @@
-The Worship Calendar v2.12
+The Worship Calendar v2.13
 Plan • Schedule • Serve
 
 Fixed:
-- Protected Administrator/admin account hidden from Members list.
-- Protected Administrator/admin account hidden from Availability list.
-- Protected Administrator/admin roles and ministries stripped.
-- Protected Administrator/admin availability records removed on startup.
+- Only the hardcoded admin account is protected.
+- Other admin users can be deleted.
+- Other admin users can be demoted back to member.
+- Hardcoded admin cannot be deleted.
+- Hardcoded admin cannot lose Admin status.
+- ZIP filename and root folder both use TheWorshipCalendar_v2.13.
 - JavaScript syntax checked before packaging.
