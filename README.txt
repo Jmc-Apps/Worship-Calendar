@@ -1,13 +1,13 @@
-The Worship Calendar v2.06
+The Worship Calendar v2.07
 Plan • Schedule • Serve
 
-Built from v2.05.
+Recovery build from uploaded v2.05 source.
 
 Fixed:
-- Login fields no longer auto-populate admin credentials.
-- Admin password is preserved after being changed.
-- Old admin password no longer works after a password change.
-- Login uses the saved user role to enter admin mode.
-- Protected system admin remains admin and cannot be reset by cleanup routines.
-- ZIP filename and root folder are both named TheWorshipCalendar_v2.06.
+- Login screen fields start blank.
+- Login screen structure preserved.
+- Admin password change preserves the new password.
+- Old admin password no longer works after change.
+- Admin accounts log into admin mode based on role.
+- ZIP and root folder both named TheWorshipCalendar_v2.07.
 - JavaScript syntax checked before packaging.
