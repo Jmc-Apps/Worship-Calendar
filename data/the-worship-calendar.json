@@ -47,21 +47,90 @@
     },
     {
       "id": "d798e957-625a-4908-8b2d-ec70b2c0a663",
-      "name": "Visuals",
+      "name": "Visuals AM",
       "ministryId": "default"
     },
     {
       "id": "284e10fd-4535-4ca6-ad89-489ea8b8b103",
-      "name": "Deacon on Duty",
+      "name": "Deacon on Duty AM",
       "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
     },
     {
       "id": "8bed1612-e2e3-4b98-8c18-fd259842b6b0",
       "name": "Communion",
       "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+    },
+    {
+      "id": "8badf8b3-e675-4562-bb02-10280095f552",
+      "name": "Visuals PM",
+      "ministryId": "default"
+    },
+    {
+      "id": "167928cd-b75e-4451-8593-7365f0abb836",
+      "name": "Deacon on Duty PM",
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
     }
   ],
-  "templates": [],
+  "templates": [
+    {
+      "id": "4215c381-7ee5-4d97-b0a6-52aa46c6fb94",
+      "name": "Sunday Service",
+      "roleNames": [
+        "Worship Leader",
+        "Piano",
+        "Rhythm Guitar",
+        "Electric Guitar",
+        "Bass",
+        "Drums",
+        "Vocal",
+        "Sound",
+        "Visuals",
+        "Deacon on Duty",
+        "Communion",
+        "Visuals AM",
+        "Visuals PM",
+        "Deacon on Duty AM",
+        "Deacon on Duty PM"
+      ],
+      "roleMin": {
+        "Worship Leader": 1,
+        "Piano": 1,
+        "Rhythm Guitar": 1,
+        "Electric Guitar": 1,
+        "Bass": 1,
+        "Drums": 1,
+        "Vocal": 2,
+        "Sound": 1,
+        "Visuals": 1,
+        "Deacon on Duty": 1,
+        "Communion": 1,
+        "Visuals PM": 1,
+        "Deacon on Duty PM": 1
+      },
+      "roleMax": {
+        "Worship Leader": 1,
+        "Piano": 1,
+        "Rhythm Guitar": 2,
+        "Electric Guitar": 1,
+        "Bass": 1,
+        "Drums": 1,
+        "Vocal": 4,
+        "Sound": 1,
+        "Visuals": 1,
+        "Deacon on Duty": 1,
+        "Communion": 1,
+        "Visuals PM": 1,
+        "Deacon on Duty PM": 1
+      },
+      "roleTimes": {
+        "Visuals AM": "08:00, 10:00",
+        "Visuals PM": "18:00",
+        "Deacon on Duty AM": "08:00, 10:00",
+        "Deacon on Duty PM": "18:00"
+      },
+      "serviceLengthMinutes": 70
+    }
+  ],
   "services": [],
   "members": [
     {
@@ -92,7 +161,8 @@
         "Bass",
         "Drums",
         "Sound",
-        "Deacon on Duty"
+        "Deacon on Duty AM",
+        "Deacon on Duty PM"
       ],
       "notes": "",
       "history": [],
@@ -131,12 +201,17 @@
       "Bass"
     ],
     "Sound": [],
-    "Visuals": [],
-    "Deacon on Duty": [
+    "Communion": [
+      "Deacon on Duty AM",
+      "Deacon on Duty PM"
+    ],
+    "Visuals AM": [],
+    "Visuals PM": [],
+    "Deacon on Duty AM": [
       "Communion"
     ],
-    "Communion": [
-      "Deacon on Duty"
+    "Deacon on Duty PM": [
+      "Communion"
     ]
   },
   "ministries": [
@@ -155,7 +230,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T14:46:11.594Z",
+    "lastSync": "2026-06-11T16:12:31.781Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
