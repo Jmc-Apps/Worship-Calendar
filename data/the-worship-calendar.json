@@ -83,17 +83,41 @@
   "rosters": [],
   "compatibleRoles": {
     "2": [],
-    "Worship Leader": [],
-    "Piano": [],
-    "Rhythm Guitar": [],
-    "Electric Guitar": [],
-    "Bass": [],
+    "Worship Leader": [
+      "Piano",
+      "Rhythm Guitar",
+      "Electric Guitar"
+    ],
+    "Piano": [
+      "Worship Leader",
+      "Vocal"
+    ],
+    "Rhythm Guitar": [
+      "Worship Leader",
+      "Vocal"
+    ],
+    "Electric Guitar": [
+      "Vocal",
+      "Worship Leader"
+    ],
+    "Bass": [
+      "Vocal"
+    ],
     "Drums": [],
-    "Vocal": [],
+    "Vocal": [
+      "Piano",
+      "Rhythm Guitar",
+      "Electric Guitar",
+      "Bass"
+    ],
     "Sound": [],
     "Visuals": [],
-    "Deacon on Duty": [],
-    "Communion": []
+    "Deacon on Duty": [
+      "Communion"
+    ],
+    "Communion": [
+      "Deacon on Duty"
+    ]
   },
   "ministries": [
     {
@@ -111,7 +135,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T13:25:07.628Z",
+    "lastSync": "2026-06-11T13:27:00.546Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
