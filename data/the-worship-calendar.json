@@ -4,7 +4,63 @@
     "adminPassword": "admin123",
     "logo": ""
   },
-  "roles": [],
+  "roles": [
+    {
+      "id": "0b32b209-97eb-4e41-b8ad-ba51fb4d9487",
+      "name": "Worship Leader",
+      "ministryId": "default"
+    },
+    {
+      "id": "ff571cb5-a88b-40f5-a009-be2af3c88457",
+      "name": "Piano",
+      "ministryId": "default"
+    },
+    {
+      "id": "040aeef7-ac44-43a5-94fb-6c1f08d9de65",
+      "name": "Rhythm Guitar",
+      "ministryId": "default"
+    },
+    {
+      "id": "76d0b962-3663-4110-b79e-b52c65b24b56",
+      "name": "Electric Guitar",
+      "ministryId": "default"
+    },
+    {
+      "id": "aee09d1d-554d-4d06-b604-1416e8e24887",
+      "name": "Bass",
+      "ministryId": "default"
+    },
+    {
+      "id": "c8dfb169-2d25-47b1-bfb0-bdfbf424e0ca",
+      "name": "Drums",
+      "ministryId": "default"
+    },
+    {
+      "id": "015c8323-fcf9-4282-8ca8-926d4046bbcf",
+      "name": "Vocal",
+      "ministryId": "default"
+    },
+    {
+      "id": "f7d64d1c-d15d-4bee-b76d-578bde2ac6f1",
+      "name": "Sound",
+      "ministryId": "default"
+    },
+    {
+      "id": "d798e957-625a-4908-8b2d-ec70b2c0a663",
+      "name": "Visuals",
+      "ministryId": "default"
+    },
+    {
+      "id": "284e10fd-4535-4ca6-ad89-489ea8b8b103",
+      "name": "Deacon on Duty",
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+    },
+    {
+      "id": "8bed1612-e2e3-4b98-8c18-fd259842b6b0",
+      "name": "Communion",
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+    }
+  ],
   "templates": [],
   "services": [],
   "members": [
@@ -26,12 +82,27 @@
   "availability": [],
   "rosters": [],
   "compatibleRoles": {
-    "2": []
+    "2": [],
+    "Worship Leader": [],
+    "Piano": [],
+    "Rhythm Guitar": [],
+    "Electric Guitar": [],
+    "Bass": [],
+    "Drums": [],
+    "Vocal": [],
+    "Sound": [],
+    "Visuals": [],
+    "Deacon on Duty": [],
+    "Communion": []
   },
   "ministries": [
     {
       "id": "default",
-      "name": "Default Ministry"
+      "name": "Worship Ministry"
+    },
+    {
+      "id": "4d3677e7-ab19-4929-8e4d-150b57363cda",
+      "name": "Deacons"
     }
   ],
   "github": {
@@ -40,7 +111,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T12:27:08.206Z",
+    "lastSync": "2026-06-11T13:25:07.628Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
