@@ -1,13 +1,9 @@
-The Worship Calendar v2.02
+The Worship Calendar v2.03
 Plan • Schedule • Serve
 
-Built from v2.01.
+Built from v2.02.
 
 Fixed:
-- Changed admin password still logs in as admin.
-- Login now respects saved member.role === "admin".
-- Admins can promote/demote other users as admin.
-- Default system admin cannot be deleted.
-- Default system admin cannot lose admin role.
-- Last remaining admin cannot be removed.
+- Add Member button now appears in the Members tab for admin users.
+- Add Member form remains available under the button.
 - JavaScript syntax checked before packaging.
