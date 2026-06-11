@@ -1,12 +1,9 @@
-The Worship Calendar v2.11
+The Worship Calendar v2.12
 Plan • Schedule • Serve
 
-Built from v2.10 rollback.
-
 Fixed:
-- Protected system admin is hidden from the Members/team list.
-- Protected system admin is hidden from the Availability tab.
-- Protected system admin roles and ministry assignments are stripped on startup.
-- Protected system admin is excluded from obvious member dropdown sources.
-- ZIP filename and root folder both use TheWorshipCalendar_v2.11.
+- Protected Administrator/admin account hidden from Members list.
+- Protected Administrator/admin account hidden from Availability list.
+- Protected Administrator/admin roles and ministries stripped.
+- Protected Administrator/admin availability records removed on startup.
 - JavaScript syntax checked before packaging.
