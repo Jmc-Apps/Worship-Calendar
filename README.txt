@@ -1,11 +1,11 @@
-The Worship Calendar v2.15
+The Worship Calendar v2.17
 Plan • Schedule • Serve
 
-Built from stable v2.13 source.
-
-Fixed:
-- Removed Create Member Profile/self-registration from login screen.
-- Members tab now shows Remove Admin Role for non-protected admin users.
-- Members tab now shows Delete User for non-protected users.
-- Hardcoded admin remains protected.
+Added:
+- If API settings are not stored on the device, the login screen is blocked.
+- New devices must import the API Backup before login is shown.
+- No demo data fallback.
+- After API Backup import, the app attempts to load church data from GitHub.
+- Login self-registration remains removed.
+- ZIP filename and root folder both use TheWorshipCalendar_v2.17.
 - JavaScript syntax checked before packaging.
