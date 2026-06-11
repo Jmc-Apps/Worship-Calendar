@@ -343,7 +343,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T18:54:21.882Z",
+    "lastSync": "2026-06-11T18:59:10.188Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
