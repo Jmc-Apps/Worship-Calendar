@@ -2,7 +2,8 @@
   "settings": {
     "churchName": "Gonubie Baptist Church",
     "adminPassword": "1405",
-    "logo": ""
+    "logo": "",
+    "appUrl": "https://jmc-apps.github.io/Worship-Calendar/"
   },
   "roles": [
     {
@@ -265,7 +266,7 @@
       "name": "Jonathan Mc Glashan",
       "email": "jonathan@mcglashan.co.za",
       "password": "Jono1959",
-      "role": "member",
+      "role": "admin",
       "ministryIds": [
         "default",
         "4d3677e7-ab19-4929-8e4d-150b57363cda"
@@ -343,13 +344,13 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-11T18:59:10.188Z",
+    "lastSync": "2026-06-11T20:28:14.006Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
     "clientId": "266422265775-4i9tc727fp6j0filku502i8usn603ebo.apps.googleusercontent.com",
     "sender": "calendargbc7@gmail.com",
-    "connectedAt": "2026-06-11T00:18:10.466Z",
+    "connectedAt": "2026-06-11T19:55:55.468Z",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
   }
