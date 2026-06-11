@@ -1,1 +1,1 @@
-The Worship Calendar v1.80\nPDF Export Update:\n- One ministry per printed page\n- Added print page-break support for ministry sections\n
+The Worship Calendar v1.81\nPDF Export Update:\n- One ministry per printed page\n- Added print page-break support for ministry sections\n
