@@ -1,4 +1,4 @@
-The Worship Calendar v2.34
+The Worship Calendar v2.35
 Plan • Schedule • Serve
 
 Fixed:
@@ -6,5 +6,5 @@ Fixed:
 - Only the protected hardcoded admin remains blocked from Personalized Roster.
 - Gmail connection is restored from saved Gmail settings after login where possible.
 - Email sending attempts to restore saved Gmail access before asking to reconnect.
-- Settings tab restriction from v2.34 is preserved.
+- Settings tab restriction from v2.35 is preserved.
 - Main patched file: index.html
