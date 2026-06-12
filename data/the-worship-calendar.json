@@ -216,7 +216,8 @@
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 4
+      "maxPerMonth": 0,
+      "limitServicesPerMonth": false
     },
     {
       "id": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
@@ -234,7 +235,8 @@
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 0
+      "maxPerMonth": 0,
+      "limitServicesPerMonth": false
     }
   ],
   "availability": [],
@@ -298,7 +300,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-12T18:18:25.947Z",
+    "lastSync": "2026-06-12T18:47:51.625Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
