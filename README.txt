@@ -1,7 +1,6 @@
-The Worship Calendar v2.38
+The Worship Calendar v2.39
 
 Changes:
-- Fixed the Rosters tab duplicate-assignment warning.
-- The warning "Member assigned X times" now uses the v2.38 compatibility checker.
-- Compatible multi-role assignments should no longer show the warning.
-- ZIP cleanup: only this one README file is included.
+- Fixed roster duplicate assignment warning to call v2.39 compatibility logic.
+- Supports compatibility stored on role records and global compatibility lists.
+- Only one README.txt is included.
