@@ -216,8 +216,8 @@
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 0,
-      "limitServicesPerMonth": false
+      "maxPerMonth": 99,
+      "limitServicesPerMonth": true
     },
     {
       "id": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
@@ -235,12 +235,96 @@
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 0,
-      "limitServicesPerMonth": false
+      "maxPerMonth": 99,
+      "limitServicesPerMonth": true
     }
   ],
   "availability": [],
-  "rosters": [],
+  "rosters": [
+    {
+      "id": "7f36fb72-f156-4de3-9a36-37bc9af9f8e9",
+      "serviceId": "bb1773cf-8e3b-4d85-9711-7a23f0af3d5c",
+      "serviceName": "Sunday Morning",
+      "date": "2026-06-21",
+      "time": "09:00",
+      "times": [
+        "09:00"
+      ],
+      "published": false,
+      "assignments": [
+        {
+          "roleName": "Worship Leader",
+          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
+          "memberName": "MasonLyons"
+        },
+        {
+          "roleName": "Piano",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Rhythm Guitar",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Electric Guitar",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Bass",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Drums",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Vocal",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Vocal",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Sound",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Visuals AM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Deacon on Duty AM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Communion",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Visuals PM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Deacon on Duty PM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        }
+      ]
+    }
+  ],
   "compatibleRoles": {
     "2": [],
     "Worship Leader": [
@@ -300,7 +384,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-12T18:47:51.625Z",
+    "lastSync": "2026-06-12T18:50:26.787Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
