@@ -1,9 +1,10 @@
-The Worship Calendar v2.40
+The Worship Calendar v2.41
 
-Changes:
-- Multi-person roles are assigned more evenly by calculating a fair monthly target between each role's minimum and maximum.
-- Roster generation meets role minimums first and avoids automatically filling to maximum unless the fair monthly target requires it.
-- Added Delete Roster button for unpublished/draft rosters only, with confirmation.
-- Generate Single Roster service dropdown marks services with no roster as "No Roster".
-- Protected hard-coded admin member named "admin" is excluded from automatic rostering, manual assignment dropdowns, assignment counts, and existing roster assignments are cleared when rosters are opened.
-- ZIP cleanup: only this one README.txt is included.
+Change focus:
+- Improved multi-person role balancing to use monthly capacity divided by number of services.
+- Example: 6 singers each limited to 2 services in a 4-week month gives 12 total monthly singer assignments, so the normal target is 3 singers per service.
+- Template maximum remains a ceiling, not the normal target.
+- If an earlier service is short because too few people are available, later services may catch up above the normal target up to the template maximum.
+- Candidates are sorted by how much of their role-specific monthly allowance they have already used, then by total monthly assignments, then by total assignments.
+- Preserves v2.40 hard-coded admin exclusion, draft roster delete button, and No Roster indicators.
+- ZIP cleanup: only this README.txt is included.
