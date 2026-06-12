@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.32 helpers */
+/* v2.32 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -57,31 +57,63 @@ function twcMaxServicesInputValue(value){
   if(!Number.isFinite(n)||isNaN(n)||n<=0)return "";
   return String(n);
 }
-function twcParseMaxServicesPerMonth(value){
-  if(value===undefined||value===null)return 0;
-  let s=String(value).trim();
-  if(s==="")return 0;
-  let n=parseInt(s,10);
-  if(!Number.isFinite(n)||isNaN(n)||n<1)return 0;
-  return n;
+async function twcGetFreshGithubSha(g){
+  if(typeof ghGetFile==="function"){
+    let file=await ghGetFile(g);
+    return file&&file.sha?file.sha:"";
+  }
+  let url=`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${encodeURIComponent(g.path).replace(/%2F/g,"/")}?ref=${encodeURIComponent(g.branch)}`;
+  let res=await fetch(url,{headers:{Authorization:`token ${g.token}`,Accept:"application/vnd.github+json"}});
+  if(res.status===404)return "";
+  if(!res.ok)throw new Error(`GitHub SHA fetch failed: ${res.status} ${await res.text()}`);
+  let json=await res.json();
+  return json.sha||"";
 }
-function twcMaxServicesAllowsMore(member,usedThisMonth){
-  let limit=twcParseMaxServicesPerMonth(member&&member.maxPerMonth);
-  if(limit<=0)return true;
-  return Number(usedThisMonth||0)<limit;
-}
-function deleteTemplate(templateId){
-  let template=(data.templates||[]).find(t=>t.id===templateId);
-  if(!template){alert("Template not found.");return}
-  if(!confirm(`Delete template "${template.name||"Unnamed Template"}"?\n\nExisting services and rosters will not be deleted.`))return;
-  data.templates=(data.templates||[]).filter(t=>t.id!==templateId);
-  save();
-  render();
-}
-function twcDeleteTemplateButton(template){
-  if(!user||user.role!=="admin")return "";
-  if(!template||!template.id)return "";
-  return `<button type="button" onclick="deleteTemplate('${template.id}')">Delete Template</button>`;
+async function twcGithubSaveWithFreshSha(){
+  if(typeof ghConfig!=="function")throw new Error("GitHub settings function not found.");
+  let g=ghConfig();
+  if(!g||!g.token||!g.owner||!g.repo||!g.branch||!g.path)throw new Error("GitHub settings are incomplete.");
+
+  let content=JSON.stringify(data,null,2);
+  let encoded=btoa(unescape(encodeURIComponent(content)));
+  let url=`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${encodeURIComponent(g.path).replace(/%2F/g,"/")}`;
+
+  for(let attempt=1;attempt<=3;attempt++){
+    let sha=await twcGetFreshGithubSha(g);
+    let body={
+      message:`Update The Worship Calendar data ${new Date().toISOString()}`,
+      content:encoded,
+      branch:g.branch
+    };
+    if(sha)body.sha=sha;
+
+    let res=await fetch(url,{
+      method:"PUT",
+      headers:{Authorization:`token ${g.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    });
+
+    if(res.ok){
+      let json=await res.json();
+      if(json&&json.content&&json.content.sha){
+        data.github=data.github||{};
+        data.github.sha=json.content.sha;
+      }
+      if(typeof save==="function")save();
+      return json;
+    }
+
+    let text=await res.text();
+    if(res.status===409&&attempt<3){
+      console.warn("GitHub SHA conflict. Fetching latest SHA and retrying.",text);
+      await new Promise(resolve=>setTimeout(resolve,250));
+      continue;
+    }
+    if(res.status===409){
+      throw new Error(`GitHub file changed while saving. Please reload online data and try again. ${text}`);
+    }
+    throw new Error(`GitHub save failed: ${res.status} ${text}`);
+  }
 }
 
 </script>
@@ -558,7 +590,7 @@ function templates(){
   ensureMinistries();
   return `<h1>Service Templates</h1>
   <div class="panel"><input id="tplName" placeholder="Template name"><button class="primary" onclick="addTemplate()">Add template</button><p class="hint">Template roles are grouped by ministry. Set Min/Max and service times per role.</p></div>
-  ${data.templates.length?data.templates.map(t=>`<div class="panel"><h3>${esc(t.name)} ${twcDeleteTemplateButton(t)}</h3>
+  ${data.templates.length?data.templates.map(t=>`<div class="panel"><h3>${esc(t.name)} ${twcV232DeleteTemplateButton(t)}</h3>
     <label>Service length in minutes<input type="number" min="1" value="${t.serviceLengthMinutes??90}" onchange="setTemplateServiceLength('${t.id}',this.value)"></label>
     ${data.ministries.map(min=>{
       let roles=data.roles.filter(r=>(r.ministryId||data.ministries[0].id)===min.id);
@@ -1319,6 +1351,1497 @@ function ghExportData(){
   return copy;
 }
 async function submitChangesOnline(){
-  return twcGithubSaveWithFreshSha();
+  async function doSaveWithLatestSha(){
+    let g=ghValidate();
+    let existing=await ghGetFile(g);
+    let payload=ghExportData();
+    payload.github=payload.github||{};
+    payload.github.lastSync=new Date().toISOString();
+    let body={
+      message:`The Worship Calendar sync ${new Date().toISOString()}`,
+      content:ghEncodeUnicode(JSON.stringify(payload,null,2)),
+      branch:g.branch
+    };
+    if(existing&&existing.sha)body.sha=existing.sha;
+    let res=await fetch(ghWriteUrl(g),{
+      method:"PUT",
+      headers:{Authorization:`Bearer ${g.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    });
+    if(!res.ok){
+      let text=await res.text();
+      let err=new Error(`GitHub save failed: ${res.status} ${text}`);
+      err.status=res.status;
+      throw err;
+    }
+    return await res.json();
+  }
+  try{
+    save();
+    ghStatus("Saving online…");
+    await doSaveWithLatestSha();
+    data.github=data.github||{};
+    data.github.lastSync=new Date().toISOString();
+    save();
+    ghStatus("Saved online");
+    return true;
+  }catch(err){
+    if(err&&err.status===409){
+      try{
+        ghStatus("GitHub file changed online. Retrying with latest version…");
+        await doSaveWithLatestSha();
+        data.github=data.github||{};
+        data.github.lastSync=new Date().toISOString();
+        save();
+        ghStatus("Saved online after refresh");
+        return true;
+      }catch(retryErr){
+        console.error(retryErr);
+        ghStatus("Failed to save after retry: "+(retryErr.message||retryErr),true);
+        throw retryErr;
+      }
+    }
+    console.error(err);
+    ghStatus("Failed to save: "+(err.message||err),true);
+    throw err;
+  }
+}
+async function testGitHubConnection(){
+  try{
+    ghStatus("Testing GitHub connection…");
+    let g=ghValidate();
+    let res=await fetch(`https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}`,{headers:{Authorization:`Bearer ${g.token}`,Accept:"application/vnd.github+json"}});
+    if(!res.ok)throw new Error(`Connection failed: ${res.status} ${await res.text()}`);
+    ghStatus("GitHub connection OK");
+    alert("GitHub connection OK.");
+  }catch(err){
+    console.error(err);
+    ghStatus("Connection failed: "+(err.message||err),true);
+    alert("GitHub connection failed: "+(err.message||err));
+  }
+}
+async function loadFromGitHub(){
+  try{
+    ghStatus("Loading from GitHub…");
+    let g=ghValidate();
+    let file=await ghGetFile(g);
+    if(!file){alert("Data file does not exist yet. Use Submit Changes Online to create it.");ghStatus("GitHub file not found");return}
+    let loaded=JSON.parse(ghDecodeUnicode(file.content));
+    let currentGithub=data.github;let currentGmail=data.gmail;let currentLocalGmail=typeof loadGmailLocalConfig==='function'?loadGmailLocalConfig():null;let currentLocalGithub=loadGithubAccessLocal&&loadGithubAccessLocal();
+    data=loaded;
+    data.github=data.github||currentGithub;
+    data.gmail=data.gmail||{};
+    ['clientId','apiKey','sender','accessToken','connectedAt'].forEach(k=>{data.gmail[k]=(currentGmail&&currentGmail[k])||(currentLocalGmail&&currentLocalGmail[k])||data.gmail[k]||''});
+    if(typeof saveGmailLocalConfig==='function')saveGmailLocalConfig();
+    data.github.token=(currentGithub&&currentGithub.token)||(currentLocalGithub&&currentLocalGithub.token)||data.github.token;['owner','repo','branch','path'].forEach(k=>{data.github[k]=(currentGithub&&currentGithub[k])||(currentLocalGithub&&currentLocalGithub[k])||data.github[k]});saveGithubAccessLocal({token:data.github.token||'',owner:data.github.owner||'',repo:data.github.repo||'',branch:data.github.branch||'main',path:data.github.path||'data/the-worship-calendar.json'});
+    save();
+    ghStatus("Loaded from GitHub");
+    render();
+  }catch(err){
+    console.error(err);
+    ghStatus("Load failed: "+(err.message||err),true);
+    alert("Load from GitHub failed: "+(err.message||err));
+  }
+}
+function syncBar(){
+  if(!user)return "";
+  if(user.role==="admin"){
+    return `<div class="syncBar"><button class="primary" type="button" onclick="submitChangesOnline().catch(err=>alert('GitHub sync failed: '+(err.message||err)))">Submit Changes Online</button><span id="syncStatus" class="syncStatus">${data.github&&data.github.lastSync?`Last online save: ${esc(data.github.lastSync)}`:"Not synced online yet"}</span></div>`;
+  }
+  return "";
 }
 
+function changeAdminPassword(){
+  if(!user||user.role!=="admin"){alert("Admin only.");return}
+  let admin=normalizeAdminAccount();
+  let current=prompt("Enter current admin password:");
+  if(current===null)return;
+  if(current!==admin.password){alert("Current password is incorrect.");return}
+  let next=prompt("Enter new admin password:");
+  if(next===null)return;
+  next=next.trim();
+  if(next.length<4){alert("Password must be at least 4 characters.");return}
+  let confirmPass=prompt("Confirm new admin password:");
+  if(confirmPass===null)return;
+  if(next!==confirmPass){alert("Passwords do not match.");return}
+  admin.password=next;
+  admin.role="admin";
+  data.settings=data.settings||{};
+  data.settings.adminPassword=next;
+  save();
+  alert("Admin password updated successfully. The old password will no longer work.");
+}
+
+function gmailLocalStorageKey(){return "twc-gmail-local-config"}
+function saveGmailLocalConfig(){
+  try{
+    let g=data.gmail||{};
+    localStorage.setItem(gmailLocalStorageKey(),JSON.stringify({
+      clientId:g.clientId||"",
+      apiKey:g.apiKey||"",
+      sender:g.sender||"",
+      accessToken:g.accessToken||"",
+      connectedAt:g.connectedAt||""
+    }));
+  }catch(e){}
+}
+function loadGmailLocalConfig(){
+  try{return JSON.parse(localStorage.getItem(gmailLocalStorageKey())||"null")}catch(e){return null}
+}
+
+function getAppUrl(){return (appSettings().appUrl||"").trim()}
+function appSettings(){data.settings=data.settings||{churchName:""};return data.settings}
+function setChurchName(value){appSettings().churchName=(value||"").trim();save()}
+function churchNameText(){return (appSettings().churchName||"").trim()||"The Worship Calendar"}
+function memberEmailSignature(){return `${churchNameText()}\nGenerated by The Worship Calendar`}
+function ministryNameById(id){let m=(data.ministries||[]).find(x=>x.id===id);return m?m.name:"Ministry"}
+function roleMinistryName(roleName){let r=(data.roles||[]).find(x=>x.name===roleName);return ministryNameById(r&&r.ministryId)}
+function rosterTimesText(roster){return (roster.times&&roster.times.length?roster.times:[roster.time||""]).filter(Boolean).join(", ")}
+function memberInAnySelectedMinistry(m,ids){let mids=m.ministryIds||[];return mids.some(id=>ids.includes(id))}
+async function emailRosterReminder(rosterId){
+  try{
+    let r=(data.rosters||[]).find(x=>x.id===rosterId);
+    if(!r){alert("Roster not found.");return}
+    let g=typeof gmailConfig==="function"?gmailConfig():{};
+    if(!g.accessToken){alert("Please connect Gmail in Settings first.");return}
+    let ids=[...new Set((r.assignments||[]).filter(a=>a.memberId).map(a=>a.memberId))];
+    let members=emailableTeamMembers().filter(m=>ids.includes(m.id));
+    if(!members.length){alert("No assigned members with email addresses found.");return}
+    if(!confirm(`Send reminder emails to ${members.length} member(s) for this service?`))return;
+    let sent=0,failed=0,errors=[];
+    for(const m of members){
+      let roles=(r.assignments||[]).filter(a=>a.memberId===m.id);
+      let body=[
+        `Hi ${m.name||""}` + ",","",
+        "This is a reminder that you are rostered for:","",
+        `Service: ${r.serviceName||r.name||"Service"}`,
+        `Date: ${r.date||""}`,
+        `Time: ${rosterTimesText(r)}`,"",
+        "Your role(s):",
+        ...roles.map(a=>`- ${a.roleName}${roleMinistryName(a.roleName)?` (${roleMinistryName(a.roleName)})`:""}`),
+        "","Thank you for serving.","",memberEmailSignature()
+      ].join("\n");
+      let subject=`Reminder: ${churchNameText()} Roster Duty – ${r.serviceName||"Service"}`;
+      try{await sendGmailMessage(m.email,subject,body);sent++}catch(e){failed++;errors.push(`${m.name||m.email}: ${e.message||e}`)}
+    }
+    let msg=`Roster reminder emails sent: ${sent}. Failed: ${failed}.`;
+    if(errors.length)msg+="\n\n"+errors.slice(0,5).join("\n");
+    alert(msg);
+  }catch(e){alert("Could not send roster reminders: "+(e.message||e))}
+}
+
+function isProtectedSystemAdminForEmail(member){
+  return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
+}
+function emailableTeamMembers(){
+  return (data.members||[]).filter(m=>!isProtectedSystemAdminForEmail(m)&&m.email);
+}
+function emailTeamPage(){
+  let mins=data.ministries||[];
+  return `<h1>Email Team</h1><div class="panel"><h3>Select Ministries</h3>${mins.length?`<div class="chips">${mins.map(m=>`<label class="chip"><input id="emailMinistry_${m.id}" type="checkbox" value="${m.id}"> ${esc(m.name)}</label>`).join("")}</div>`:`<p class="hint">No ministries configured.</p>`}<label>Subject<input id="emailTeamSubject" placeholder="Message from ${esc(churchNameText())}"></label><label>Message<textarea id="emailTeamMessage" rows="8" placeholder="Type your message to the team here..."></textarea></label><button class="primary" type="button" onclick="sendEmailTeam()">Send Email To Selected Ministries</button><p id="emailTeamStatus" class="notice"></p></div>`;
+}
+async function sendEmailTeam(){
+  try{
+    let g=typeof gmailConfig==="function"?gmailConfig():{};
+    if(!g.accessToken){alert("Please connect Gmail in Settings first.");return}
+    let selected=[...document.querySelectorAll('input[id^="emailMinistry_"]:checked')].map(x=>x.value);
+    if(!selected.length){alert("Please select at least one ministry.");return}
+    let msgText=((document.getElementById("emailTeamMessage")||{}).value||"").trim();
+    if(!msgText){alert("Please type a message to send.");return}
+    let subject=((document.getElementById("emailTeamSubject")||{}).value||"").trim()||`Message from ${churchNameText()}`;
+    let members=emailableTeamMembers().filter(m=>memberInAnySelectedMinistry(m,selected));
+    let unique=[];let seen=new Set();
+    members.forEach(m=>{if(!seen.has(m.email)){seen.add(m.email);unique.push(m)}});
+    if(!unique.length){alert("No members with email addresses found in the selected ministries.");return}
+    if(!confirm(`Send this email to ${unique.length} team member(s)?`))return;
+    let sent=0,failed=0,errors=[];
+    for(const m of unique){
+      let body=[`Hi ${m.name||""}` + ",","",msgText,"",memberEmailSignature()].join("\n");
+      try{await sendGmailMessage(m.email,subject,body);sent++}catch(e){failed++;errors.push(`${m.name||m.email}: ${e.message||e}`)}
+    }
+    let out=`Bulk team emails sent: ${sent}. Failed: ${failed}.`;
+    let el=document.getElementById("emailTeamStatus"); if(el)el.textContent=out;
+    if(errors.length)out+="\n\n"+errors.slice(0,5).join("\n");
+    alert(out);
+  }catch(e){alert("Could not send team email: "+(e.message||e))}
+}
+function gmailConfig(){
+  data.gmail=data.gmail||{clientId:"",apiKey:"",sender:"",accessToken:"",connectedAt:""};
+  let local=typeof loadGmailLocalConfig==="function"?loadGmailLocalConfig():null;
+  if(local){
+    ["clientId","apiKey","sender","accessToken","connectedAt"].forEach(k=>{if(!data.gmail[k]&&local[k])data.gmail[k]=local[k]});
+  }
+  return data.gmail;
+}
+function gmailSet(field,value){
+  let g=gmailConfig();
+  g[field]=value;
+  saveGmailLocalConfig();
+  save();
+}
+function gmailStatus(msg,isError){
+  let el=document.getElementById("gmailStatus");
+  if(el){el.textContent=msg;el.style.color=isError?"#b42318":"#52616f";}
+}
+function connectGmail(){
+  let g=gmailConfig();
+  if(!g.clientId){alert("Please enter the Google Client ID first.");return}
+  if(!window.google||!google.accounts||!google.accounts.oauth2){
+    alert("Google sign-in library has not loaded yet. Please check your internet connection and try again.");
+    return;
+  }
+  const tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:g.clientId,
+    scope:"https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/userinfo.email",
+    callback:(tokenResponse)=>{
+      if(tokenResponse&&tokenResponse.access_token){
+        g.accessToken=tokenResponse.access_token;
+        g.connectedAt=new Date().toISOString();
+        saveGmailLocalConfig();
+        save();
+        gmailStatus("Gmail connected");
+        alert("Gmail connected.");
+        render();
+      }else{
+        gmailStatus("Gmail connection failed",true);
+      }
+    }
+  });
+  tokenClient.requestAccessToken({prompt:"consent"});
+}
+function disconnectGmail(){
+  let g=gmailConfig();
+  g.accessToken="";
+  g.connectedAt="";
+  saveGmailLocalConfig();
+  save();
+  gmailStatus("Gmail disconnected");
+  render();
+}
+async function testGmailConnection(){
+  try{
+    let g=gmailConfig();
+    if(!g.accessToken){alert("Connect Gmail first.");return false}
+    gmailStatus("Gmail token is present. Ready to send roster emails.");
+    alert("Gmail is connected and ready to send roster emails. This test no longer calls the Gmail profile endpoint because the app only needs Gmail send permission.");
+    return true;
+  }catch(err){
+    console.error(err);
+    gmailStatus("Gmail test failed: "+(err.message||err),true);
+    alert("Gmail test failed: "+(err.message||err));
+    return false;
+  }
+}
+function rosterEmailTextForMember(member){
+  let lines=[];
+  lines.push(`Hi ${member.name || ""},`);
+  lines.push("");
+  lines.push("Here is your personalized worship roster:");
+  lines.push("");
+  let published=(data.rosters||[])
+    .filter(r=>r.published)
+    .map(r=>({roster:r,assignments:(r.assignments||[]).filter(a=>a.memberId===member.id)}))
+    .filter(x=>x.assignments.length)
+    .sort((a,b)=>(a.roster.date+(a.roster.time||((a.roster.times||[])[0])||"")).localeCompare(b.roster.date+(b.roster.time||((b.roster.times||[])[0])||"")));
+  if(!published.length){
+    lines.push("You are not currently rostered for any published services.");
+  }else{
+    published.forEach(item=>{
+      let r=item.roster;
+      lines.push(`${r.date} — ${r.serviceName} (${typeof serviceTimesText==="function"?serviceTimesText(r):((r.times&&r.times.length?r.times:[r.time||""]).join(", "))})`);
+      let grouped={};
+      item.assignments.forEach(a=>{
+        let ministry="Ministry";
+        if(typeof v152RoleMinistryId==="function"&&typeof v152MinistryName==="function"){
+          ministry=v152MinistryName(v152RoleMinistryId(a.roleName));
+        }else if(typeof v153RoleMinistryId==="function"&&typeof v153MinistryName==="function"){
+          ministry=v153MinistryName(v153RoleMinistryId(a.roleName));
+        }else if(typeof getMinistryName==="function"){
+          let role=(data.roles||[]).find(x=>x.name===a.roleName);
+          ministry=getMinistryName(role&&role.ministryId);
+        }
+        (grouped[ministry]=grouped[ministry]||[]).push(a.roleName);
+      });
+      Object.keys(grouped).forEach(min=>{
+        lines.push(`  ${min}:`);
+        grouped[min].forEach(role=>lines.push(`  - ${role}`));
+      });
+      lines.push("");
+    });
+  }
+  lines.push("Blessings,");
+  lines.push(memberEmailSignature());
+  return lines.join("\n");
+}
+function makeRawGmailMessage(to,subject,body){
+  let g=gmailConfig();
+  let from=g.sender?`From: ${g.sender}\r\n`:"";
+  let raw=`${from}To: ${to}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`;
+  return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+async function sendGmailMessage(to,subject,body){
+  let g=gmailConfig();
+  if(!g.accessToken)throw new Error("Gmail is not connected.");
+  let raw=makeRawGmailMessage(to,subject,body);
+  let res=await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send",{
+    method:"POST",
+    headers:{Authorization:`Bearer ${g.accessToken}`,"Content-Type":"application/json"},
+    body:JSON.stringify({raw})
+  });
+  if(!res.ok)throw new Error(`Failed sending to ${to}: ${res.status} ${await res.text()}`);
+  return await res.json();
+}
+async function emailPersonalizedRosters(){
+  try{
+    let g=gmailConfig();
+    if(!g.accessToken){alert("Please connect Gmail in Settings first.");return}
+    let members=emailableTeamMembers();
+    if(!members.length){alert("No member email addresses found.");return}
+    if(!confirm(`Send personalized roster emails to ${members.length} member(s)?`))return;
+    let sent=0,failed=0,errors=[];
+    for(const member of members){
+      if(isProtectedSystemAdminForEmail(member))continue;
+      let body=rosterEmailTextForMember(member);
+      try{
+        await sendGmailMessage(member.email,"Your Worship Roster",body);
+        sent++;
+      }catch(err){
+        failed++;
+        errors.push(`${member.name||member.email}: ${err.message||err}`);
+      }
+    }
+    let msg=`Roster emails sent: ${sent}. Failed: ${failed}.`;
+    if(errors.length)msg+="\n\n"+errors.slice(0,5).join("\n");
+    alert(msg);
+  }catch(err){
+    console.error(err);
+    alert("Could not send roster emails: "+(err.message||err));
+  }
+}
+
+function exportApiBackup(){
+  try{
+    let backup={
+      type:"the-worship-calendar-api-backup",
+      version:"2.0",
+      exportedAt:new Date().toISOString(),
+      settings:{churchName:(typeof appSettings==="function"&&appSettings().churchName)||"",appUrl:(data.settings&&data.settings.appUrl)||""},
+      github:{
+        token:(data.github&&data.github.token)||"",
+        owner:(data.github&&data.github.owner)||"",
+        repo:(data.github&&data.github.repo)||"",
+        branch:(data.github&&data.github.branch)||"main",
+        path:(data.github&&data.github.path)||"data/the-worship-calendar.json"
+      },
+      gmail:{
+        clientId:(data.gmail&&data.gmail.clientId)||"",
+        apiKey:(data.gmail&&data.gmail.apiKey)||"",
+        sender:(data.gmail&&data.gmail.sender)||"",
+        accessToken:(data.gmail&&data.gmail.accessToken)||"",
+        connectedAt:(data.gmail&&data.gmail.connectedAt)||""
+      }
+    };
+    let blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+    let a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="TheWorshipCalendar_API_Backup.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }catch(err){alert("Could not export API backup: "+(err.message||err))}
+}
+function importApiBackupButton(){
+  let input=document.createElement("input");
+  input.type="file";
+  input.accept=".json,application/json";
+  input.onchange=()=>importApiBackupFile(input);
+  input.click();
+}
+function importApiBackupFile(input){
+  let file=input.files&&input.files[0];
+  if(!file)return;
+  let reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      let backup=JSON.parse(reader.result);
+      if(backup.type!=="the-worship-calendar-api-backup")throw new Error("This is not a valid Worship Calendar API backup file.");
+      data.github=data.github||{};
+      if(backup.github){
+        ["token","owner","repo","branch","path"].forEach(k=>{if(backup.github[k]!==undefined)data.github[k]=backup.github[k]});
+        if(typeof saveGithubAccessLocal==="function")saveGithubAccessLocal({
+          token:data.github.token||"",
+          owner:data.github.owner||"",
+          repo:data.github.repo||"",
+          branch:data.github.branch||"main",
+          path:data.github.path||"data/the-worship-calendar.json"
+        });
+      }
+      data.gmail=data.gmail||{};
+      if(backup.gmail){
+        ["clientId","apiKey","sender","accessToken","connectedAt"].forEach(k=>{if(backup.gmail[k]!==undefined)data.gmail[k]=backup.gmail[k]});
+        if(typeof saveGmailLocalConfig==="function")saveGmailLocalConfig();
+      }
+      data.settings=data.settings||{};
+      if(backup.settings&&backup.settings.churchName!==undefined)data.settings.churchName=backup.settings.churchName;
+      if(backup.settings&&backup.settings.appUrl!==undefined)data.settings.appUrl=backup.settings.appUrl;
+      save();
+      alert("API backup imported. Loading church data...");
+      twcAfterApiImport();
+    }catch(err){alert("Could not import API backup: "+(err.message||err))}
+  };
+  reader.readAsText(file);
+  input.value="";
+}
+function settings(){
+  let g=ghConfig();
+  return `<h1>Settings</h1><div class="panel"><h3>API Backup</h3>
+    <p class="hint">Export or import GitHub and Gmail API setup details as a single JSON backup file.</p>
+    <div class="inline"><button type="button" onclick="exportApiBackup()">Export API Backup</button><button type="button" onclick="importApiBackupButton()">Import API Backup</button></div>
+  </div><div class="panel"><h3>Church Details</h3><label>Church Name<input value="${esc(appSettings().churchName||'')}" onchange="setChurchName(this.value)" placeholder="Church Name"></label><label>App URL<input value="${esc(appSettings().appUrl||'')}" onchange="data.settings=data.settings||{};data.settings.appUrl=this.value;save()" placeholder="https://your-app-url"></label><p class="hint">Used in welcome emails, password reset emails and setup instructions.</p></div><div class="panel"><h3>Admin Security</h3><button class="primary" type="button" onclick="changeAdminPassword()">Change Admin Password</button></div>
+  <div class="panel"><h3>GitHub Online Storage</h3>
+    <p class="danger">Security warning: You are choosing to store the GitHub token in this app configuration. Use a fine-grained token restricted to this repository only.</p>
+    <label>GitHub Token<input type="password" value="${esc(g.token||"")}" onchange="ghSet('token',this.value)"></label>
+    <label>Repo Owner<input value="${esc(g.owner||"")}" onchange="ghSet('owner',this.value)"></label>
+    <label>Repo Name<input value="${esc(g.repo||"")}" onchange="ghSet('repo',this.value)"></label>
+    <label>Branch<input value="${esc(g.branch||"main")}" onchange="ghSet('branch',this.value)"></label>
+    <label>Data File Path<input value="${esc(g.path||"data/the-worship-calendar.json")}" onchange="ghSet('path',this.value)"></label>
+    <div class="inline"><button type="button" onclick="testGitHubConnection()">Test Connection</button><button type="button" onclick="loadFromGitHub()">Load From GitHub</button><button class="primary" type="button" onclick="submitChangesOnline()">Save To GitHub</button><button type="button" onclick="exportGithubAccessSetup()">Export GitHub Access Setup</button><button type="button" onclick="importGithubAccessSetupButton()">Import GitHub Access Setup</button></div>
+    <p class="hint">Members do not see this settings page. They only use username and password. The Submit Changes Online button uses this saved configuration. Export GitHub Access Setup creates a JSON file that can be imported on member devices.</p>
+  </div><div class="panel"><h3>Gmail API Settings</h3>
+    <p class="hint">Used to send one personalized roster email to each member. Requires a Google OAuth Client ID with Gmail API enabled.</p>
+    <label>Google Client ID<input value="${esc((gmailConfig().clientId)||"")}" onchange="gmailSet('clientId',this.value)"></label>
+    <label>Google API Key<input value="${esc((gmailConfig().apiKey)||"")}" onchange="gmailSet('apiKey',this.value)"></label>
+    <label>Authorized Gmail Sender<input value="${esc((gmailConfig().sender)||"")}" onchange="gmailSet('sender',this.value)" placeholder="church@example.com"></label>
+    <div class="inline"><button type="button" onclick="connectGmail()">Connect Gmail</button><button type="button" onclick="testGmailConnection()">Test Gmail Connection</button><button type="button" onclick="disconnectGmail()">Disconnect Gmail</button></div>
+    <p id="gmailStatus" class="syncStatus">${gmailConfig().accessToken?"Gmail connected":"Gmail not connected"}</p>
+  </div>`;
+}
+
+function login(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  normalizeAdminAccount();
+
+  let email=(loginEmail&&loginEmail.value?loginEmail.value:"").trim();
+  let pass=(loginPass&&loginPass.value)||"";
+
+  let member=(data.members||[]).find(x=>String(x.email||"").toLowerCase()===email.toLowerCase()&&x.password===pass);
+
+
+  if(member){
+    if(member.id==="admin"||String(member.email||"").toLowerCase()==="admin")member.role="admin";
+    let loginRole=member.role==="admin"?"admin":"member";
+    return setUser({role:loginRole,memberId:member.id,name:member.name||member.email,email:member.email});
+  }
+
+  msg.textContent="Login failed.";
+}
+
+function twcMemberExists(email){
+  email=String(email||"").trim().toLowerCase();
+  return (data.members||[]).some(m=>String(m.email||"").trim().toLowerCase()===email);
+}
+function twcCreateMember(payload){
+  data.members=data.members||[];
+  let name=String(payload.name||"").trim();
+  let email=String(payload.email||"").trim();
+  let password=String(payload.password||"").trim();
+  if(!name)throw new Error("Full Name is required.");
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error("Please enter a valid email address.");
+  if(twcMemberExists(email))throw new Error("That email address already exists.");
+  if(!password)throw new Error("Password is required.");
+  let member={
+    id:payload.id||(typeof uid==="function"?uid():"m"+Date.now()),
+    name,
+    email,
+    password,
+    role:payload.role==="admin"?"admin":"member",
+    ministryIds:payload.ministryIds||[],
+    roles:payload.roles||[],
+    notes:String(payload.notes||"").trim(),
+    history:payload.history||[],
+    maxPerMonth:Number(payload.maxPerMonth)||0
+  };
+  data.members.push(member);
+  if(typeof save==="function")save();
+  try{localStorage.setItem("twc-last-member-save",new Date().toISOString())}catch(e){}
+  return member;
+}
+function twcRefreshMembersAfterSave(){
+  if(typeof render==="function")render();
+}
+function register(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  try{
+    let name=((document.getElementById("regName")||{}).value||(document.getElementById("registerName")||{}).value||"").trim();
+    let email=((document.getElementById("regEmail")||{}).value||(document.getElementById("registerEmail")||{}).value||"").trim();
+    let password=((document.getElementById("regPass")||{}).value||(document.getElementById("registerPass")||{}).value||(document.getElementById("regPassword")||{}).value||"").trim();
+    let member=twcCreateMember({name,email,password,role:"member"});
+    alert("Member account created.");
+    if(typeof setUser==="function"){
+      setUser({role:"member",memberId:member.id,name:member.name,email:member.email});
+    }else{
+      save();
+      render();
+    }
+  }catch(err){
+    if(typeof msg!=="undefined"&&msg)msg.textContent=err.message||err;
+    else alert(err.message||err);
+  }
+}
+function logout(){user=null;sessionStorage.removeItem("twc-user");render()}function getServiceTimes(){return (svcTimes.value||"09:00").split(",").map(t=>t.trim()).filter(Boolean)}
+function serviceTimesText(s){return (s.times&&s.times.length?s.times:[s.time||""]).filter(Boolean).join(", ")}
+function addService(){data.services.push({id:uid(),name:svcName.value,date:svcDate.value,times:getServiceTimes(),time:getServiceTimes()[0]||"09:00",notes:svcNotes.value,template:svcTemplate.value,type:svcType.value||"adhoc"});render()}
+function addRecurring(){let base=new Date(svcDate.value),times=getServiceTimes(),weeks=Math.max(1,parseInt(svcWeeks.value||"8",10));for(let i=0;i<weeks;i++){let d=new Date(base);d.setDate(d.getDate()+i*7);data.services.push({id:uid(),name:svcName.value,date:d.toISOString().slice(0,10),times:[...times],time:times[0]||"09:00",notes:svcNotes.value,template:svcTemplate.value,type:"recurring"})}render()}
+function delService(id){
+  if(!confirmDeleteAction("service"))return;
+data.services=data.services.filter(s=>s.id!==id);render()}
+function editRole(id,field,value){
+  let r=data.roles.find(x=>x.id===id);
+  if(!r)return;
+  let oldName=r.name;
+  if(field==="name"){
+    let newName=(value||"").trim();
+    if(!newName){alert("Role name cannot be blank.");render();return}
+    if(data.roles.some(x=>x.id!==id && x.name.toLowerCase()===newName.toLowerCase())){alert("That role already exists.");render();return}
+    r.name=newName;
+    data.members.forEach(m=>{m.roles=(m.roles||[]).map(role=>role===oldName?newName:role)});
+    if(data.compatibleRoles&&data.compatibleRoles[oldName]){data.compatibleRoles[newName]=data.compatibleRoles[oldName];delete data.compatibleRoles[oldName]}if(data.compatibleRoles){Object.keys(data.compatibleRoles).forEach(k=>{data.compatibleRoles[k]=data.compatibleRoles[k].map(x=>x===oldName?newName:x)})}if(data.compatibleRoles){delete data.compatibleRoles[role.name];Object.keys(data.compatibleRoles).forEach(k=>{data.compatibleRoles[k]=data.compatibleRoles[k].filter(x=>x!==role.name)})}data.templates.forEach(t=>{
+      t.roleNames=(t.roleNames||[]).map(role=>role===oldName?newName:role);
+      if(t.roleTimes&&t.roleTimes[oldName]!==undefined){t.roleTimes[newName]=t.roleTimes[oldName];delete t.roleTimes[oldName]}
+      if(t.roleMin&&t.roleMin[oldName]!==undefined){t.roleMin[newName]=t.roleMin[oldName];delete t.roleMin[oldName]}
+      if(t.roleMax&&t.roleMax[oldName]!==undefined){t.roleMax[newName]=t.roleMax[oldName];delete t.roleMax[oldName]}
+    });
+  }
+  save();
+  render();
+}
+function addRole(){addRoleFromRolesTab()}
+function delRole(id){
+  let role=data.roles.find(r=>r.id===id);
+  if(!role)return;
+  if(!confirm(`Delete role "${role.name}"?`))return;
+  data.roles=data.roles.filter(r=>r.id!==id);
+  data.members.forEach(m=>{m.roles=(m.roles||[]).filter(x=>x!==role.name)});
+  data.templates.forEach(t=>{
+    t.roleNames=(t.roleNames||[]).filter(x=>x!==role.name);
+    if(t.roleTimes)delete t.roleTimes[role.name];
+    if(t.roleMin)delete t.roleMin[role.name];
+    if(t.roleMax)delete t.roleMax[role.name];
+  });
+  render();
+}
+function addTemplate(){let roleNames=data.roles.map(r=>r.name);let roleMin={},roleMax={};roleNames.forEach(n=>{roleMin[n]=1;roleMax[n]=1});data.templates.push({id:uid(),name:tplName.value||"New Template",roleNames,roleMin,roleMax,roleTimes:{},serviceLengthMinutes:90});render()}function toggleTemplateRole(tid,role){let t=data.templates.find(x=>x.id===tid);t.roleNames=t.roleNames.includes(role)?t.roleNames.filter(r=>r!==role):[...t.roleNames,role];render()}
+function setTemplateServiceLength(tid,value){
+  let t=data.templates.find(x=>x.id===tid);
+  if(!t)return;
+  t.serviceLengthMinutes=Math.max(1,parseInt(value||"90",10));
+  save();
+  render();
+}
+function getTemplateServiceLength(templateName){
+  let t=data.templates.find(x=>x.name===templateName);
+  return Math.max(1,parseInt((t&&t.serviceLengthMinutes)||90,10));
+}
+function setTemplateRoleMin(tid,role,value){let t=data.templates.find(x=>x.id===tid);t.roleMin=t.roleMin||{};t.roleMin[role]=parseInt(value||1,10);save()}function setTemplateRoleMax(tid,role,value){let t=data.templates.find(x=>x.id===tid);t.roleMax=t.roleMax||{};t.roleMax[role]=parseInt(value||1,10);save()}function setTemplateRoleTimes(tid,role,value){let t=data.templates.find(x=>x.id===tid);if(!t)return;t.roleTimes=t.roleTimes||{};t.roleTimes[role]=value.trim();save();render()}
+function templateAllowsRoleAtTime(templateName,role,time){let t=data.templates.find(x=>x.name===templateName);if(!t)return true;if(!t.roleNames.includes(role))return false;if(!t.roleTimes||!t.roleTimes[role])return true;let times=t.roleTimes[role].split(",").map(x=>x.trim()).filter(Boolean);return times.length===0||times.includes(time)}
+function toggleRole(mid,role){let m=data.members.find(x=>x.id===mid);m.roles=m.roles.includes(role)?m.roles.filter(r=>r!==role):[...m.roles,role];render()}function resetMemberPassword(mid){
+  let m=data.members.find(x=>x.id===mid);
+  if(!m)return;
+  let suggested="worship"+Math.floor(1000+Math.random()*9000);
+  let newPass=prompt(`Enter new password for ${m.name}:`, suggested);
+  if(!newPass)return;
+  m.password=newPass;
+  save();
+  alert(`${m.name}'s password has been reset to: ${newPass}`);
+  render();
+}
+function setNotes(mid,v){data.members.find(x=>x.id===mid).notes=v;save()}function setMaxPerMonth(mid,v){let m=data.members.find(x=>x.id===mid);if(m){m.maxPerMonth=twcParseMaxServicesPerMonth(v);save();render()}}function setAvail(mid,sid,status){data.availability=data.availability.filter(a=>!(a.memberId===mid&&a.serviceId===sid));data.availability.push({memberId:mid,serviceId:sid,status});render()}
+function monthKey(dateStr){return (dateStr||"").slice(0,7)}
+function getAssignmentCount(mid){return data.rosters.reduce((n,r)=>n+r.assignments.filter(a=>a.memberId===mid).length,0)}
+function getMonthlyAssignmentCount(mid,month){return data.rosters.reduce((n,r)=>monthKey(r.date)===month?n+r.assignments.filter(a=>a.memberId===mid).length:n,0)}
+function memberCanServeThisMonth(member,sid){let service=data.services.find(s=>s.id===sid);let limit=member.maxPerMonth??3;if(limit<=0)return false;return getMonthlyAssignmentCount(member.id,monthKey(service?.date))<limit}
+function memberAssignedRoles(assignments,memberId){return assignments.filter(a=>a.memberId===memberId).map(a=>a.roleName)}
+
+
+function twcServiceTimes(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
+function twcServiceTimesText(s){return twcServiceTimes(s).join(", ")}
+function twcIsAvailable(mid,sid){
+  let a=(data.availability||[]).find(x=>x.memberId===mid&&x.serviceId===sid);
+  return !a||a.status==="available";
+}
+function twcMonthKey(dateStr){return (dateStr||"").slice(0,7)}
+function twcMonthlyAssignmentCount(mid,month){
+  return (data.rosters||[]).reduce((n,r)=>twcMonthKey(r.date)===month?n+(r.assignments||[]).filter(a=>a.memberId===mid).length:n,0);
+}
+function twcCanServeMonth(member,service){
+  let limit=member.maxPerMonth??3;
+  if(limit<=0)return false;
+  return twcMonthlyAssignmentCount(member.id,twcMonthKey(service.date))<limit;
+}
+function twcRolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function twcAssignedRoles(assignments,mid){
+  return (assignments||[]).filter(a=>a.memberId===mid).map(a=>a.roleName);
+}
+function twcMemberCanSelectRole(member,role){
+  if(typeof safeMemberCanSelectRole==="function")return safeMemberCanSelectRole(member,role);
+  if(typeof memberCanSelectRole==="function")return memberCanSelectRole(member,role);
+  if(!data.ministries||!role.ministryId)return true;
+  let ids=member.ministryIds||[(data.ministries[0]||{}).id];
+  return ids.includes(role.ministryId||((data.ministries[0]||{}).id));
+}
+function twcGetAssignmentCount(mid){
+  return (data.rosters||[]).reduce((n,r)=>n+(r.assignments||[]).filter(a=>a.memberId===mid).length,0);
+}
+function twcCandidateOk(member,role,service,assignments){
+  if(!twcIsAvailable(member.id,service.id))return false;
+  if(!twcCanServeMonth(member,service))return false;
+  if(!(member.roles||[]).includes(role.name))return false;
+  if(!twcMemberCanSelectRole(member,role))return false;
+  let current=twcAssignedRoles(assignments,member.id);
+  if(current.includes(role.name))return false;
+  return current.length===0||current.every(r=>twcRolesCompatible(r,role.name));
+}
+function buildRosterForService(sid){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let s=(data.services||[]).find(x=>x.id===sid);
+  if(!s)throw new Error("Service not found");
+  let tpl=(data.templates||[]).find(t=>t.name===s.template);
+  let roleList=(data.roles||[]).filter(role=>!tpl||!(tpl.roleNames)||tpl.roleNames.includes(role.name));
+  let assignments=[];
+  roleList.forEach(role=>{
+    let roleMin=(tpl&&tpl.roleMin&&tpl.roleMin[role.name]!==undefined)?parseInt(tpl.roleMin[role.name],10):(role.min??1);
+    let roleMax=(tpl&&tpl.roleMax&&tpl.roleMax[role.name]!==undefined)?parseInt(tpl.roleMax[role.name],10):(role.max??1);
+    roleMin=Math.max(0,roleMin||0);
+    roleMax=Math.max(roleMin,roleMax||roleMin||1);
+    for(let k=0;k<roleMax;k++){
+      let c=(data.members||[])
+        .filter(m=>twcCandidateOk(m,role,s,assignments))
+        .sort((a,b)=>twcGetAssignmentCount(a.id)-twcGetAssignmentCount(b.id)||a.name.localeCompare(b.name))[0];
+      if(c)assignments.push({roleName:role.name,memberId:c.id,memberName:c.name});
+    }
+    for(let k=assignments.filter(a=>a.roleName===role.name).length;k<roleMin;k++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+  return {id:uid(),serviceId:sid,serviceName:s.name,date:s.date,time:s.time,times:s.times||[s.time],published:false,assignments};
+}
+function isAvailable(mid,sid){let a=data.availability.find(x=>x.memberId===mid&&x.serviceId===sid);return !a||a.status==="available"}function makeRoster(){
+  let sel=document.getElementById("rosterSvc");
+  let sid=sel&&sel.value;
+  if(!sid){alert("Please select a service.");return}
+  if((data.rosters||[]).some(r=>r.serviceId===sid)){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters=data.rosters||[];
+    data.rosters.unshift(buildRosterForService(sid));
+    render();
+  }catch(e){
+    console.error(e);
+    alert("Could not generate roster: "+(e.message||e));
+  }
+}
+function makeRostersForRange(){
+  let startEl=document.getElementById("rosterStart"),endEl=document.getElementById("rosterEnd");
+  let start=startEl&&startEl.value,end=endEl&&endEl.value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  let created=0,skipped=0,failed=0;
+  (data.services||[])
+    .filter(s=>s.date>=start&&s.date<=end)
+    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
+    .forEach(s=>{
+      if(data.rosters.some(r=>r.serviceId===s.id)){skipped++;return}
+      try{
+        data.rosters.unshift(buildRosterForService(s.id));
+        created++;
+      }catch(e){
+        console.error(e);
+        failed++;
+      }
+    });
+  render();
+  setTimeout(()=>{
+    let el=document.getElementById("rangeResult");
+    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
+function conflictsFor(r){let out=[],counts={},seen={};r.assignments.forEach(a=>{counts[a.roleName]=(counts[a.roleName]||0)+(+!!a.memberId);if(a.memberId)seen[a.memberId]=(seen[a.memberId]||0)+1;let av=data.availability.find(x=>x.serviceId===r.serviceId&&x.memberId===a.memberId);if(av&&av.status==="unavailable")out.push(`${a.memberName} is marked unavailable for ${a.roleName}`)});data.roles.forEach(role=>{let n=counts[role.name]||0;if(n<role.min)out.push(`${role.name} missing minimum: ${n}/${role.min}`);if(n>role.max)out.push(`${role.name} over maximum: ${n}/${role.max}`)});Object.entries(seen).forEach(([mid,n])=>{
+  if(n>1)out.push(`${data.members.find(m=>m.id===mid)?.name||"Member"} assigned ${n} times`);
+  let m=data.members.find(x=>x.id===mid);
+  let monthly=getMonthlyAssignmentCount(mid,monthKey(r.date));
+  if(m&&monthly>(m.maxPerMonth??3))out.push(`${m.name} exceeds monthly serving limit: ${monthly}/${m.maxPerMonth??3}`);
+});
+let sameRoleCheck={};
+r.assignments.forEach(a=>{
+  if(!a.memberId)return;
+  let key=a.memberId+"|"+a.roleName;
+  sameRoleCheck[key]=(sameRoleCheck[key]||0)+1;
+  if(sameRoleCheck[key]>1)out.push(`${a.memberName} is assigned to ${a.roleName} more than once`);
+});
+return out}function editAssign(rid,i,mid){
+  let r=data.rosters.find(x=>x.id===rid);
+  if(r&&r.published){alert("Published rosters are locked. Unpublish this roster before editing assignments.");render();return}
+  let targetRole=r.assignments[i].roleName;
+  if(mid&&r.assignments.some((a,idx)=>idx!==i&&a.memberId===mid&&a.roleName===targetRole)){
+    alert("This member is already assigned to this role for this service.");
+    render();
+    return;
+  }
+  let m=data.members.find(x=>x.id===mid);
+  r.assignments[i].memberId=mid;
+  r.assignments[i].memberName=m?m.name:"Unfilled";
+  render();
+}function resetDraftRosters(){let count=data.rosters.filter(r=>!r.published).length;if(!count){alert("There are no unpublished draft rosters to reset.");return}if(!confirm(`Delete ${count} unpublished draft roster(s)? Published rosters will be kept.`))return;data.rosters=data.rosters.filter(r=>r.published);save();render();setTimeout(()=>{let el=document.getElementById("resetResult");if(el)el.textContent=`Removed ${count} unpublished draft roster(s).`},0)}function publishRoster(id){let r=data.rosters.find(x=>x.id===id);r.published=!r.published;render()}function appLogoUrl(){return new URL('assets/logo.png', window.location.href).href}
+function monthLabel(dateStr){let d=new Date(dateStr+"T00:00:00");return d.toLocaleString(undefined,{month:"short",year:"2-digit"})}
+function dayLabel(dateStr){let d=new Date(dateStr+"T00:00:00");return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric"})}
+function roleClass(role){let r=role.toLowerCase();if(r.includes("sound")||r.includes("livestream"))return "role-sound";if(r.includes("visual")||r.includes("projection"))return "role-visual";return ""}
+
+function ministryPageBreakWrapper(title,content,isFirst){
+  return `<div class="${isFirst?'':'ministry-page-break'}"><h2>${title}</h2>${content}</div>`;
+}
+
+function monthLabel(dateStr){
+  let d=new Date(dateStr+"T00:00:00");
+  return d.toLocaleString(undefined,{month:"short",year:"2-digit"});
+}
+function dayLabel(dateStr){
+  let d=new Date(dateStr+"T00:00:00");
+  return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric"});
+}
+function roleClass(role){
+  let r=role.toLowerCase();
+  if(r.includes("sound")||r.includes("livestream"))return "role-sound";
+  if(r.includes("visual")||r.includes("projection"))return "role-visual";
+  return "";
+}
+function exportRoleMinistryId(roleName){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  let role=data.roles.find(r=>r.name===roleName);
+  let fallback=(data.ministries&&data.ministries[0]&&data.ministries[0].id)||"default";
+  return role?(role.ministryId||fallback):fallback;
+}
+function exportMinistryName(id){
+  if(typeof getMinistryName==="function")return getMinistryName(id);
+  if(typeof ministryName==="function")return ministryName(id);
+  let m=(data.ministries||[]).find(x=>x.id===id);
+  return m?m.name:"";
+}
+function exportSelectedMinistryIds(list){
+  let ids=[];
+  list.forEach(r=>(r.assignments||[]).forEach(a=>{
+    let mid=exportRoleMinistryId(a.roleName);
+    if(!ids.includes(mid))ids.push(mid);
+  }));
+  let ordered=(data.ministries||[]).map(m=>m.id).filter(id=>ids.includes(id));
+  ids.forEach(id=>{if(!ordered.includes(id))ordered.push(id)});
+  return ordered;
+}
+
+function buildPdfPageHeader(ministryName,startDate,endDate){
+  let logo=(data.logo||"");
+  return `<div class="pdf-header">${logo?`<img class="pdf-logo" src="${logo}">`:''}<div><div class="pdf-title">The Worship Calendar</div><div>${ministryName}</div><div>${startDate} - ${endDate}</div></div></div>`;
+}
+
+function pdfLogoSrc(){
+  return data.logo || "assets/logo.png";
+}
+function buildPdfPageHeader(ministryName,startDate,endDate){
+  return `<div class="pdf-header"><img class="pdf-logo" src="${pdfLogoSrc()}" onerror="this.style.display='none'"><div><div class="pdf-title">The Worship Calendar</div><div class="pdf-subtitle">${esc(ministryName)}</div><div class="pdf-range">${esc(startDate)} - ${esc(endDate)}</div></div></div>`;
+}
+function exportRostersPDF(){
+  let start=pdfStart.value,end=pdfEnd.value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
+  if(!list.length){alert("No rosters found in that date range.");return}
+  let ministries=exportSelectedMinistryIds(list);
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.32</title><style>
+@page{size:A4 landscape;margin:8mm}
+body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
+button{margin-bottom:10px;padding:8px 12px}
+.pdf-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;border-bottom:2px solid #333;padding-bottom:8px}
+.pdf-logo{height:58px;max-width:120px;object-fit:contain}
+.pdf-title{font-size:20px;font-weight:bold;text-transform:uppercase}
+.pdf-subtitle{font-size:16px;font-weight:bold}
+.pdf-range{font-size:12px;color:#333}
+.ministry-page{break-before:page;page-break-before:always}
+.ministry-page.first{break-before:auto;page-break-before:auto}
+.month-section{break-inside:avoid;page-break-inside:avoid;margin-bottom:16px}
+.roster-table{width:100%;border-collapse:collapse;table-layout:fixed;page-break-inside:avoid;break-inside:avoid}
+.roster-table th,.roster-table td{border:2px solid #111;text-align:center;vertical-align:middle;padding:4px;font-size:11px;line-height:1.25;word-wrap:break-word}
+.month-row th{font-size:18px;text-align:left;background:white;border:3px solid #111;padding:6px}
+.roster-table th.role-head{width:115px;background:#e7f3f7}
+.roster-table th.date-head{background:#d9eef3;font-weight:bold;text-transform:uppercase}
+.roster-table th.time-head{background:#d9eef3;font-size:10px}
+.role-cell{text-align:left!important;font-weight:bold;text-transform:uppercase;background:#d9eef3}
+.role-sound{background:#ffc000!important}
+.role-visual{background:#92d050!important}
+.name-cell{background:#d9eef3;min-height:24px}
+.name-cell.role-sound{background:#ffc000!important}
+.name-cell.role-visual{background:#92d050!important}
+@media print{button{display:none}body{padding:0}.ministry-page{page-break-before:always;break-before:page}.ministry-page.first{page-break-before:auto;break-before:auto}.roster-table th,.roster-table td{font-size:9px;padding:3px}.month-row th{font-size:15px}}
+</style></head><body><button onclick="window.print()">Print / Save as PDF</button>`;
+  ministries.forEach((ministryId,ministryIndex)=>{
+    let ministryName=exportMinistryName(ministryId);
+    let monthGroups={};
+    list.forEach(r=>{
+      let filteredAssignments=(r.assignments||[]).filter(a=>exportRoleMinistryId(a.roleName)===ministryId);
+      if(!filteredAssignments.length)return;
+      let month=monthLabel(r.date);
+      (monthGroups[month]=monthGroups[month]||[]).push({...r,assignments:filteredAssignments});
+    });
+    if(!Object.keys(monthGroups).length)return;
+    htmlDoc+=`<section class="ministry-page ${ministryIndex===0?"first":""}">${buildPdfPageHeader(ministryName,start,end)}`;
+    Object.keys(monthGroups).forEach(month=>{
+      let rosters=monthGroups[month];
+      let roleOrder=[];
+      rosters.forEach(r=>(r.assignments||[]).forEach(a=>{if(!roleOrder.includes(a.roleName))roleOrder.push(a.roleName)}));
+      let totalCols=1+rosters.reduce((n,r)=>n+(r.times&&r.times.length?r.times.length:1),0);
+      htmlDoc+=`<div class="month-section"><table class="roster-table"><tr class="month-row"><th colspan="${totalCols}">${esc(month)}</th></tr><tr><th class="role-head"></th>`;
+      rosters.forEach(r=>{htmlDoc+=`<th class="date-head" colspan="${(r.times&&r.times.length?r.times.length:1)}">${esc(dayLabel(r.date))}</th>`});
+      htmlDoc+=`</tr><tr><th class="role-head"></th>`;
+      rosters.forEach(r=>{let times=(r.times&&r.times.length?r.times:[r.time||""]);times.forEach(t=>{htmlDoc+=`<th class="time-head">${esc(t)}</th>`})});
+      htmlDoc+=`</tr>`;
+      roleOrder.forEach(role=>{
+        let cls=roleClass(role);
+        htmlDoc+=`<tr><td class="role-cell ${cls}">${esc(role)}</td>`;
+        rosters.forEach(r=>{
+          let times=(r.times&&r.times.length?r.times:[r.time||""]);
+          let people=(r.assignments||[]).filter(a=>a.roleName===role).map(a=>a.memberName).filter(n=>n&&n!=="Unfilled");
+          let names=people.length?people.join("<br>"):"";
+          times.forEach(t=>{
+            let allowed=typeof templateAllowsRoleAtTime==="function"?templateAllowsRoleAtTime((data.services.find(s=>s.id===r.serviceId)||{}).template||"",role,t):true;
+            htmlDoc+=`<td class="name-cell ${cls}">${allowed?names:""}</td>`;
+          });
+        });
+        htmlDoc+=`</tr>`;
+      });
+      htmlDoc+=`</table></div>`;
+    });
+    htmlDoc+=`</section>`;
+  });
+  htmlDoc+=`</body></html>`;
+  let w=window.open("","_blank");
+  w.document.open();
+  w.document.write(htmlDoc);
+  w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.32-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
+
+/* v2.32 roster generation repair: final overrides */
+function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
+function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
+function twc51Available(memberId,serviceId){
+  let a=(data.availability||[]).find(x=>x.memberId===memberId&&x.serviceId===serviceId);
+  return !a||a.status==="available";
+}
+function twc51AssignmentCount(memberId){
+  return (data.rosters||[]).reduce((n,r)=>n+(r.assignments||[]).filter(a=>a.memberId===memberId).length,0);
+}
+function twc51MonthlyCount(memberId,month){
+  return (data.rosters||[]).reduce((n,r)=>twc51Month(r.date)===month?n+(r.assignments||[]).filter(a=>a.memberId===memberId).length:n,0);
+}
+function twc51RolesCompatible(a,b){
+  if(a===b)return true;
+  data.compatibleRoles=data.compatibleRoles||{};
+  return (data.compatibleRoles[a]||[]).includes(b)||(data.compatibleRoles[b]||[]).includes(a);
+}
+function twc51RoleAllowedForMember(member,role){
+  if(!(member.roles||[]).includes(role.name))return false;
+  if(data.ministries&&data.ministries.length&&role.ministryId){
+    let ids=member.ministryIds||[data.ministries[0].id];
+    if(!ids.includes(role.ministryId))return false;
+  }
+  return true;
+}
+function twc51Candidate(member,role,service,assignments){
+  if(!twc51Available(member.id,service.id))return false;
+  let limit=member.maxPerMonth??3;
+  if(limit<=0)return false;
+  if(twc51MonthlyCount(member.id,twc51Month(service.date))>=limit)return false;
+  if(!twc51RoleAllowedForMember(member,role))return false;
+  let already=(assignments||[]).filter(a=>a.memberId===member.id).map(a=>a.roleName);
+  if(already.includes(role.name))return false;
+  return already.length===0||already.every(r=>twc51RolesCompatible(r,role.name));
+}
+function buildRosterForService(serviceId){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  data.rosters=data.rosters||[];
+  let service=(data.services||[]).find(s=>s.id===serviceId);
+  if(!service)throw new Error("Service not found");
+  let template=(data.templates||[]).find(t=>t.name===service.template);
+  let roles=(data.roles||[]).filter(role=>!template||!template.roleNames||template.roleNames.includes(role.name));
+  let assignments=[];
+  roles.forEach(role=>{
+    let min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
+    let max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
+    min=Math.max(0,min||0);
+    max=Math.max(min,max||min||1);
+    for(let i=0;i<max;i++){
+      let candidate=(data.members||[])
+        .filter(m=>twc51Candidate(m,role,service,assignments))
+        .sort((a,b)=>twc51AssignmentCount(a.id)-twc51AssignmentCount(b.id)||String(a.name).localeCompare(String(b.name)))[0];
+      if(candidate)assignments.push({roleName:role.name,memberId:candidate.id,memberName:candidate.name});
+    }
+    let filled=assignments.filter(a=>a.roleName===role.name).length;
+    for(let i=filled;i<min;i++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments};
+}
+function makeRoster(){
+  let select=document.getElementById("rosterSvc");
+  let serviceId=select&&select.value;
+  if(!serviceId){alert("Please select a service.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(r=>r.serviceId===serviceId)){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters.unshift(buildRosterForService(serviceId));
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  let start=(document.getElementById("rosterStart")||{}).value;
+  let end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  let created=0,skipped=0,failed=0;
+  (data.services||[])
+    .filter(s=>s.date>=start&&s.date<=end)
+    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
+    .forEach(service=>{
+      if(data.rosters.some(r=>r.serviceId===service.id)){skipped++;return}
+      try{
+        data.rosters.unshift(buildRosterForService(service.id));
+        created++;
+      }catch(err){
+        console.error(err);
+        failed++;
+      }
+    });
+  save();
+  
+
+cleanDemoTeamMembersV175();
+
+stripProtectedAdminOperationalAssignments();
+twcStripProtectedAdminFromOperationalData();
+enforceHardcodedAdminProtection();
+render();
+  setTimeout(()=>{
+    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
+    let el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
+
+
+
+
+
+function twcAppUrl(){
+  return ((data.settings&&data.settings.appUrl)||"").trim();
+}
+function twcChurchName(){
+  if(typeof churchNameText==="function")return churchNameText();
+  return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
+}
+
+/* v2.32 real login-details email workflow overrides */
+function twcBase64UrlUnicode(str){
+  return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function twcCreateApiBackupObject(){
+  data.github=data.github||{};
+  data.gmail=data.gmail||{};
+  data.settings=data.settings||{};
+  return {
+    type:"the-worship-calendar-api-backup",
+    version:VERSION||"2.21",
+    exportedAt:new Date().toISOString(),
+    settings:{
+      churchName:(data.settings&&data.settings.churchName)||"",
+      appUrl:(data.settings&&data.settings.appUrl)||""
+    },
+    github:{
+      token:(data.github&&data.github.token)||"",
+      owner:(data.github&&data.github.owner)||"",
+      repo:(data.github&&data.github.repo)||"",
+      branch:(data.github&&data.github.branch)||"main",
+      path:(data.github&&data.github.path)||"data/the-worship-calendar.json"
+    },
+    gmail:{
+      clientId:(data.gmail&&data.gmail.clientId)||"",
+      apiKey:(data.gmail&&data.gmail.apiKey)||"",
+      sender:(data.gmail&&data.gmail.sender)||"",
+      accessToken:(data.gmail&&data.gmail.accessToken)||"",
+      connectedAt:(data.gmail&&data.gmail.connectedAt)||""
+    }
+  };
+}
+function twcApiBackupJsonString(){
+  return JSON.stringify(twcCreateApiBackupObject(),null,2);
+}
+async function sendGmailMessageWithAttachment(to,subject,body,attachmentName,attachmentText){
+  let g=typeof gmailConfig==="function"?gmailConfig():(data.gmail||{});
+  if((!g||!g.accessToken)&&typeof twcRestoreGmailConnection==="function"){await twcRestoreGmailConnection();g=typeof gmailConfig==="function"?gmailConfig():(data.gmail||{});} if(!g||!g.accessToken)throw new Error("Please connect Gmail in Settings first.");
+  let boundary="twc_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  let sender=g.sender||"";
+  let mime=[
+    `From: ${sender}`,
+    `To: ${to}`,
+    `Subject: ${subject}`,
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/mixed; boundary="${boundary}"`,
+    "",
+    `--${boundary}`,
+    "Content-Type: text/plain; charset=UTF-8",
+    "Content-Transfer-Encoding: 7bit",
+    "",
+    body,
+    "",
+    `--${boundary}`,
+    `Content-Type: application/json; name="${attachmentName}"`,
+    "Content-Transfer-Encoding: base64",
+    `Content-Disposition: attachment; filename="${attachmentName}"`,
+    "",
+    btoa(unescape(encodeURIComponent(attachmentText))),
+    "",
+    `--${boundary}--`
+  ].join("\r\n");
+  let res=await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send",{
+    method:"POST",
+    headers:{Authorization:`Bearer ${g.accessToken}`,"Content-Type":"application/json"},
+    body:JSON.stringify({raw:twcBase64UrlUnicode(mime)})
+  });
+  if(!res.ok){
+    let text=await res.text();
+    throw new Error(`Gmail send failed: ${res.status} ${text}`);
+  }
+  return await res.json();
+}
+function twcAppUrl(){
+  return ((data.settings&&data.settings.appUrl)||"").trim();
+}
+function twcChurchName(){
+  if(typeof churchNameText==="function")return churchNameText();
+  return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
+}
+function twcLoginDetailsBody(member,password,isReset){
+  let appUrl=twcAppUrl();
+  let lines=[
+    isReset?"Your password has been reset for The Worship Calendar.":"Welcome to The Worship Calendar.",
+    "",
+    "Your login details are:",
+    "",
+    `Username: ${member.email||""}`,
+    `Password: ${password||""}`,
+    ""
+  ];
+  if(appUrl){
+    lines.push("Open The Worship Calendar:");
+    lines.push(appUrl);
+    lines.push("");
+  }
+  lines.push("Your setup file is attached to this email.");
+  lines.push("Please import the attached setup file when opening The Worship Calendar on your device.");
+  lines.push("");
+  lines.push("Thank you,");
+  lines.push(twcChurchName());
+  lines.push("Generated by The Worship Calendar");
+  return lines.join("\n");
+}
+async function twcEmailLoginDetails(member,password,isReset){
+  if(!member||!member.email)throw new Error("This member does not have an email address.");
+  let subject=isReset?"Your Worship Calendar Password Has Been Reset":`Welcome to ${twcChurchName()} Worship Calendar`;
+  let body=twcLoginDetailsBody(member,password,isReset);
+  await sendGmailMessageWithAttachment(member.email,subject,body,"TheWorshipCalendar-API-Backup.json",twcApiBackupJsonString());
+}
+function twcPromptEmailLoginDetails(member,password,isReset){
+  if(!member||!member.email)return;
+  let ask=isReset?"Would you like to email this team member their updated login details and setup file?":"Would you like to email this team member their login details and setup file?";
+  if(!confirm(ask))return;
+  twcEmailLoginDetails(member,password,isReset).then(()=>alert("Login details email sent.")).catch(err=>{
+    console.error(err);
+    alert("Could not send login details email: "+(err.message||err));
+  });
+}
+function saveNewMember(){
+  try{
+    let name=((document.getElementById("newMemberName")||{}).value||"").trim();
+    let email=((document.getElementById("newMemberEmail")||{}).value||"").trim();
+    let password=((document.getElementById("newMemberPassword")||{}).value||"").trim();
+    let max=((document.getElementById("newMemberMax")||{}).value||"").trim();
+    let notes=((document.getElementById("newMemberNotes")||{}).value||"").trim();
+    let ministryIds=[...document.querySelectorAll(".newMemberMinistry:checked")].map(x=>x.value);
+    let roles=[...document.querySelectorAll(".newMemberRole:checked")].map(x=>x.value);
+    let member;
+    if(typeof twcCreateMember==="function"){
+      member=twcCreateMember({name,email,password,role:"member",ministryIds,roles,notes,maxPerMonth:twcParseMaxServicesPerMonth(max)});
+    }else{
+      if(!name)throw new Error("Full Name is required.");
+      if(!email)throw new Error("Email is required.");
+      if(!password)throw new Error("Password is required.");
+      data.members=data.members||[];
+      if(data.members.some(m=>String(m.email||"").toLowerCase()===email.toLowerCase()))throw new Error("That email address already exists.");
+      member={id:typeof uid==="function"?uid():"m"+Date.now(),name,email,password,role:"member",ministryIds,roles,notes,history:[],maxPerMonth:twcParseMaxServicesPerMonth(max)};
+      data.members.push(member);
+      save();
+    }
+    window.twcShowAddMemberForm=false;
+    save();
+    render();
+    alert("Member saved.");
+    twcPromptEmailLoginDetails(member,password,false);
+  }catch(err){
+    alert(err.message||err);
+  }
+}
+function resetMemberPassword(mid){
+  let m=(data.members||[]).find(x=>x.id===mid);
+  if(!m){alert("Member not found.");return}
+  let suggested="worship"+Math.floor(1000+Math.random()*9000);
+  let newPass=prompt(`Enter new password for ${m.name}:`, suggested);
+  if(!newPass)return;
+  m.password=newPass;
+  save();
+  alert(`${m.name}'s password has been reset to: ${newPass}`);
+  render();
+  twcPromptEmailLoginDetails(m,newPass,true);
+}
+function deleteMember(mid){
+  let member=(data.members||[]).find(m=>m.id===mid);
+  if(!member){alert("Member not found.");return}
+  if(typeof isHardcodedProtectedAdmin==="function"&&isHardcodedProtectedAdmin(member)){
+    alert("The hardcoded admin account cannot be deleted.");
+    return;
+  }
+  if(typeof isHardcodedAdminOnly==="function"&&isHardcodedAdminOnly(member)){
+    alert("The hardcoded admin account cannot be deleted.");
+    return;
+  }
+  if(typeof confirmDeleteAction==="function"){
+    if(!confirmDeleteAction("member"))return;
+  }else if(!confirm("Are you sure you want to delete this member?\nThis action cannot be undone.")){
+    return;
+  }
+  data.members=(data.members||[]).filter(m=>m.id!==mid);
+  data.availability=(data.availability||[]).filter(a=>a.memberId!==mid);
+  (data.rosters||[]).forEach(r=>{
+    r.assignments=(r.assignments||[]).map(a=>a.memberId===mid?{...a,memberId:"",memberName:"Unfilled"}:a);
+  });
+  save();
+  render();
+}
+
+
+/* v2.32 Members tab login-details email button */
+function twcIsProtectedAdminForLoginEmail(member){
+  return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
+}
+function twcSendLoginDetailsButton(member){
+  if(!user||user.role!=="admin")return "";
+  if(!member||twcIsProtectedAdminForLoginEmail(member))return "";
+  if(!member.email)return "";
+  return `<button type="button" onclick="twcSendLoginDetailsFromMembers('${member.id}')">Send Login Details</button>`;
+}
+function twcSendLoginDetailsFromMembers(memberId){
+  let member=(data.members||[]).find(m=>m.id===memberId);
+  if(!member){alert("Member not found.");return}
+  if(twcIsProtectedAdminForLoginEmail(member)){alert("The protected admin account cannot receive this email.");return}
+  if(!member.email){alert("This member does not have an email address.");return}
+  if(!member.password){alert("This member does not have a stored password to send.");return}
+  if(!confirm(`Send login details and setup file to ${member.name||member.email}?`))return;
+  if(typeof twcEmailLoginDetails!=="function"){
+    alert("Login details email function is not available.");
+    return;
+  }
+  twcEmailLoginDetails(member,member.password,false)
+    .then(()=>alert("Login details email sent."))
+    .catch(err=>{
+      console.error(err);
+      alert("Could not send login details email: "+(err.message||err));
+    });
+}
+
+
+/* v2.32 Edit Member workflow */
+function twcIsProtectedAdminForEdit(member){
+  return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
+}
+function twcShowEditMember(memberId){
+  window.twcEditingMemberId=memberId;
+  window.twcShowAddMemberForm=false;
+  render();
+}
+function twcCancelEditMember(){
+  window.twcEditingMemberId="";
+  render();
+}
+function twcEditMemberButton(member){
+  if(!user||user.role!=="admin")return "";
+  if(!member)return "";
+  return `<button type="button" onclick="twcShowEditMember('${member.id}')">Edit Member</button>`;
+}
+function twcEditMemberFormHtml(member){
+  if(!member)return "";
+  let protectedAdmin=twcIsProtectedAdminForEdit(member);
+  let ministries=data.ministries||[];
+  let selectedMinistries=member.ministryIds||[];
+  let roleList=data.roles||[];
+  let selectedRoles=member.roles||[];
+  return `<div class="panel"><h3>Edit Member</h3>
+    <label>Full Name<input id="editMemberName" value="${esc(member.name||"")}" placeholder="Full Name"></label>
+    <label>Email Address<input id="editMemberEmail" value="${esc(member.email||"")}" placeholder="email@example.com"></label>
+    <label>Password<input id="editMemberPassword" value="${esc(member.password||"")}" placeholder="Password"></label>
+    <label>Maximum Services Per Month<input id="editMemberMax" type="number" min="0" value="${esc(twcMaxServicesInputValue(member.maxPerMonth))}" placeholder="Leave blank for Unlimited"></label>
+    <label>Notes<textarea id="editMemberNotes" rows="3" placeholder="Optional notes">${esc(member.notes||"")}</textarea></label>
+    ${protectedAdmin?`<p class="hint">Protected admin: ministries and roles cannot be assigned.</p>`:`
+      <h4>Ministries</h4>
+      ${ministries.length?`<div class="chips">${ministries.map(m=>`<label class="chip"><input type="checkbox" class="editMemberMinistry" value="${m.id}" ${selectedMinistries.includes(m.id)?"checked":""} onchange="twcRefreshEditMemberRoles()"> ${esc(m.name)}</label>`).join("")}</div>`:`<p class="hint">No ministries configured yet.</p>`}
+      <h4>Roles</h4>
+      <div id="editMemberRolesBox">${twcEditMemberRolesHtml(selectedMinistries,selectedRoles)}</div>
+    `}
+    <label class="chip"><input id="editMemberEmailLogin" type="checkbox"> Email updated login details to member</label>
+    <div class="inline"><button class="primary" type="button" onclick="twcSaveEditedMember('${member.id}')">Save Changes</button><button type="button" onclick="twcCancelEditMember()">Cancel</button></div>
+  </div>`;
+}
+function twcEditMemberRolesHtml(selectedMinistries,selectedRoles){
+  let roles=data.roles||[];
+  selectedMinistries=selectedMinistries||[];
+  selectedRoles=selectedRoles||[];
+  roles=selectedMinistries.length?roles.filter(r=>selectedMinistries.includes(r.ministryId||"")):[];
+  if(!roles.length)return `<p class="hint">Select ministries first to choose roles.</p>`;
+  let byMin={};
+  roles.forEach(r=>{let mid=r.ministryId||"";(byMin[mid]=byMin[mid]||[]).push(r)});
+  return Object.keys(byMin).map(mid=>{
+    let min=(data.ministries||[]).find(m=>m.id===mid);
+    let minName=(typeof ministryNameById==="function"?ministryNameById(mid):(min?min.name:"Ministry"));
+    return `<div class="compatible-ministry-group"><b>${esc(minName)}</b><div class="chips">${byMin[mid].map(r=>`<label class="chip"><input type="checkbox" class="editMemberRole" value="${esc(r.name)}" ${selectedRoles.includes(r.name)?"checked":""}> ${esc(r.name)}</label>`).join("")}</div></div>`;
+  }).join("");
+}
+function twcRefreshEditMemberRoles(){
+  let member=(data.members||[]).find(m=>m.id===window.twcEditingMemberId);
+  let selected=[...document.querySelectorAll(".editMemberMinistry:checked")].map(x=>x.value);
+  let selectedRoles=member?member.roles||[]:[];
+  let box=document.getElementById("editMemberRolesBox");
+  if(box)box.innerHTML=twcEditMemberRolesHtml(selected,selectedRoles);
+}
+function twcSaveEditedMember(memberId){
+  let member=(data.members||[]).find(m=>m.id===memberId);
+  if(!member){alert("Member not found.");return}
+  let protectedAdmin=twcIsProtectedAdminForEdit(member);
+  let name=((document.getElementById("editMemberName")||{}).value||"").trim();
+  let email=((document.getElementById("editMemberEmail")||{}).value||"").trim();
+  let password=((document.getElementById("editMemberPassword")||{}).value||"").trim();
+  let max=((document.getElementById("editMemberMax")||{}).value||"").trim();
+  let notes=((document.getElementById("editMemberNotes")||{}).value||"").trim();
+  if(!name){alert("Full Name is required.");return}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert("Please enter a valid email address.");return}
+  if((data.members||[]).some(m=>m.id!==memberId&&String(m.email||"").toLowerCase()===email.toLowerCase())){alert("That email address already exists.");return}
+  if(!password){alert("Password is required.");return}
+
+  member.name=name;
+  member.email=email;
+  member.password=password;
+  member.notes=notes;
+  member.maxPerMonth=twcParseMaxServicesPerMonth(max);
+
+  if(protectedAdmin){
+    member.role="admin";
+    member.roles=[];
+    member.ministryIds=[];
+  }else{
+    member.ministryIds=[...document.querySelectorAll(".editMemberMinistry:checked")].map(x=>x.value);
+    member.roles=[...document.querySelectorAll(".editMemberRole:checked")].map(x=>x.value);
+  }
+
+  save();
+  let emailLogin=(document.getElementById("editMemberEmailLogin")||{}).checked;
+  window.twcEditingMemberId="";
+  render();
+  alert("Member updated.");
+  if(emailLogin&&typeof twcPromptEmailLoginDetails==="function"){
+    twcPromptEmailLoginDetails(member,password,false);
+  }
+}
+
+
+/* v2.32 Personalized roster + Gmail restore fixes */
+function twcProtectedSystemAdminId(){
+  return "admin";
+}
+function twcIsProtectedSystemAdminAccount(memberOrUser){
+  if(!memberOrUser)return false;
+  let id=memberOrUser.id||memberOrUser.memberId||"";
+  let email=String(memberOrUser.email||"").toLowerCase();
+  return id==="admin"||email==="admin";
+}
+function twcCurrentLoginMember(){
+  if(!user)return null;
+  return (data.members||[]).find(m=>m.id===user.memberId||String(m.email||"").toLowerCase()===String(user.email||"").toLowerCase())||null;
+}
+function twcCanSeePersonalizedRoster(){
+  let member=twcCurrentLoginMember();
+  return !!(user&&member&&!twcIsProtectedSystemAdminAccount(member));
+}
+async function twcRestoreGmailConnection(){
+  try{
+    data.gmail=data.gmail||{};
+    let local=null;
+    if(typeof loadGmailLocalConfig==="function"){
+      local=loadGmailLocalConfig();
+    }else{
+      try{local=JSON.parse(localStorage.getItem("twc-gmail-config")||"null")}catch(e){}
+    }
+    if(local){
+      ["clientId","apiKey","sender","accessToken","connectedAt"].forEach(k=>{
+        data.gmail[k]=data.gmail[k]||local[k]||"";
+      });
+    }
+    if(!data.gmail.accessToken)return false;
+    let res=await fetch("https://gmail.googleapis.com/gmail/v1/users/me/profile",{
+      headers:{Authorization:`Bearer ${data.gmail.accessToken}`}
+    });
+    if(res.ok){
+      data.gmail.connectedAt=data.gmail.connectedAt||new Date().toISOString();
+      if(typeof saveGmailLocalConfig==="function")saveGmailLocalConfig();
+      if(typeof save==="function")save();
+      return true;
+    }
+    console.warn("Saved Gmail token is not valid and needs reconnect:", await res.text());
+    return false;
+  }catch(err){
+    console.warn("Could not restore Gmail connection",err);
+    return false;
+  }
+}
+
+
+/* v2.32 compatible-role roster warning helpers */
+function twcNormalizeRoleNameForCompat(roleName){
+  return String(roleName||"").trim().toLowerCase();
+}
+function twcRoleNamesCompatible(roleA,roleB){
+  roleA=String(roleA||"").trim();
+  roleB=String(roleB||"").trim();
+  if(!roleA||!roleB)return false;
+  if(twcNormalizeRoleNameForCompat(roleA)===twcNormalizeRoleNameForCompat(roleB))return false;
+
+  let compat=data.compatibleRoles||[];
+  let a=twcNormalizeRoleNameForCompat(roleA);
+  let b=twcNormalizeRoleNameForCompat(roleB);
+
+  return compat.some(pair=>{
+    if(Array.isArray(pair)){
+      let x=twcNormalizeRoleNameForCompat(pair[0]);
+      let y=twcNormalizeRoleNameForCompat(pair[1]);
+      return (x===a&&y===b)||(x===b&&y===a);
+    }
+    if(pair&&typeof pair==="object"){
+      let x=twcNormalizeRoleNameForCompat(pair.roleA||pair.a||pair.role1||pair.from||pair.roleNameA);
+      let y=twcNormalizeRoleNameForCompat(pair.roleB||pair.b||pair.role2||pair.to||pair.roleNameB);
+      if((x===a&&y===b)||(x===b&&y===a))return true;
+      let roles=pair.roles||pair.compatible||pair.names;
+      if(Array.isArray(roles)){
+        let list=roles.map(twcNormalizeRoleNameForCompat);
+        return list.includes(a)&&list.includes(b);
+      }
+    }
+    return false;
+  });
+}
+function twcAllAssignedRolesCompatible(roleNames){
+  roleNames=(roleNames||[]).filter(Boolean);
+  for(let i=0;i<roleNames.length;i++){
+    for(let j=i+1;j<roleNames.length;j++){
+      if(!twcRoleNamesCompatible(roleNames[i],roleNames[j]))return false;
+    }
+  }
+  return true;
+}
+function twcMemberHasIncompatibleAssignments(assignments,memberId){
+  let roles=(assignments||[]).filter(a=>a.memberId===memberId).map(a=>a.roleName||a.role||a.name).filter(Boolean);
+  if(roles.length<2)return false;
+  return !twcAllAssignedRolesCompatible(roles);
+}
+
+
+/* v2.32 max services per month: blank/0 = unlimited */
+function twcParseMaxServicesPerMonth(value){
+  if(value===undefined||value===null)return 0;
+  let s=String(value).trim();
+  if(s==="")return 0;
+  let n=parseInt(s,10);
+  if(!Number.isFinite(n)||isNaN(n)||n<1)return 0;
+  return n;
+}
+function twcMaxServicesAllowsMore(member,usedThisMonth){
+  let limit=twcParseMaxServicesPerMonth(member&&member.maxPerMonth);
+  if(limit<=0)return true;
+  return Number(usedThisMonth||0)<limit;
+}
+function twcMemberMaxLimit(member){
+  return twcParseMaxServicesPerMonth(member&&member.maxPerMonth);
+}
+
+
+
+/* v2.32 main app patch */
+function twcV232MaxDisplay(value){
+  var n = 0;
+  if(value !== undefined && value !== null && String(value).trim() !== ""){
+    n = parseInt(value, 10);
+  }
+  return (!Number.isFinite(n) || isNaN(n) || n <= 0) ? "Unlimited" : String(n);
+}
+function twcV232MaxInput(value){
+  var n = 0;
+  if(value !== undefined && value !== null && String(value).trim() !== ""){
+    n = parseInt(value, 10);
+  }
+  return (!Number.isFinite(n) || isNaN(n) || n <= 0) ? "" : String(n);
+}
+function twcV232ParseMax(value){
+  if(value === undefined || value === null) return 0;
+  var s = String(value).trim();
+  if(s === "") return 0;
+  var n = parseInt(s, 10);
+  return (!Number.isFinite(n) || isNaN(n) || n < 1) ? 0 : n;
+}
+function twcV232MaxAllowsMore(member, usedThisMonth){
+  var limit = twcV232ParseMax(member && member.maxPerMonth);
+  if(limit <= 0) return true;
+  return Number(usedThisMonth || 0) < limit;
+}
+function deleteTemplate(templateId){
+  var template = (data.templates || []).find(function(t){ return t.id === templateId; });
+  if(!template){ alert("Template not found."); return; }
+  if(!confirm('Delete template "' + (template.name || "Unnamed Template") + '"?\n\nExisting services and rosters will not be deleted.')) return;
+  data.templates = (data.templates || []).filter(function(t){ return t.id !== templateId; });
+  save();
+  render();
+}
+function twcV232DeleteTemplateButton(template){
+  if(!user || user.role !== "admin") return "";
+  if(!template || !template.id) return "";
+  return '<button type="button" onclick="deleteTemplate(\'' + template.id + '\')">Delete Template</button>';
+}
+</script></body></html>
+
+/* v2.32 online save override */
+
+submitChangesOnline=async function(){
+  return await twcGithubSaveWithFreshSha();
+};
