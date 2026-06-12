@@ -1,10 +1,7 @@
-The Worship Calendar v2.37
-Plan • Schedule • Serve
+The Worship Calendar v2.38
 
-Fixed:
-- Admin team members can open Personalized Roster and see their own assignments.
-- Only the protected hardcoded admin remains blocked from Personalized Roster.
-- Gmail connection is restored from saved Gmail settings after login where possible.
-- Email sending attempts to restore saved Gmail access before asking to reconnect.
-- Settings tab restriction from v2.37 is preserved.
-- Main patched file: index.html
+Changes:
+- Fixed the Rosters tab duplicate-assignment warning.
+- The warning "Member assigned X times" now uses the v2.38 compatibility checker.
+- Compatible multi-role assignments should no longer show the warning.
+- ZIP cleanup: only this one README file is included.

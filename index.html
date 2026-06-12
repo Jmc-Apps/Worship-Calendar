@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.37</title>
+<title>The Worship Calendar v2.38</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.37 max-services display + GitHub SHA save fixes */
+/* v2.38 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -119,7 +119,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.37",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-37-local";
+const VERSION="2.38",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-38-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -164,7 +164,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.37 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.38 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -184,7 +184,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.37 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.38 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -271,7 +271,7 @@ function twcRemoveDemoData(){
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
 
-/* v2.37 safe welcome screen before login */
+/* v2.38 safe welcome screen before login */
 let twcLoginScreenReady=false;
 
 function twcWelcomeScreen(){
@@ -2071,7 +2071,7 @@ function makeRostersForRange(){
   },0);
 }
 function conflictsFor(r){let out=[],counts={},seen={};r.assignments.forEach(a=>{counts[a.roleName]=(counts[a.roleName]||0)+(+!!a.memberId);if(a.memberId)seen[a.memberId]=(seen[a.memberId]||0)+1;let av=data.availability.find(x=>x.serviceId===r.serviceId&&x.memberId===a.memberId);if(av&&av.status==="unavailable")out.push(`${a.memberName} is marked unavailable for ${a.roleName}`)});data.roles.forEach(role=>{let n=counts[role.name]||0;if(n<role.min)out.push(`${role.name} missing minimum: ${n}/${role.min}`);if(n>role.max)out.push(`${role.name} over maximum: ${n}/${role.max}`)});Object.entries(seen).forEach(([mid,n])=>{
-  if(n>1&&twcV237MemberHasIncompatibleDuplicate(r.assignments,mid))out.push(`${data.members.find(m=>m.id===mid)?.name||"Member"} assigned ${n} times`);
+  if(n>1&&twcV238MemberHasIncompatibleDuplicate(r.assignments,mid))out.push(`${data.members.find(m=>m.id===mid)?.name||"Member"} assigned ${n} times`);
   let m=data.members.find(x=>x.id===mid);
   let monthly=getMonthlyAssignmentCount(mid,monthKey(r.date));
   if(m&&monthly>(m.maxPerMonth??3))out.push(`${m.name} exceeds monthly serving limit: ${monthly}/${m.maxPerMonth??3}`);
@@ -2159,7 +2159,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.37</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.38</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2231,10 +2231,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.37-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.38-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.37 roster generation repair: final overrides */
+/* v2.38 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2358,7 +2358,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.37 real login-details email workflow overrides */
+/* v2.38 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2547,7 +2547,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.37 Members tab login-details email button */
+/* v2.38 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2577,7 +2577,7 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.37 Edit Member workflow */
+/* v2.38 Edit Member workflow */
 function twcIsProtectedAdminForEdit(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2679,7 +2679,7 @@ function twcSaveEditedMember(memberId){
 }
 
 
-/* v2.37 Personalized roster + Gmail restore fixes */
+/* v2.38 Personalized roster + Gmail restore fixes */
 function twcProtectedSystemAdminId(){
   return "admin";
 }
@@ -2730,7 +2730,7 @@ async function twcRestoreGmailConnection(){
 }
 
 
-/* v2.37 compatible-role roster warning helpers */
+/* v2.38 compatible-role roster warning helpers */
 function twcNormalizeRoleNameForCompat(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2779,7 +2779,7 @@ function twcMemberHasIncompatibleAssignments(assignments,memberId){
 }
 
 
-/* v2.37 max services per month: blank/0 = unlimited */
+/* v2.38 max services per month: blank/0 = unlimited */
 function twcParseMaxServicesPerMonth(value){
   if(value===undefined||value===null)return 0;
   let s=String(value).trim();
@@ -2799,7 +2799,7 @@ function twcMemberMaxLimit(member){
 
 
 
-/* v2.37 main app patch */
+/* v2.38 main app patch */
 function twcV232MaxDisplay(value){
   var n = 0;
   if(value !== undefined && value !== null && String(value).trim() !== ""){
@@ -2841,7 +2841,7 @@ function twcV232DeleteTemplateButton(template){
 }
 
 
-/* v2.37 max service limit checkbox + Gmail 401 retry */
+/* v2.38 max service limit checkbox + Gmail 401 retry */
 function twcV233HasServiceLimit(member){
   return !!(member && (member.limitServicesPerMonth===true || (Number(member.maxPerMonth||0)>0 && member.limitServicesPerMonth!==false)));
 }
@@ -2925,7 +2925,7 @@ async function twcV233SendWith401Retry(sendFn){
 }
 
 
-/* v2.37 member-card monthly limit controls */
+/* v2.38 member-card monthly limit controls */
 function twcV234MemberLimitControls(member){return "";}
 
 function twcV234UpdateMemberLimit(memberId){
@@ -2952,7 +2952,7 @@ function twcV234UpdateMemberLimit(memberId){
 }
 
 
-/* v2.37 max-services numeric + compatible-role warning helpers */
+/* v2.38 max-services numeric + compatible-role warning helpers */
 function twcV235ParseMax(value){
   var n=parseInt(value||0,10);
   return (!Number.isFinite(n)||isNaN(n)||n<0)?0:n;
@@ -2995,7 +2995,7 @@ function twcV235MemberHasIncompatibleMultipleRoles(assignments,memberId){
 }
 
 
-/* v2.37 roster warning compatibility patch */
+/* v2.38 roster warning compatibility patch */
 function twcV236NormRole(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -3069,7 +3069,7 @@ function twcV236RoleCompatibleFromRoleRecords(roleA,roleB){
 }
 
 
-/* v2.37 exact roster duplicate warning compatibility helpers */
+/* v2.38 exact warning compatibility helpers */
 function twcV237NormRoleName(x){return String(x||"").trim().toLowerCase();}
 function twcV237RoleByAny(value){
   value=String(value||"");
@@ -3141,9 +3141,102 @@ function twcV237MemberHasIncompatibleDuplicate(assignments,memberId){
   }
   return false;
 }
+function twcV237MemberDuplicateCount(assignments,memberId){
+  return (assignments||[]).filter(function(a){return a.memberId===memberId;}).length;
+}
+
+
+/* v2.38 robust role compatibility checker for roster warnings */
+function twcV238RoleKey(value){return String(value||"").trim().toLowerCase();}
+function twcV238RoleRecord(value){
+  value=String(value||"");
+  var key=twcV238RoleKey(value);
+  return (data.roles||[]).find(function(r){
+    return String(r.id||"")===value || twcV238RoleKey(r.name||r.roleName)===key;
+  }) || null;
+}
+function twcV238RoleName(value){
+  var r=twcV238RoleRecord(value);
+  return r ? (r.name||r.roleName||value) : value;
+}
+function twcV238ValueMatchesRole(value,targetName,targetId){
+  return twcV238RoleKey(twcV238RoleName(value))===targetName || (!!targetId && String(value||"")===targetId);
+}
+function twcV238RolesCompatible(roleA,roleB){
+  var a=twcV238RoleKey(twcV238RoleName(roleA));
+  var b=twcV238RoleKey(twcV238RoleName(roleB));
+  if(!a||!b||a===b)return false;
+
+  var recA=twcV238RoleRecord(roleA);
+  var recB=twcV238RoleRecord(roleB);
+  var idA=recA?String(recA.id||""):"";
+  var idB=recB?String(recB.id||""):"";
+
+  // Global compatible-role list, supporting many data shapes.
+  var compat=data.compatibleRoles||[];
+  for(var i=0;i<compat.length;i++){
+    var pair=compat[i];
+
+    if(Array.isArray(pair)){
+      if(pair.length>=2 && (
+        (twcV238ValueMatchesRole(pair[0],a,idA)&&twcV238ValueMatchesRole(pair[1],b,idB)) ||
+        (twcV238ValueMatchesRole(pair[0],b,idB)&&twcV238ValueMatchesRole(pair[1],a,idA))
+      )) return true;
+
+      var pairNames=pair.map(function(v){return twcV238RoleKey(twcV238RoleName(v));});
+      var pairIds=pair.map(function(v){return String(v||"");});
+      if(pairNames.indexOf(a)>=0 && pairNames.indexOf(b)>=0)return true;
+      if(idA&&idB&&pairIds.indexOf(idA)>=0&&pairIds.indexOf(idB)>=0)return true;
+    }
+
+    if(pair&&typeof pair==="object"){
+      var x=pair.roleA||pair.a||pair.role1||pair.from||pair.roleNameA||pair.nameA||pair.roleIdA||pair.idA||pair.sourceRole||pair.role;
+      var y=pair.roleB||pair.b||pair.role2||pair.to||pair.roleNameB||pair.nameB||pair.roleIdB||pair.idB||pair.targetRole||pair.compatibleRole;
+      if(x!==undefined&&y!==undefined&&(
+        (twcV238ValueMatchesRole(x,a,idA)&&twcV238ValueMatchesRole(y,b,idB)) ||
+        (twcV238ValueMatchesRole(x,b,idB)&&twcV238ValueMatchesRole(y,a,idA))
+      )) return true;
+
+      var roles=pair.roles||pair.compatible||pair.names||pair.roleIds||pair.compatibleRoles;
+      if(Array.isArray(roles)){
+        var roleNames=roles.map(function(v){return twcV238RoleKey(twcV238RoleName(v));});
+        var roleIds=roles.map(function(v){return String(v||"");});
+        if(roleNames.indexOf(a)>=0&&roleNames.indexOf(b)>=0)return true;
+        if(idA&&idB&&roleIds.indexOf(idA)>=0&&roleIds.indexOf(idB)>=0)return true;
+      }
+    }
+  }
+
+  // Per-role compatibility fields.
+  var roleRecords=data.roles||[];
+  for(var j=0;j<roleRecords.length;j++){
+    var r=roleRecords[j];
+    var rn=twcV238RoleKey(r.name||r.roleName);
+    var rid=String(r.id||"");
+    var list=r.compatibleRoles||r.compatible||r.canCombineWith||r.compatibleRoleNames||r.compatibleRoleIds||[];
+    if(!Array.isArray(list))continue;
+    var isA=(rn===a)||(idA&&rid===idA);
+    var isB=(rn===b)||(idB&&rid===idB);
+    if(isA&&list.some(function(v){return twcV238ValueMatchesRole(v,b,idB)}))return true;
+    if(isB&&list.some(function(v){return twcV238ValueMatchesRole(v,a,idA)}))return true;
+  }
+
+  return false;
+}
+function twcV238AssignmentRole(a){return a.roleName||a.role||a.name||a.roleId||a.templateRole||"";}
+function twcV238MemberHasIncompatibleDuplicate(assignments,memberId){
+  var roles=(assignments||[]).filter(function(a){return a.memberId===memberId;}).map(twcV238AssignmentRole).filter(Boolean);
+  if(roles.length<2)return false;
+  for(var i=0;i<roles.length;i++){
+    for(var j=i+1;j<roles.length;j++){
+      if(!twcV238RolesCompatible(roles[i],roles[j]))return true;
+    }
+  }
+  return false;
+}
 </script></body></html>
 
-/* v2.37 online save override */
+/* v2.38 online save override */
 
 submitChangesOnline=async function(){
   return await twcGithubSaveWithFreshSha();
