@@ -402,149 +402,11 @@
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 0
+      "maxPerMonth": 20
     }
   ],
   "availability": [],
-  "rosters": [
-    {
-      "id": "9dafa8e1-eabe-45af-af04-6042ed800522",
-      "serviceId": "bb1773cf-8e3b-4d85-9711-7a23f0af3d5c",
-      "serviceName": "Sunday Morning",
-      "date": "2026-06-21",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Bass",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    },
-    {
-      "id": "9acc7447-5a8b-4651-ab6a-db41405b47cb",
-      "serviceId": "5522f8fa-e089-41ca-b94d-f151b72a6e3c",
-      "serviceName": "Sunday Morning",
-      "date": "2026-06-14",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Sound",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        }
-      ]
-    },
-    {
-      "id": "fac9c00c-0168-4577-ac5c-26fcd31897ad",
-      "serviceId": "c2dda010-d1a1-4ba6-8ab4-36bba9626da3",
-      "serviceName": "Sunday Morning",
-      "date": "2026-06-14",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        }
-      ]
-    },
-    {
-      "id": "fcfbb2ec-dbd7-441f-bffa-bd27bdb3eafe",
-      "serviceId": "99334275-7f65-49e5-afc3-514543a661e2",
-      "serviceName": "Sunday Morning",
-      "date": "2026-06-14",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        }
-      ]
-    }
-  ],
+  "rosters": [],
   "compatibleRoles": {
     "2": [],
     "Worship Leader": [
@@ -604,7 +466,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-12T16:30:52.088Z",
+    "lastSync": "2026-06-12T16:32:41.532Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
