@@ -298,13 +298,13 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-12T18:14:42.607Z",
+    "lastSync": "2026-06-12T18:18:25.947Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
     "clientId": "266422265775-4i9tc727fp6j0filku502i8usn603ebo.apps.googleusercontent.com",
     "sender": "calendargbc7@gmail.com",
-    "connectedAt": "2026-06-11T22:27:14.348Z",
+    "connectedAt": "",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
   }
