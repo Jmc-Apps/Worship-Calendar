@@ -1,10 +1,10 @@
-The Worship Calendar v2.25
+The Worship Calendar v2.27
 Plan • Schedule • Serve
 
-Added:
-- Edit Member button in Members tab.
-- Edit form for name, email, password, max services per month, notes, ministries and roles.
-- Protected admin can be edited but cannot receive ministry/role assignments.
-- Optional checkbox to email updated login details after saving.
-- Maximum Services Per Month placeholder clarifies blank means Unlimited.
-- JavaScript syntax checked before packaging.
+Fixed:
+- Admin team members can open Personalized Roster and see their own assignments.
+- Only the protected hardcoded admin remains blocked from Personalized Roster.
+- Gmail connection is restored from saved Gmail settings after login where possible.
+- Email sending attempts to restore saved Gmail access before asking to reconnect.
+- Settings tab restriction from v2.26 is preserved.
+- Main patched file: index.html
