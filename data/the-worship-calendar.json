@@ -134,42 +134,6 @@
   ],
   "services": [
     {
-      "id": "99334275-7f65-49e5-afc3-514543a661e2",
-      "name": "Sunday Morning",
-      "date": "2026-06-14",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "test 1",
-      "type": "recurring"
-    },
-    {
-      "id": "c2dda010-d1a1-4ba6-8ab4-36bba9626da3",
-      "name": "Sunday Morning",
-      "date": "2026-06-14",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "test 2",
-      "type": "recurring"
-    },
-    {
-      "id": "5522f8fa-e089-41ca-b94d-f151b72a6e3c",
-      "name": "Sunday Morning",
-      "date": "2026-06-14",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "test 3",
-      "type": "recurring"
-    },
-    {
       "id": "bb1773cf-8e3b-4d85-9711-7a23f0af3d5c",
       "name": "Sunday Morning",
       "date": "2026-06-21",
@@ -221,7 +185,7 @@
     },
     {
       "id": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-      "name": "MasonLyons",
+      "name": "Mason Lyons",
       "email": "mason@gonubiebaptist.co.za",
       "password": "12345!JesusGBC",
       "role": "admin",
@@ -242,7 +206,7 @@
   "availability": [],
   "rosters": [
     {
-      "id": "7f36fb72-f156-4de3-9a36-37bc9af9f8e9",
+      "id": "172dfe2e-047c-4eae-a352-baf2f772829c",
       "serviceId": "bb1773cf-8e3b-4d85-9711-7a23f0af3d5c",
       "serviceName": "Sunday Morning",
       "date": "2026-06-21",
@@ -264,8 +228,8 @@
         },
         {
           "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
+          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
+          "memberName": "MasonLyons"
         },
         {
           "roleName": "Electric Guitar",
@@ -274,8 +238,8 @@
         },
         {
           "roleName": "Bass",
-          "memberId": "",
-          "memberName": "Unfilled"
+          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
+          "memberName": "Jonathan Mc Glashan"
         },
         {
           "roleName": "Drums",
@@ -384,7 +348,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-12T18:50:26.787Z",
+    "lastSync": "2026-06-12T18:51:40.366Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
