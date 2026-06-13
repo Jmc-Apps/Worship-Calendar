@@ -1,12 +1,14 @@
-The Worship Calendar v2.61
+The Worship Calendar v2.62
 
 Changes:
-- Changed the colour scheme from forest green to approved shades of light grey.
-- Used the approved lighter grey header box.
-- Kept the doubled header logo size.
-- Kept the duplicate version number removed from the tagline line.
-- Fixed the large blank vertical gap above the Data refreshed / Submit Changes Online bar.
-- Removed icon.svg from the package and removed icon.svg references from cache files.
-- Preserved v2.59 PDF role sorting and PDF row colours.
+- Removed visible online-save override text from the bottom of pages.
+- Removed Dashboard text: testing data includes 3 to 5 team members for every role.
+- Removed Availability text: Mobile-friendly calendar cards.
+- Services tab now loads the new service form details from the preselected template.
+- Services tab now preloads the service name from the preselected template.
+- Services tab now preloads service times from the preselected template's listed role/service times.
+- Changing the template updates the service name and service times.
+- Removed icon.svg from the package and cache references.
+- Preserved v2.61 light-grey cosmetic refresh and previous working features.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
