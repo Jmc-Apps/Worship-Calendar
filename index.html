@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.43</title>
+<title>The Worship Calendar v2.44</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.43 max-services display + GitHub SHA save fixes */
+/* v2.44 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -119,7 +119,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.43",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-43-local";
+const VERSION="2.44",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-44-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -164,7 +164,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.43 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.44 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -184,7 +184,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.43 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.44 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -271,7 +271,7 @@ function twcRemoveDemoData(){
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
 
-/* v2.43 safe welcome screen before login */
+/* v2.44 safe welcome screen before login */
 let twcLoginScreenReady=false;
 
 function twcWelcomeScreen(){
@@ -998,67 +998,12 @@ function v152CandidateOk(member,role,service,currentAssignments){
   if(current.includes(role.name))return false;
   return current.length===0||current.every(r=>v152RolesCompatible(r,role.name));
 }
-function v152BuildRosterForService(serviceId){
-  if(typeof ensureMinistries==="function")ensureMinistries();
-  let service=(data.services||[]).find(s=>s.id===serviceId);
-  if(!service)throw new Error("Service not found");
-  let template=(data.templates||[]).find(t=>t.name===service.template);
-  let roles=(data.roles||[]).filter(role=>!template||!template.roleNames||template.roleNames.includes(role.name));
-  let assignments=[];
-  roles.forEach(role=>{
-    let min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
-    let max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
-    min=Math.max(0,min||0);
-    max=Math.max(min,max||min||1);
-    let target=twcV243TargetCountForRole(role,service,min,max);
-    for(let i=0;i<target;i++){
-      let person=twcV240AssignableMembers()
-        .filter(m=>v152CandidateOk(m,role,service,assignments))
-        .sort(twcV243RoleCandidateSort(role,service))[0];
-      if(person)assignments.push({roleName:role.name,memberId:person.id,memberName:person.name});
-    }
-    for(let i=assignments.filter(a=>a.roleName===role.name).length;i<min;i++){
-      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
-    }
-  });
-  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments};
-}
-function makeRoster(){
-  let serviceId=(document.getElementById("rosterSvc")||{}).value;
-  if(!serviceId){alert("Please select a service.");return}
-  data.rosters=data.rosters||[];
-  if(data.rosters.some(r=>r.serviceId===serviceId)){alert("A roster already exists for this service.");return}
-  try{
-    data.rosters.unshift(v152BuildRosterForService(serviceId));
-    save();
-    render();
-  }catch(err){
-    console.error(err);
-    alert("Could not generate roster: "+(err&&err.message?err.message:err));
-  }
-}
-function makeRostersForRange(){
-  let start=(document.getElementById("rosterStart")||{}).value;
-  let end=(document.getElementById("rosterEnd")||{}).value;
-  if(!start||!end){alert("Please select a start and end date.");return}
-  data.rosters=data.rosters||[];
-  let created=0,skipped=0,failed=0;
-  (data.services||[])
-    .filter(s=>s.date>=start&&s.date<=end)
-    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
-    .forEach(service=>{
-      if(data.rosters.some(r=>r.serviceId===service.id)){skipped++;return}
-      try{data.rosters.unshift(v152BuildRosterForService(service.id));created++}
-      catch(err){console.error(err);failed++}
-    });
-  save();
-  render();
-  setTimeout(()=>{
-    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
-    let el=document.getElementById("rangeResult");
-    if(el)el.textContent=msg; else alert(msg);
-  },0);
-}
+
+
+
+
+
+
 function v152GroupedRosterHtml(roster,editable){
   let ministries=(data.ministries&&data.ministries.length)?data.ministries:[{id:"default",name:""}];
   let groups={};
@@ -2011,71 +1956,12 @@ function twcCandidateOk(member,role,service,assignments){
   if(current.includes(role.name))return false;
   return current.length===0||current.every(r=>twcRolesCompatible(r,role.name));
 }
-function buildRosterForService(sid){
-  if(typeof ensureMinistries==="function")ensureMinistries();
-  let s=(data.services||[]).find(x=>x.id===sid);
-  if(!s)throw new Error("Service not found");
-  let tpl=(data.templates||[]).find(t=>t.name===s.template);
-  let roleList=(data.roles||[]).filter(role=>!tpl||!(tpl.roleNames)||tpl.roleNames.includes(role.name));
-  let assignments=[];
-  roleList.forEach(role=>{
-    let roleMin=(tpl&&tpl.roleMin&&tpl.roleMin[role.name]!==undefined)?parseInt(tpl.roleMin[role.name],10):(role.min??1);
-    let roleMax=(tpl&&tpl.roleMax&&tpl.roleMax[role.name]!==undefined)?parseInt(tpl.roleMax[role.name],10):(role.max??1);
-    roleMin=Math.max(0,roleMin||0);
-    roleMax=Math.max(roleMin,roleMax||roleMin||1);
-    let target=twcV243TargetCountForRole(role,s,roleMin,roleMax);
-    for(let k=0;k<target;k++){
-      let c=twcV240AssignableMembers()
-        .filter(m=>twcCandidateOk(m,role,s,assignments))
-        .sort(twcV243RoleCandidateSort(role,s))[0];
-      if(c)assignments.push({roleName:role.name,memberId:c.id,memberName:c.name});
-    }
-    for(let k=assignments.filter(a=>a.roleName===role.name).length;k<roleMin;k++){
-      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
-    }
-  });
-  return {id:uid(),serviceId:sid,serviceName:s.name,date:s.date,time:s.time,times:s.times||[s.time],published:false,assignments};
-}
-function isAvailable(mid,sid){let a=data.availability.find(x=>x.memberId===mid&&x.serviceId===sid);return !a||a.status==="available"}function makeRoster(){
-  let sel=document.getElementById("rosterSvc");
-  let sid=sel&&sel.value;
-  if(!sid){alert("Please select a service.");return}
-  if((data.rosters||[]).some(r=>r.serviceId===sid)){alert("A roster already exists for this service.");return}
-  try{
-    data.rosters=data.rosters||[];
-    data.rosters.unshift(buildRosterForService(sid));
-    render();
-  }catch(e){
-    console.error(e);
-    alert("Could not generate roster: "+(e.message||e));
-  }
-}
-function makeRostersForRange(){
-  let startEl=document.getElementById("rosterStart"),endEl=document.getElementById("rosterEnd");
-  let start=startEl&&startEl.value,end=endEl&&endEl.value;
-  if(!start||!end){alert("Please select a start and end date.");return}
-  data.rosters=data.rosters||[];
-  let created=0,skipped=0,failed=0;
-  (data.services||[])
-    .filter(s=>s.date>=start&&s.date<=end)
-    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
-    .forEach(s=>{
-      if(data.rosters.some(r=>r.serviceId===s.id)){skipped++;return}
-      try{
-        data.rosters.unshift(buildRosterForService(s.id));
-        created++;
-      }catch(e){
-        console.error(e);
-        failed++;
-      }
-    });
-  render();
-  setTimeout(()=>{
-    let el=document.getElementById("rangeResult");
-    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
-    if(el)el.textContent=msg; else alert(msg);
-  },0);
-}
+
+
+function isAvailable(mid,sid){let a=data.availability.find(x=>x.memberId===mid&&x.serviceId===sid);return !a||a.status==="available"}
+
+
+
 function conflictsFor(r){let out=[],counts={},seen={};r.assignments.forEach(a=>{counts[a.roleName]=(counts[a.roleName]||0)+(+!!a.memberId);if(a.memberId)seen[a.memberId]=(seen[a.memberId]||0)+1;let av=data.availability.find(x=>x.serviceId===r.serviceId&&x.memberId===a.memberId);if(av&&av.status==="unavailable")out.push(`${a.memberName} is marked unavailable for ${a.roleName}`)});data.roles.forEach(role=>{let n=counts[role.name]||0;if(n<role.min)out.push(`${role.name} missing minimum: ${n}/${role.min}`);if(n>role.max)out.push(`${role.name} over maximum: ${n}/${role.max}`)});Object.entries(seen).forEach(([mid,n])=>{
   if(n>1&&twcV239MemberHasIncompatibleDuplicate(r.assignments,mid))out.push(`${data.members.find(m=>m.id===mid)?.name||"Member"} assigned ${n} times`);
   let m=data.members.find(x=>x.id===mid);
@@ -2166,7 +2052,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.43</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.44</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2238,10 +2124,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.43-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.44-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.43 roster generation repair: final overrides */
+/* v2.44 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2277,81 +2163,12 @@ function twc51Candidate(member,role,service,assignments){
   if(already.includes(role.name))return false;
   return already.length===0||already.every(r=>twc51RolesCompatible(r,role.name));
 }
-function buildRosterForService(serviceId){
-  if(typeof ensureMinistries==="function")ensureMinistries();
-  data.rosters=data.rosters||[];
-  let service=(data.services||[]).find(s=>s.id===serviceId);
-  if(!service)throw new Error("Service not found");
-  let template=(data.templates||[]).find(t=>t.name===service.template);
-  let roles=(data.roles||[]).filter(role=>!template||!template.roleNames||template.roleNames.includes(role.name));
-  let assignments=[];
-  roles.forEach(role=>{
-    let min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
-    let max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
-    min=Math.max(0,min||0);
-    max=Math.max(min,max||min||1);
-    for(let i=0;i<max;i++){
-      let candidate=(data.members||[])
-        .filter(m=>twc51Candidate(m,role,service,assignments))
-        .sort((a,b)=>twc51AssignmentCount(a.id)-twc51AssignmentCount(b.id)||String(a.name).localeCompare(String(b.name)))[0];
-      if(candidate)assignments.push({roleName:role.name,memberId:candidate.id,memberName:candidate.name});
-    }
-    let filled=assignments.filter(a=>a.roleName===role.name).length;
-    for(let i=filled;i<min;i++){
-      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
-    }
-  });
-  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments};
-}
-function makeRoster(){
-  let select=document.getElementById("rosterSvc");
-  let serviceId=select&&select.value;
-  if(!serviceId){alert("Please select a service.");return}
-  data.rosters=data.rosters||[];
-  if(data.rosters.some(r=>r.serviceId===serviceId)){alert("A roster already exists for this service.");return}
-  try{
-    data.rosters.unshift(buildRosterForService(serviceId));
-    save();
-    render();
-  }catch(err){
-    console.error(err);
-    alert("Could not generate roster: "+(err&&err.message?err.message:err));
-  }
-}
-function makeRostersForRange(){
-  let start=(document.getElementById("rosterStart")||{}).value;
-  let end=(document.getElementById("rosterEnd")||{}).value;
-  if(!start||!end){alert("Please select a start and end date.");return}
-  data.rosters=data.rosters||[];
-  let created=0,skipped=0,failed=0;
-  (data.services||[])
-    .filter(s=>s.date>=start&&s.date<=end)
-    .sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")))
-    .forEach(service=>{
-      if(data.rosters.some(r=>r.serviceId===service.id)){skipped++;return}
-      try{
-        data.rosters.unshift(buildRosterForService(service.id));
-        created++;
-      }catch(err){
-        console.error(err);
-        failed++;
-      }
-    });
-  save();
-  
 
-cleanDemoTeamMembersV175();
 
-stripProtectedAdminOperationalAssignments();
-twcStripProtectedAdminFromOperationalData();
-enforceHardcodedAdminProtection();
-render();
-  setTimeout(()=>{
-    let msg=`Created ${created} roster(s). Skipped ${skipped}. Failed ${failed}.`;
-    let el=document.getElementById("rangeResult");
-    if(el)el.textContent=msg; else alert(msg);
-  },0);
-}
+
+
+
+
 
 
 
@@ -2365,7 +2182,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.43 real login-details email workflow overrides */
+/* v2.44 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2554,7 +2371,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.43 Members tab login-details email button */
+/* v2.44 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2584,7 +2401,7 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.43 Edit Member workflow */
+/* v2.44 Edit Member workflow */
 function twcIsProtectedAdminForEdit(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2686,7 +2503,7 @@ function twcSaveEditedMember(memberId){
 }
 
 
-/* v2.43 Personalized roster + Gmail restore fixes */
+/* v2.44 Personalized roster + Gmail restore fixes */
 function twcProtectedSystemAdminId(){
   return "admin";
 }
@@ -2737,7 +2554,7 @@ async function twcRestoreGmailConnection(){
 }
 
 
-/* v2.43 compatible-role roster warning helpers */
+/* v2.44 compatible-role roster warning helpers */
 function twcNormalizeRoleNameForCompat(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2786,7 +2603,7 @@ function twcMemberHasIncompatibleAssignments(assignments,memberId){
 }
 
 
-/* v2.43 max services per month: blank/0 = unlimited */
+/* v2.44 max services per month: blank/0 = unlimited */
 function twcParseMaxServicesPerMonth(value){
   if(value===undefined||value===null)return 0;
   let s=String(value).trim();
@@ -2806,7 +2623,7 @@ function twcMemberMaxLimit(member){
 
 
 
-/* v2.43 main app patch */
+/* v2.44 main app patch */
 function twcV232MaxDisplay(value){
   var n = 0;
   if(value !== undefined && value !== null && String(value).trim() !== ""){
@@ -2848,7 +2665,7 @@ function twcV232DeleteTemplateButton(template){
 }
 
 
-/* v2.43 max service limit checkbox + Gmail 401 retry */
+/* v2.44 max service limit checkbox + Gmail 401 retry */
 function twcV233HasServiceLimit(member){
   return !!(member && (member.limitServicesPerMonth===true || (Number(member.maxPerMonth||0)>0 && member.limitServicesPerMonth!==false)));
 }
@@ -2932,7 +2749,7 @@ async function twcV233SendWith401Retry(sendFn){
 }
 
 
-/* v2.43 member-card monthly limit controls */
+/* v2.44 member-card monthly limit controls */
 function twcV234MemberLimitControls(member){return "";}
 
 function twcV234UpdateMemberLimit(memberId){
@@ -2959,7 +2776,7 @@ function twcV234UpdateMemberLimit(memberId){
 }
 
 
-/* v2.43 max-services numeric + compatible-role warning helpers */
+/* v2.44 max-services numeric + compatible-role warning helpers */
 function twcV235ParseMax(value){
   var n=parseInt(value||0,10);
   return (!Number.isFinite(n)||isNaN(n)||n<0)?0:n;
@@ -3002,7 +2819,7 @@ function twcV235MemberHasIncompatibleMultipleRoles(assignments,memberId){
 }
 
 
-/* v2.43 roster warning compatibility patch */
+/* v2.44 roster warning compatibility patch */
 function twcV236NormRole(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -3076,7 +2893,7 @@ function twcV236RoleCompatibleFromRoleRecords(roleA,roleB){
 }
 
 
-/* v2.43 exact warning compatibility helpers */
+/* v2.44 exact warning compatibility helpers */
 function twcV237NormRoleName(x){return String(x||"").trim().toLowerCase();}
 function twcV237RoleByAny(value){
   value=String(value||"");
@@ -3153,7 +2970,7 @@ function twcV237MemberDuplicateCount(assignments,memberId){
 }
 
 
-/* v2.43 robust role compatibility checker for roster warnings */
+/* v2.44 robust role compatibility checker for roster warnings */
 function twcV238RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV238RoleRecord(value){
   value=String(value||"");
@@ -3243,7 +3060,7 @@ function twcV238MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.43 exact compatibility warning fix */
+/* v2.44 exact compatibility warning fix */
 function twcV239RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV239RoleRecord(value){
   value=String(value||"");
@@ -3351,7 +3168,7 @@ function twcV239MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.43 roster improvements */
+/* v2.44 roster improvements */
 function twcV240IsProtectedAdminMember(member){
   if(!member)return false;
   return String(member.name||"").trim().toLowerCase()==="admin" ||
@@ -3423,7 +3240,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.43 clean fair monthly multi-person role balancing */
+/* v2.44 clean fair monthly multi-person role balancing */
 
 
 
@@ -3444,65 +3261,93 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.43 remaining-capacity fair multi-person role balancing */
-function twcV243RoleServicesInMonth(service,roleName){
+/* v2.44 remaining-capacity fair multi-person role balancing */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* v2.44 active generator and remaining-capacity balancing fix */
+function twcV244ServiceSortKey(service){
+  return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
+}
+function twcV244RoleServicesInMonth(service,roleName){
   var month=String(service.date||"").slice(0,7);
   return (data.services||[]).filter(function(s){
     return String(s.date||"").slice(0,7)===month && twcV240RoleIsInService(s,roleName);
-  }).sort(function(a,b){
-    return twcV243ServiceSortKey(a).localeCompare(twcV243ServiceSortKey(b));
-  });
+  }).sort(function(a,b){return twcV244ServiceSortKey(a).localeCompare(twcV244ServiceSortKey(b));});
 }
-function twcV243ServiceSortKey(service){
-  return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
-}
-function twcV243AssignableRoleMembers(role){
-  return twcV240AssignableMembers().filter(function(m){return twcV240MemberCanDoRoleBasic(m,role);});
-}
-function twcV243MemberMonthlyLimit(member){
+function twcV244MemberMonthlyLimit(member){
   var limit=parseInt(member&&member.maxPerMonth,10);
   if(!Number.isFinite(limit)||isNaN(limit))limit=3;
   return Math.max(0,limit);
 }
-function twcV243RoleMemberMonthlyCount(memberId,roleName,month){
+function twcV244AssignableRoleMembers(role){
+  return twcV240AssignableMembers().filter(function(m){return twcV240MemberCanDoRoleBasic(m,role);});
+}
+function twcV244ProjectedRoleMemberCount(memberId,roleName,month,plannedAssignments){
+  var existing=(data.rosters||[]).reduce(function(n,r){
+    if(String(r.date||"").slice(0,7)!==month)return n;
+    return n+(r.assignments||[]).filter(function(a){return a.memberId===memberId&&a.roleName===roleName;}).length;
+  },0);
+  var planned=(plannedAssignments||[]).filter(function(a){return a.memberId===memberId&&a.roleName===roleName;}).length;
+  return existing+planned;
+}
+function twcV244ExistingRoleAssignmentsBeforeService(roleName,service){
+  var month=String(service.date||"").slice(0,7);
+  var currentKey=twcV244ServiceSortKey(service);
   return (data.rosters||[]).reduce(function(n,r){
     if(String(r.date||"").slice(0,7)!==month)return n;
-    return n+(r.assignments||[]).filter(function(a){
-      return a.memberId===memberId && a.roleName===roleName;
-    }).length;
+    var rs=(data.services||[]).find(function(s){return s.id===r.serviceId;});
+    var key=rs?twcV244ServiceSortKey(rs):String((r.date||"")+(r.time||((r.times||[])[0])||""));
+    if(key>=currentKey)return n;
+    return n+(r.assignments||[]).filter(function(a){return a.roleName===roleName&&a.memberId;}).length;
   },0);
 }
-function twcV243RemainingRoleCapacity(role,service){
+function twcV244PlannedRoleAssignmentsBeforeService(roleName,service,plannedRosters){
+  var currentKey=twcV244ServiceSortKey(service);
+  return (plannedRosters||[]).reduce(function(n,r){
+    var key=String((r.date||"")+(r.time||((r.times||[])[0])||""));
+    if(key>=currentKey)return n;
+    return n+(r.assignments||[]).filter(function(a){return a.roleName===roleName&&a.memberId;}).length;
+  },0);
+}
+function twcV244RemainingRoleCapacity(role,service,plannedAssignments){
   var month=String(service.date||"").slice(0,7);
-  return twcV243AssignableRoleMembers(role).reduce(function(total,m){
-    var limit=twcV243MemberMonthlyLimit(m);
-    var used=twcV243RoleMemberMonthlyCount(m.id,role.name,month);
+  return twcV244AssignableRoleMembers(role).reduce(function(total,m){
+    var limit=twcV244MemberMonthlyLimit(m);
+    var used=twcV244ProjectedRoleMemberCount(m.id,role.name,month,plannedAssignments);
     return total+Math.max(0,limit-used);
   },0);
 }
-function twcV243RemainingServicesIncludingCurrent(service,roleName){
-  var services=twcV243RoleServicesInMonth(service,roleName);
-  var currentKey=twcV243ServiceSortKey(service);
-  return services.filter(function(s){return twcV243ServiceSortKey(s)>=currentKey;});
+function twcV244RemainingServicesIncludingCurrent(service,roleName){
+  var currentKey=twcV244ServiceSortKey(service);
+  return twcV244RoleServicesInMonth(service,roleName).filter(function(s){
+    return twcV244ServiceSortKey(s)>=currentKey;
+  });
 }
-function twcV243TargetCountForRole(role,service,min,max){
+function twcV244TargetCountForRole(role,service,min,max,plannedAssignments,plannedRosters){
   min=Math.max(0,parseInt(min||0,10));
   max=Math.max(min,parseInt(max||min||1,10));
-
-  /*
-    Remaining-capacity rule:
-    Use remaining capacity divided by remaining services. This prevents using all
-    vocal capacity in the first weeks and leaving the last week empty.
-  */
-  var remainingCapacity=twcV243RemainingRoleCapacity(role,service);
-  var remainingServices=Math.max(1,twcV243RemainingServicesIncludingCurrent(service,role.name).length);
+  var remainingCapacity=twcV244RemainingRoleCapacity(role,service,plannedAssignments);
+  var remainingServices=Math.max(1,twcV244RemainingServicesIncludingCurrent(service,role.name).length);
   var target=Math.ceil(remainingCapacity/remainingServices);
 
-  /*
-    If there is enough capacity to cover minimums for the rest of the month,
-    keep the role minimum as the floor. If not, spread the shortage across
-    the remaining services instead of filling early weeks first.
-  */
   if(remainingCapacity>=min*remainingServices){
     target=Math.max(min,target);
   }else{
@@ -3511,13 +3356,25 @@ function twcV243TargetCountForRole(role,service,min,max){
 
   return Math.max(0,Math.min(max,target));
 }
-function twcV243RoleCandidateSort(role,service){
+function twcV244CandidateOk(member,role,service,currentAssignments,plannedAssignments){
+  if(twcV240IsProtectedAdminMember(member))return false;
+  if(typeof v152IsAvailable==="function"&&!v152IsAvailable(member.id,service.id))return false;
+  var month=String(service.date||"").slice(0,7);
+  if(twcV244ProjectedRoleMemberCount(member.id,role.name,month,plannedAssignments)>=twcV244MemberMonthlyLimit(member))return false;
+  if(!twcV240MemberCanDoRoleBasic(member,role))return false;
+
+  var current=(currentAssignments||[]).filter(function(a){return a.memberId===member.id;}).map(function(a){return a.roleName;});
+  if(current.indexOf(role.name)>=0)return false;
+  if(current.length>0&&typeof v152RolesCompatible==="function"&&!current.every(function(r){return v152RolesCompatible(r,role.name);}))return false;
+  return true;
+}
+function twcV244CandidateSort(role,service,plannedAssignments){
   var month=String(service.date||"").slice(0,7);
   return function(a,b){
-    var ar=twcV243RoleMemberMonthlyCount(a.id,role.name,month);
-    var br=twcV243RoleMemberMonthlyCount(b.id,role.name,month);
-    var al=twcV243MemberMonthlyLimit(a);
-    var bl=twcV243MemberMonthlyLimit(b);
+    var ar=twcV244ProjectedRoleMemberCount(a.id,role.name,month,plannedAssignments);
+    var br=twcV244ProjectedRoleMemberCount(b.id,role.name,month,plannedAssignments);
+    var al=twcV244MemberMonthlyLimit(a);
+    var bl=twcV244MemberMonthlyLimit(b);
     var ap=al?ar/al:999;
     var bp=bl?br/bl:999;
     return ap-bp ||
@@ -3527,9 +3384,93 @@ function twcV243RoleCandidateSort(role,service){
       String(a.name).localeCompare(String(b.name));
   };
 }
+function twcV244BuildRosterForService(serviceId,plannedRosters){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  var service=(data.services||[]).find(function(s){return s.id===serviceId;});
+  if(!service)throw new Error("Service not found");
+  var template=(data.templates||[]).find(function(t){return t.name===service.template;});
+  var roles=(data.roles||[]).filter(function(role){return !template||!template.roleNames||template.roleNames.indexOf(role.name)>=0;});
+  var assignments=[];
+  var plannedAssignments=[];
+  (plannedRosters||[]).forEach(function(r){
+    (r.assignments||[]).forEach(function(a){
+      if(a.memberId)plannedAssignments.push({memberId:a.memberId,roleName:a.roleName});
+    });
+  });
+
+  roles.forEach(function(role){
+    var min=(template&&template.roleMin&&template.roleMin[role.name]!==undefined)?parseInt(template.roleMin[role.name],10):(role.min??1);
+    var max=(template&&template.roleMax&&template.roleMax[role.name]!==undefined)?parseInt(template.roleMax[role.name],10):(role.max??1);
+    min=Math.max(0,min||0);
+    max=Math.max(min,max||min||1);
+
+    var target=twcV244TargetCountForRole(role,service,min,max,plannedAssignments,plannedRosters);
+    for(var i=0;i<target;i++){
+      var person=twcV244AssignableRoleMembers(role)
+        .filter(function(m){return twcV244CandidateOk(m,role,service,assignments,plannedAssignments);})
+        .sort(twcV244CandidateSort(role,service,plannedAssignments))[0];
+      if(person){
+        assignments.push({roleName:role.name,memberId:person.id,memberName:person.name});
+        plannedAssignments.push({roleName:role.name,memberId:person.id});
+      }
+    }
+    for(var j=assignments.filter(function(a){return a.roleName===role.name;}).length;j<min;j++){
+      assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+    }
+  });
+
+  return {id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments:assignments};
+}
+function v152BuildRosterForService(serviceId,plannedRosters){
+  return twcV244BuildRosterForService(serviceId,plannedRosters||[]);
+}
+function buildRosterForService(serviceId,plannedRosters){
+  return twcV244BuildRosterForService(serviceId,plannedRosters||[]);
+}
+function makeRoster(){
+  var serviceId=(document.getElementById("rosterSvc")||{}).value;
+  if(!serviceId){alert("Please select a service.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(function(r){return r.serviceId===serviceId;})){alert("A roster already exists for this service.");return}
+  try{
+    data.rosters.unshift(twcV244BuildRosterForService(serviceId,[]));
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  var start=(document.getElementById("rosterStart")||{}).value;
+  var end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  var created=0,skipped=0,failed=0;
+  var planned=[];
+  (data.services||[])
+    .filter(function(s){return s.date>=start&&s.date<=end;})
+    .sort(function(a,b){return twcV244ServiceSortKey(a).localeCompare(twcV244ServiceSortKey(b));})
+    .forEach(function(service){
+      if(data.rosters.some(function(r){return r.serviceId===service.id;})){skipped++;return}
+      try{
+        var roster=twcV244BuildRosterForService(service.id,planned);
+        planned.push(roster);
+        data.rosters.unshift(roster);
+        created++;
+      }catch(err){console.error(err);failed++}
+    });
+  save();
+  render();
+  setTimeout(function(){
+    var msg="Created "+created+" roster(s). Skipped "+skipped+". Failed "+failed+".";
+    var el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
 </script></body></html>
 
-/* v2.43 online save override */
+/* v2.44 online save override */
 
 submitChangesOnline=async function(){
   return await twcGithubSaveWithFreshSha();
