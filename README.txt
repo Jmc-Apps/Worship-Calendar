@@ -1,11 +1,10 @@
-The Worship Calendar v2.54
+The Worship Calendar v2.55
 
-Changes:
-- Multiple services on the same date are treated as one rostering block during generation.
-- A person rostered in one service on a date cannot be rostered in another service on that same date unless the roles are compatible.
-- Published rosters on that date are treated as fixed priority assignments and are considered before assigning new draft rosters.
-- Single-service generation now generates the whole unrostered block for that date.
-- Date-range generation applies the same same-date block rules.
-- Preserves v2.53 template role order controls and v2.45 month-aware batch planner.
+Change:
+- Team members can now update their own maximum services per month from the Availability page.
+- The new field appears above the availability calendar for logged-in members.
+- The value is saved to the member profile and used by roster generation.
+- Admins can still manage the same value from the Members page.
+- Preserves v2.54 same-date rostering block rules and v2.53 template role order controls.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
