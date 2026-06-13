@@ -147,104 +147,7 @@
       ]
     }
   ],
-  "services": [
-    {
-      "id": "87b746c7-ed5a-42a0-bdff-1b78250b277b",
-      "name": "Sunday Morning",
-      "date": "2026-06-14",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "33880001-3d25-4186-9d27-ca0f99392651",
-      "name": "Sunday Morning",
-      "date": "2026-06-21",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "bc429b07-731b-4979-9f04-bb02dbde60e6",
-      "name": "Sunday Morning",
-      "date": "2026-06-28",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "53b202d6-7a4e-4af2-a0b2-1ad512138c54",
-      "name": "Sunday Morning",
-      "date": "2026-07-05",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "de8345a2-e7d3-4ab1-8013-c70f42106338",
-      "name": "Sunday Morning",
-      "date": "2026-07-12",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "1a1edf79-d972-4408-a247-8fd25d155e41",
-      "name": "Sunday Morning",
-      "date": "2026-07-19",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "93dc5c1b-4807-4035-9eb4-eba6485f739e",
-      "name": "Sunday Morning",
-      "date": "2026-07-26",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "b1e2cd9a-5aff-4e92-9bcd-ab3e3e6c20a8",
-      "name": "Sunday Morning",
-      "date": "2026-08-02",
-      "times": [
-        "09:00"
-      ],
-      "time": "09:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    }
-  ],
+  "services": [],
   "members": [
     {
       "id": "admin",
@@ -364,7 +267,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T10:36:20.295Z",
+    "lastSync": "2026-06-13T10:44:38.283Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
