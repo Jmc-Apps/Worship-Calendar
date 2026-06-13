@@ -1,9 +1,9 @@
-The Worship Calendar v2.49
+The Worship Calendar v2.50
 
 Fix:
-- Added working ↑ ↓ order buttons directly beside each role in the template role table.
-- Removed the separate Role Order panel from v2.48.
-- Unused roles remain automatically sorted to the bottom of each template role order.
-- Roster generation, display, and export continue to use the saved template role order.
-- Preserves v2.45 month-aware batch planner, hard-coded admin exclusion, No Roster markers, and draft roster delete button.
+- Template role row buttons now sit together in the left Use Role column: Used, ↑, ↓.
+- Fixed broken template button handlers by removing trailing spaces from role names in onclick/onchange calls.
+- Replaced v2.49 order buttons with v2.50 id-based handlers.
+- Up/down buttons now move only active template roles; unused roles stay automatically at the bottom.
+- Preserves template role order for roster generation, display, and export.
 - ZIP cleanup: only this README.txt is included.
