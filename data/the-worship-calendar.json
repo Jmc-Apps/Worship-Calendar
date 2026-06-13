@@ -256,11 +256,15 @@
         "4d3677e7-ab19-4929-8e4d-150b57363cda"
       ],
       "roles": [
-        "Vocal"
+        "Deacon on Duty AM",
+        "Deacon on Duty PM",
+        "Bass",
+        "Drums",
+        "Sound"
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 3,
+      "maxPerMonth": 99,
       "limitServicesPerMonth": true
     },
     {
@@ -273,18 +277,21 @@
         "default"
       ],
       "roles": [
+        "Worship Leader",
+        "Rhythm Guitar",
+        "Electric Guitar",
         "Vocal"
       ],
       "notes": "",
       "history": [],
-      "maxPerMonth": 3,
+      "maxPerMonth": 99,
       "limitServicesPerMonth": true
     }
   ],
   "availability": [],
   "rosters": [
     {
-      "id": "fba2c532-dc7f-428f-979c-c3a4f1747690",
+      "id": "48702739-d9b6-4f0f-a754-83047e139320",
       "serviceId": "53b202d6-7a4e-4af2-a0b2-1ad512138c54",
       "serviceName": "Sunday Morning",
       "date": "2026-07-05",
@@ -362,7 +369,7 @@
       ]
     },
     {
-      "id": "b8f9257c-7247-4cda-bf0e-db0e14a00a35",
+      "id": "4681a546-cce4-48e4-af8d-bb361aef8ff4",
       "serviceId": "de8345a2-e7d3-4ab1-8013-c70f42106338",
       "serviceName": "Sunday Morning",
       "date": "2026-07-12",
@@ -440,7 +447,7 @@
       ]
     },
     {
-      "id": "473e0498-60e1-43cd-a0a3-e4616845c7d7",
+      "id": "5a7b3672-d3e3-4ee5-979a-d756ddcf391f",
       "serviceId": "1a1edf79-d972-4408-a247-8fd25d155e41",
       "serviceName": "Sunday Morning",
       "date": "2026-07-19",
@@ -518,7 +525,7 @@
       ]
     },
     {
-      "id": "1299f197-e120-4f7c-9a5f-6ce62edb4913",
+      "id": "329cee84-e421-42b2-940c-62829e8bbae7",
       "serviceId": "93dc5c1b-4807-4035-9eb4-eba6485f739e",
       "serviceName": "Sunday Morning",
       "date": "2026-07-26",
@@ -655,7 +662,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T08:34:45.903Z",
+    "lastSync": "2026-06-13T08:37:40.152Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
