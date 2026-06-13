@@ -1,10 +1,9 @@
-The Worship Calendar v2.64
+The Worship Calendar v2.65
 
-Change:
-- All normal buttons are now light grey.
-- Selected/active buttons and selected chips are now dark grey.
-- Selected button text remains white for readability.
+Changes:
+- Changed the first welcome/login screen background to dark grey.
+- Made the version number text inside version badges white.
 - Removed icon.svg from the package and cache references.
-- Preserved v2.63 dashboard team-member count fix and previous working features.
+- Preserved v2.64 light-grey/dark-grey button styling and previous working features.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
