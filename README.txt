@@ -1,14 +1,9 @@
-The Worship Calendar v2.62
+The Worship Calendar v2.63
 
-Changes:
-- Removed visible online-save override text from the bottom of pages.
-- Removed Dashboard text: testing data includes 3 to 5 team members for every role.
-- Removed Availability text: Mobile-friendly calendar cards.
-- Services tab now loads the new service form details from the preselected template.
-- Services tab now preloads the service name from the preselected template.
-- Services tab now preloads service times from the preselected template's listed role/service times.
-- Changing the template updates the service name and service times.
+Change:
+- Dashboard Team Members count now excludes the hardcoded protected admin account.
+- The protected admin is still available for administration but is not counted as a team member.
 - Removed icon.svg from the package and cache references.
-- Preserved v2.61 light-grey cosmetic refresh and previous working features.
+- Preserved v2.62 services template pre-load changes and previous working features.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
