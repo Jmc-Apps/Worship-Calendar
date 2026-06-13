@@ -1,10 +1,12 @@
-The Worship Calendar v2.41
+The Worship Calendar v2.42
 
-Change focus:
-- Improved multi-person role balancing to use monthly capacity divided by number of services.
-- Example: 6 singers each limited to 2 services in a 4-week month gives 12 total monthly singer assignments, so the normal target is 3 singers per service.
-- Template maximum remains a ceiling, not the normal target.
-- If an earlier service is short because too few people are available, later services may catch up above the normal target up to the template maximum.
-- Candidates are sorted by how much of their role-specific monthly allowance they have already used, then by total monthly assignments, then by total assignments.
-- Preserves v2.40 hard-coded admin exclusion, draft roster delete button, and No Roster indicators.
+Recommended balancing fixes:
+- Removed duplicate v2.41 balancing functions.
+- Added a single clean v2.42 fair-balancing helper set.
+- Multi-person role target is now based on monthly capacity divided by the number of services in that month.
+- Template maximum is used as a ceiling, not the default target.
+- Catch-up logic now counts only rosters for services before the current service, so future or later-month rosters cannot distort the current target.
+- Example: 6 singers with max 2 services each in a 4-service month creates a normal target of 3 singers per service.
+- If one earlier week is short, a later week may increase up to the template maximum.
+- Preserves hard-coded admin exclusion, No Roster markers, and draft roster delete button.
 - ZIP cleanup: only this README.txt is included.
