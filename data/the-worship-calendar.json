@@ -129,7 +129,24 @@
         "Deacon on Duty AM": "08:00, 10:00",
         "Deacon on Duty PM": "18:00"
       },
-      "serviceLengthMinutes": 70
+      "serviceLengthMinutes": 70,
+      "roleOrder": [
+        "Worship Leader",
+        "Vocal",
+        "Piano",
+        "Rhythm Guitar",
+        "Electric Guitar",
+        "Bass",
+        "Drums",
+        "Sound",
+        "Visuals",
+        "Deacon on Duty",
+        "Communion",
+        "Visuals AM",
+        "Visuals PM",
+        "Deacon on Duty AM",
+        "Deacon on Duty PM"
+      ]
     }
   ],
   "services": [
@@ -289,320 +306,7 @@
     }
   ],
   "availability": [],
-  "rosters": [
-    {
-      "id": "48702739-d9b6-4f0f-a754-83047e139320",
-      "serviceId": "53b202d6-7a4e-4af2-a0b2-1ad512138c54",
-      "serviceName": "Sunday Morning",
-      "date": "2026-07-05",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-          "memberName": "Mason Lyons"
-        },
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    },
-    {
-      "id": "4681a546-cce4-48e4-af8d-bb361aef8ff4",
-      "serviceId": "de8345a2-e7d3-4ab1-8013-c70f42106338",
-      "serviceName": "Sunday Morning",
-      "date": "2026-07-12",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-          "memberName": "Mason Lyons"
-        },
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    },
-    {
-      "id": "5a7b3672-d3e3-4ee5-979a-d756ddcf391f",
-      "serviceId": "1a1edf79-d972-4408-a247-8fd25d155e41",
-      "serviceName": "Sunday Morning",
-      "date": "2026-07-19",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-          "memberName": "Mason Lyons"
-        },
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    },
-    {
-      "id": "329cee84-e421-42b2-940c-62829e8bbae7",
-      "serviceId": "93dc5c1b-4807-4035-9eb4-eba6485f739e",
-      "serviceName": "Sunday Morning",
-      "date": "2026-07-26",
-      "time": "09:00",
-      "times": [
-        "09:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    }
-  ],
+  "rosters": [],
   "compatibleRoles": {
     "2": [],
     "Worship Leader": [
@@ -662,7 +366,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T08:37:40.152Z",
+    "lastSync": "2026-06-13T08:52:43.329Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
