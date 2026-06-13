@@ -269,7 +269,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T10:47:43.036Z",
+    "lastSync": "2026-06-13T11:02:17.151Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
@@ -278,5 +278,19 @@
     "connectedAt": "",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
+  },
+  "roleColors": {
+    "Worship Leader": "#ff0000",
+    "Piano": "#dd94ff",
+    "Rhythm Guitar": "#dd94ff",
+    "Electric Guitar": "#dd94ff",
+    "Bass": "#dd94ff",
+    "Drums": "#00ccff",
+    "Vocal": "#adcdff",
+    "Sound": "#ffab66",
+    "Visuals PM": "#d1ff7a",
+    "Deacon on Duty AM": "#ffffff",
+    "Communion": "#c2f3ff",
+    "Deacon on Duty PM": "#ffffff"
   }
 }
