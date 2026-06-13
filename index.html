@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.53</title>
+<title>The Worship Calendar v2.54</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.53 max-services display + GitHub SHA save fixes */
+/* v2.54 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -119,7 +119,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.53",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-53-local";
+const VERSION="2.54",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-54-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -164,7 +164,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.53 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.54 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -184,7 +184,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.53 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.54 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -271,7 +271,7 @@ function twcRemoveDemoData(){
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
 
-/* v2.53 safe welcome screen before login */
+/* v2.54 safe welcome screen before login */
 let twcLoginScreenReady=false;
 
 function twcWelcomeScreen(){
@@ -2053,7 +2053,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.53</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.54</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2125,10 +2125,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.53-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.54-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.53 roster generation repair: final overrides */
+/* v2.54 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2183,7 +2183,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.53 real login-details email workflow overrides */
+/* v2.54 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2372,7 +2372,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.53 Members tab login-details email button */
+/* v2.54 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2402,7 +2402,7 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.53 Edit Member workflow */
+/* v2.54 Edit Member workflow */
 function twcIsProtectedAdminForEdit(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2504,7 +2504,7 @@ function twcSaveEditedMember(memberId){
 }
 
 
-/* v2.53 Personalized roster + Gmail restore fixes */
+/* v2.54 Personalized roster + Gmail restore fixes */
 function twcProtectedSystemAdminId(){
   return "admin";
 }
@@ -2555,7 +2555,7 @@ async function twcRestoreGmailConnection(){
 }
 
 
-/* v2.53 compatible-role roster warning helpers */
+/* v2.54 compatible-role roster warning helpers */
 function twcNormalizeRoleNameForCompat(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2604,7 +2604,7 @@ function twcMemberHasIncompatibleAssignments(assignments,memberId){
 }
 
 
-/* v2.53 max services per month: blank/0 = unlimited */
+/* v2.54 max services per month: blank/0 = unlimited */
 function twcParseMaxServicesPerMonth(value){
   if(value===undefined||value===null)return 0;
   let s=String(value).trim();
@@ -2624,7 +2624,7 @@ function twcMemberMaxLimit(member){
 
 
 
-/* v2.53 main app patch */
+/* v2.54 main app patch */
 function twcV232MaxDisplay(value){
   var n = 0;
   if(value !== undefined && value !== null && String(value).trim() !== ""){
@@ -2666,7 +2666,7 @@ function twcV232DeleteTemplateButton(template){
 }
 
 
-/* v2.53 max service limit checkbox + Gmail 401 retry */
+/* v2.54 max service limit checkbox + Gmail 401 retry */
 function twcV233HasServiceLimit(member){
   return !!(member && (member.limitServicesPerMonth===true || (Number(member.maxPerMonth||0)>0 && member.limitServicesPerMonth!==false)));
 }
@@ -2750,7 +2750,7 @@ async function twcV233SendWith401Retry(sendFn){
 }
 
 
-/* v2.53 member-card monthly limit controls */
+/* v2.54 member-card monthly limit controls */
 function twcV234MemberLimitControls(member){return "";}
 
 function twcV234UpdateMemberLimit(memberId){
@@ -2777,7 +2777,7 @@ function twcV234UpdateMemberLimit(memberId){
 }
 
 
-/* v2.53 max-services numeric + compatible-role warning helpers */
+/* v2.54 max-services numeric + compatible-role warning helpers */
 function twcV235ParseMax(value){
   var n=parseInt(value||0,10);
   return (!Number.isFinite(n)||isNaN(n)||n<0)?0:n;
@@ -2820,7 +2820,7 @@ function twcV235MemberHasIncompatibleMultipleRoles(assignments,memberId){
 }
 
 
-/* v2.53 roster warning compatibility patch */
+/* v2.54 roster warning compatibility patch */
 function twcV236NormRole(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2894,7 +2894,7 @@ function twcV236RoleCompatibleFromRoleRecords(roleA,roleB){
 }
 
 
-/* v2.53 exact warning compatibility helpers */
+/* v2.54 exact warning compatibility helpers */
 function twcV237NormRoleName(x){return String(x||"").trim().toLowerCase();}
 function twcV237RoleByAny(value){
   value=String(value||"");
@@ -2971,7 +2971,7 @@ function twcV237MemberDuplicateCount(assignments,memberId){
 }
 
 
-/* v2.53 robust role compatibility checker for roster warnings */
+/* v2.54 robust role compatibility checker for roster warnings */
 function twcV238RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV238RoleRecord(value){
   value=String(value||"");
@@ -3061,7 +3061,7 @@ function twcV238MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.53 exact compatibility warning fix */
+/* v2.54 exact compatibility warning fix */
 function twcV239RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV239RoleRecord(value){
   value=String(value||"");
@@ -3169,7 +3169,7 @@ function twcV239MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.53 roster improvements */
+/* v2.54 roster improvements */
 function twcV240IsProtectedAdminMember(member){
   if(!member)return false;
   return String(member.name||"").trim().toLowerCase()==="admin" ||
@@ -3241,7 +3241,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.53 clean fair monthly multi-person role balancing */
+/* v2.54 clean fair monthly multi-person role balancing */
 
 
 
@@ -3262,7 +3262,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.53 remaining-capacity fair multi-person role balancing */
+/* v2.54 remaining-capacity fair multi-person role balancing */
 
 
 
@@ -3283,7 +3283,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.53 active generator and remaining-capacity balancing fix */
+/* v2.54 active generator and remaining-capacity balancing fix */
 function twcV244ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3384,7 +3384,7 @@ function twcV244CandidateSort(role,service,plannedAssignments){
 
 
 
-/* v2.53 month-aware batch roster planner */
+/* v2.54 month-aware batch roster planner */
 function twcV245ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3589,7 +3589,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.53 clean template role order controls */
+/* v2.54 clean template role order controls */
 function twcV253TemplateById(templateId){
   return (data.templates||[]).find(function(t){return t.id===templateId;})||null;
 }
@@ -3675,9 +3675,192 @@ function twcV253RoleOrderButtons(templateId,roleName){
   var i=order.indexOf(roleName);
   return "<button type='button' class='small' title='Move up' onclick=\"twcV253MoveTemplateRole('"+esc(t.id)+"','"+esc(roleName)+"',-1)\">↑</button><button type='button' class='small' title='Move down' onclick=\"twcV253MoveTemplateRole('"+esc(t.id)+"','"+esc(roleName)+"',1)\">↓</button>";
 }
+
+
+/* v2.54 same-date rostering block rules */
+function twcV254ServiceSortKey(service){
+  return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
+}
+function twcV254RolesCompatible(a,b){
+  if(a===b)return true;
+  if(typeof v152RolesCompatible==="function")return v152RolesCompatible(a,b);
+  return false;
+}
+function twcV254ExistingPublishedAssignmentsOnDate(date){
+  var rows=[];
+  (data.rosters||[]).forEach(function(r){
+    if(!r||!r.published||r.date!==date)return;
+    (r.assignments||[]).forEach(function(a){
+      if(a.memberId)rows.push({memberId:a.memberId,roleName:a.roleName,serviceId:r.serviceId,published:true});
+    });
+  });
+  return rows;
+}
+function twcV254PlannedAssignmentsOnDate(date,plannedRosters){
+  var rows=[];
+  (plannedRosters||[]).forEach(function(r){
+    if(!r||r.date!==date)return;
+    (r.assignments||[]).forEach(function(a){
+      if(a.memberId)rows.push({memberId:a.memberId,roleName:a.roleName,serviceId:r.serviceId,planned:true});
+    });
+  });
+  return rows;
+}
+function twcV254MemberDateRoles(memberId,date,plannedRosters){
+  return twcV254ExistingPublishedAssignmentsOnDate(date)
+    .concat(twcV254PlannedAssignmentsOnDate(date,plannedRosters))
+    .filter(function(x){return x.memberId===memberId;})
+    .map(function(x){return x.roleName;});
+}
+function twcV254CanMemberServeRoleOnDate(memberId,roleName,date,plannedRosters,currentRosterAssignments){
+  var roles=twcV254MemberDateRoles(memberId,date,plannedRosters);
+  (currentRosterAssignments||[]).forEach(function(a){
+    if(a.memberId===memberId)roles.push(a.roleName);
+  });
+  if(roles.indexOf(roleName)>=0)return false;
+  return roles.length===0 || roles.every(function(existingRole){
+    return twcV254RolesCompatible(existingRole,roleName);
+  });
+}
+function twcV254MemberCanTake(member,role,service,rosterAssignments,roleUsed,plannedRosters){
+  if(!member||twcV240IsProtectedAdminMember(member))return false;
+  if(typeof v152IsAvailable==="function"&&!v152IsAvailable(member.id,service.id))return false;
+  if(!twcV240MemberCanDoRoleBasic(member,role))return false;
+  if((roleUsed[member.id]||0)>=twcV245MemberLimit(member))return false;
+  if(!twcV254CanMemberServeRoleOnDate(member.id,role.name,service.date,plannedRosters,rosterAssignments))return false;
+  return true;
+}
+function twcV254BuildRostersForServices(serviceList){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  var services=(serviceList||[]).slice().sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));});
+  var rostersByService={};
+  services.forEach(function(service){
+    rostersByService[service.id]={id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments:[]};
+  });
+
+  var groupMap={};
+  services.forEach(function(service){
+    twcV245RolesForService(service).forEach(function(role){
+      var month=String(service.date||"").slice(0,7);
+      var key=month+"||"+role.name;
+      if(!groupMap[key])groupMap[key]={month:month,role:role,items:[]};
+      groupMap[key].items.push({service:service,minmax:twcV245RoleMinMax(service,role)});
+    });
+  });
+
+  Object.keys(groupMap).sort().forEach(function(key){
+    var group=groupMap[key];
+    group.items.sort(function(a,b){return twcV254ServiceSortKey(a.service).localeCompare(twcV254ServiceSortKey(b.service));});
+    var role=group.role;
+    var month=group.month;
+    var skipServiceIds={};
+    services.forEach(function(s){skipServiceIds[s.id]=true;});
+
+    var members=twcV240AssignableMembers().filter(function(m){return twcV240MemberCanDoRoleBasic(m,role);});
+    var roleUsed={};
+    members.forEach(function(m){roleUsed[m.id]=twcV245BaseUsed(m.id,role.name,month,skipServiceIds);});
+
+    var totalRemainingCapacity=members.reduce(function(sum,m){
+      return sum+Math.max(0,twcV245MemberLimit(m)-(roleUsed[m.id]||0));
+    },0);
+
+    var minList=group.items.map(function(x){return x.minmax.min;});
+    var maxList=group.items.map(function(x){return x.minmax.max;});
+    var targets=twcV245DistributedTargets(totalRemainingCapacity,group.items.length,minList,maxList);
+
+    group.items.forEach(function(item,index){
+      var service=item.service;
+      var roster=rostersByService[service.id];
+      var target=targets[index]||0;
+      var plannedRosters=services.map(function(s){return rostersByService[s.id];}).filter(Boolean);
+      for(var i=0;i<target;i++){
+        var person=members
+          .filter(function(m){return twcV254MemberCanTake(m,role,service,roster.assignments,roleUsed,plannedRosters);})
+          .sort(twcV245CandidateSort(roleUsed))[0];
+        if(person){
+          roster.assignments.push({roleName:role.name,memberId:person.id,memberName:person.name});
+          roleUsed[person.id]=(roleUsed[person.id]||0)+1;
+        }
+      }
+      var actual=roster.assignments.filter(function(a){return a.roleName===role.name;}).length;
+      for(var j=actual;j<item.minmax.min;j++){
+        roster.assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+      }
+    });
+  });
+
+  return services.map(function(s){return rostersByService[s.id];});
+}
+function twcV254BuildSameDateBlockForSingleService(serviceId){
+  var service=(data.services||[]).find(function(s){return s.id===serviceId;});
+  if(!service)throw new Error("Service not found");
+  var services=(data.services||[]).filter(function(s){
+    return s.date===service.date && !(data.rosters||[]).some(function(r){return r.serviceId===s.id;});
+  });
+  if(!services.some(function(s){return s.id===service.id;}))services=[service];
+  var rosters=twcV254BuildRostersForServices(services);
+  return rosters.find(function(r){return r.serviceId===serviceId;})||rosters[0];
+}
+/* Override active builders to enforce same-date block rules */
+function buildRosterForService(serviceId){
+  return twcV254BuildSameDateBlockForSingleService(serviceId);
+}
+function v152BuildRosterForService(serviceId){
+  return twcV254BuildSameDateBlockForSingleService(serviceId);
+}
+function makeRoster(){
+  var serviceId=(document.getElementById("rosterSvc")||{}).value;
+  if(!serviceId){alert("Please select a service.");return}
+  var service=(data.services||[]).find(function(s){return s.id===serviceId;});
+  if(!service){alert("Service not found.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(function(r){return r.serviceId===serviceId;})){alert("A roster already exists for this service.");return}
+  try{
+    var blockServices=(data.services||[]).filter(function(s){
+      return s.date===service.date && !data.rosters.some(function(r){return r.serviceId===s.id;});
+    }).sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));});
+    var rosters=twcV254BuildRostersForServices(blockServices);
+    rosters.slice().reverse().forEach(function(r){data.rosters.unshift(r);});
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  var start=(document.getElementById("rosterStart")||{}).value;
+  var end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  var skipped=0,failed=0;
+  var services=(data.services||[])
+    .filter(function(s){return s.date>=start&&s.date<=end;})
+    .sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));})
+    .filter(function(service){
+      if(data.rosters.some(function(r){return r.serviceId===service.id;})){skipped++;return false}
+      return true;
+    });
+  var createdRosters=[];
+  try{
+    createdRosters=twcV254BuildRostersForServices(services);
+    createdRosters.slice().reverse().forEach(function(r){data.rosters.unshift(r);});
+  }catch(err){
+    console.error(err);
+    failed=services.length;
+    createdRosters=[];
+  }
+  save();
+  render();
+  setTimeout(function(){
+    var msg="Created "+createdRosters.length+" roster(s). Skipped "+skipped+". Failed "+failed+".";
+    var el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
+}
 </script></body></html>
 
-/* v2.53 online save override */
+/* v2.54 online save override */
 
 submitChangesOnline=async function(){
   return await twcGithubSaveWithFreshSha();
