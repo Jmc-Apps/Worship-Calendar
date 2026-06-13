@@ -85,11 +85,9 @@
         "Drums",
         "Vocal",
         "Sound",
-        "Visuals",
-        "Deacon on Duty",
-        "Communion",
         "Visuals AM",
         "Visuals PM",
+        "Communion",
         "Deacon on Duty AM",
         "Deacon on Duty PM"
       ],
@@ -139,11 +137,15 @@
         "Bass",
         "Drums",
         "Sound",
-        "Communion",
         "Visuals AM",
         "Visuals PM",
         "Deacon on Duty AM",
-        "Deacon on Duty PM"
+        "Deacon on Duty PM",
+        "Communion"
+      ],
+      "ministryIds": [
+        "default",
+        "4d3677e7-ab19-4929-8e4d-150b57363cda"
       ]
     }
   ],
@@ -267,7 +269,7 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T10:44:38.283Z",
+    "lastSync": "2026-06-13T10:46:08.338Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
