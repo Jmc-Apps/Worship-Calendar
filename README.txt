@@ -1,9 +1,11 @@
-The Worship Calendar v2.65
+The Worship Calendar v2.66
 
 Changes:
-- Changed the first welcome/login screen background to dark grey.
-- Made the version number text inside version badges white.
+- Added Family / Linked Member Groups in the Members tab.
+- Admins can create linked groups such as families and assign members to those groups.
+- Added Family / Linked Member Rostering option in Settings: Off, Prefer together, or Keep together where possible.
+- Roster generation now prioritises linked family/group members onto the same service/date block when possible.
+- All existing roster rules are still respected: availability, roles, ministries, monthly limits, compatibility, same-date blocking and published rosters.
 - Removed icon.svg from the package and cache references.
-- Preserved v2.64 light-grey/dark-grey button styling and previous working features.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.

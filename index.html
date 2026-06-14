@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.65</title>
+<title>The Worship Calendar v2.66</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 
-/* v2.65 approved cosmetic refresh */
+/* v2.66 approved cosmetic refresh */
 :root{
   --twc-forest-950:#081c15;
   --twc-forest-900:#123524;
@@ -147,7 +147,7 @@ main > br{
 }
 
 
-/* v2.65 approved light-grey cosmetic refresh and top-gap fix */
+/* v2.66 approved light-grey cosmetic refresh and top-gap fix */
 :root{
   --twc-grey-950:#1f2937;
   --twc-grey-900:#2f343a;
@@ -317,7 +317,7 @@ button[onclick*="submitChangesOnline"]{
 }
 
 
-/* v2.65 approved button styling: normal light grey, selected dark grey */
+/* v2.66 approved button styling: normal light grey, selected dark grey */
 button,
 button.primary,
 .primary,
@@ -373,7 +373,7 @@ button:disabled,
 }
 
 
-/* v2.65 login background and version badge readability */
+/* v2.66 login background and version badge readability */
 .login,
 body:has(.login){
   background:#2f343a!important;
@@ -396,7 +396,7 @@ body:has(.login){
 }
 
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.65 max-services display + GitHub SHA save fixes */
+/* v2.66 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -475,7 +475,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.65",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-65-local";
+const VERSION="2.66",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-66-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -520,7 +520,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.65 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.66 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -540,7 +540,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.65 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.66 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -627,7 +627,7 @@ function twcRemoveDemoData(){
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
 
-/* v2.65 safe welcome screen before login */
+/* v2.66 safe welcome screen before login */
 let twcLoginScreenReady=false;
 
 function twcWelcomeScreen(){
@@ -1181,13 +1181,14 @@ function members(){
       <p>${esc(member.email)}</p>
       ${user.role==="admin"?`<div class="inline"><button class="primary" type="button" onclick="resetMemberPassword('${member.id}')">Reset Password</button>${twcEditMemberButton(member)}${twcSendLoginDetailsButton(member)}${adminRoleControl(member)}</div>`:""}
       ${ministryHtml}
+      ${user.role==="admin"?`<label>Family / Linked Group<select onchange="twcV266SetMemberFamilyGroup('${member.id}',this.value)"><option value="">No linked group</option>${twcV266FamilyGroups().map(g=>`<option value="${g.id}" ${twcV266MemberFamilyGroupId(member.id)===g.id?"selected":""}>${esc(g.name)}</option>`).join("")}</select></label>`:""}
       <label>Max services per month<input type="number" min="0" value="${member.maxPerMonth??3}" onchange="setMaxPerMonth('${member.id}',this.value)"></label>
       ${user.role==="admin"?`<label>Admin notes<textarea onchange="setNotes('${member.id}',this.value)">${esc(member.notes||"")}</textarea></label>`:""}
       <h4>Roles</h4>
       ${roleHtml||`<p class="hint">No roles available for this member's ministries.</p>`}
     </div>`;
   }).join("");
-  return `<h1>${user.role==="admin"?"Members":"My Profile"}</h1>${window.twcEditingMemberId?twcEditMemberFormHtml((data.members||[]).find(m=>m.id===window.twcEditingMemberId)):""}${user.role==="admin"?`<div class="panel"><button class="primary" type="button" onclick="showAddMemberForm()">Add Member</button></div>${window.twcShowAddMemberForm?addMemberFormHtml():""}`:""}<p class="hint">Members can belong to multiple ministries. Roles are grouped by ministry.</p>${cards}`;
+  return `<h1>${user.role==="admin"?"Members":"My Profile"}</h1>${window.twcEditingMemberId?twcEditMemberFormHtml((data.members||[]).find(m=>m.id===window.twcEditingMemberId)):""}${user.role==="admin"?`<div class="panel"><button class="primary" type="button" onclick="showAddMemberForm()">Add Member</button></div>${window.twcShowAddMemberForm?addMemberFormHtml():""}${twcV266FamilyGroupAdminPanel()}`:""}<p class="hint">Members can belong to multiple ministries. Roles are grouped by ministry.</p>${cards}`;
 }
 
 
@@ -2113,6 +2114,13 @@ function settings(){
     <div class="inline"><button type="button" onclick="twcV256ExportDatabaseBackup()">Export Full Database Backup</button><button type="button" onclick="twcV256ImportDatabaseBackupButton()">Restore From Full Database Backup</button></div>
     <input id="twcV256DbRestoreFile" type="file" accept="application/json,.json" style="display:none" onchange="twcV256ImportDatabaseBackupFile(this.files&&this.files[0])">
     <p class="danger">Restore replaces the current local database. Export a backup first if you need to keep the current data.</p>
+  </div><div class="panel"><h3>Family / Linked Member Rostering</h3>
+    <p class="hint">Choose how the roster generator treats members who are linked as family or a shared group.</p>
+    <label>Family rostering rule<select onchange="twcV266SetFamilyRule(this.value)">
+      <option value="off" ${twcV266FamilyRule()==="off"?"selected":""}>Off - ignore linked groups</option>
+      <option value="prefer" ${twcV266FamilyRule()==="prefer"?"selected":""}>Prefer together - try to roster linked members together</option>
+      <option value="keep" ${twcV266FamilyRule()==="keep"?"selected":""}>Keep together where possible - stronger preference</option>
+    </select></label>
   </div><div class="panel"><h3>Church Details</h3><label>Church Name<input value="${esc(appSettings().churchName||'')}" onchange="setChurchName(this.value)" placeholder="Church Name"></label><label>App URL<input value="${esc(appSettings().appUrl||'')}" onchange="data.settings=data.settings||{};data.settings.appUrl=this.value;save()" placeholder="https://your-app-url"></label><p class="hint">Used in welcome emails, password reset emails and setup instructions.</p></div><div class="panel"><h3>Admin Security</h3><button class="primary" type="button" onclick="changeAdminPassword()">Change Admin Password</button></div>
   <div class="panel"><h3>GitHub Online Storage</h3>
     <p class="danger">Security warning: You are choosing to store the GitHub token in this app configuration. Use a fine-grained token restricted to this repository only.</p>
@@ -2417,7 +2425,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.65</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.66</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2488,10 +2496,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.65-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.66-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.65 roster generation repair: final overrides */
+/* v2.66 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2546,7 +2554,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.65 real login-details email workflow overrides */
+/* v2.66 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2735,7 +2743,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.65 Members tab login-details email button */
+/* v2.66 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2765,7 +2773,7 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.65 Edit Member workflow */
+/* v2.66 Edit Member workflow */
 function twcIsProtectedAdminForEdit(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2867,7 +2875,7 @@ function twcSaveEditedMember(memberId){
 }
 
 
-/* v2.65 Personalized roster + Gmail restore fixes */
+/* v2.66 Personalized roster + Gmail restore fixes */
 function twcProtectedSystemAdminId(){
   return "admin";
 }
@@ -2918,7 +2926,7 @@ async function twcRestoreGmailConnection(){
 }
 
 
-/* v2.65 compatible-role roster warning helpers */
+/* v2.66 compatible-role roster warning helpers */
 function twcNormalizeRoleNameForCompat(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2967,7 +2975,7 @@ function twcMemberHasIncompatibleAssignments(assignments,memberId){
 }
 
 
-/* v2.65 max services per month: blank/0 = unlimited */
+/* v2.66 max services per month: blank/0 = unlimited */
 function twcParseMaxServicesPerMonth(value){
   if(value===undefined||value===null)return 0;
   let s=String(value).trim();
@@ -2987,7 +2995,7 @@ function twcMemberMaxLimit(member){
 
 
 
-/* v2.65 main app patch */
+/* v2.66 main app patch */
 function twcV232MaxDisplay(value){
   var n = 0;
   if(value !== undefined && value !== null && String(value).trim() !== ""){
@@ -3029,7 +3037,7 @@ function twcV232DeleteTemplateButton(template){
 }
 
 
-/* v2.65 max service limit checkbox + Gmail 401 retry */
+/* v2.66 max service limit checkbox + Gmail 401 retry */
 function twcV233HasServiceLimit(member){
   return !!(member && (member.limitServicesPerMonth===true || (Number(member.maxPerMonth||0)>0 && member.limitServicesPerMonth!==false)));
 }
@@ -3113,7 +3121,7 @@ async function twcV233SendWith401Retry(sendFn){
 }
 
 
-/* v2.65 member-card monthly limit controls */
+/* v2.66 member-card monthly limit controls */
 function twcV234MemberLimitControls(member){return "";}
 
 function twcV234UpdateMemberLimit(memberId){
@@ -3140,7 +3148,7 @@ function twcV234UpdateMemberLimit(memberId){
 }
 
 
-/* v2.65 max-services numeric + compatible-role warning helpers */
+/* v2.66 max-services numeric + compatible-role warning helpers */
 function twcV235ParseMax(value){
   var n=parseInt(value||0,10);
   return (!Number.isFinite(n)||isNaN(n)||n<0)?0:n;
@@ -3183,7 +3191,7 @@ function twcV235MemberHasIncompatibleMultipleRoles(assignments,memberId){
 }
 
 
-/* v2.65 roster warning compatibility patch */
+/* v2.66 roster warning compatibility patch */
 function twcV236NormRole(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -3257,7 +3265,7 @@ function twcV236RoleCompatibleFromRoleRecords(roleA,roleB){
 }
 
 
-/* v2.65 exact warning compatibility helpers */
+/* v2.66 exact warning compatibility helpers */
 function twcV237NormRoleName(x){return String(x||"").trim().toLowerCase();}
 function twcV237RoleByAny(value){
   value=String(value||"");
@@ -3334,7 +3342,7 @@ function twcV237MemberDuplicateCount(assignments,memberId){
 }
 
 
-/* v2.65 robust role compatibility checker for roster warnings */
+/* v2.66 robust role compatibility checker for roster warnings */
 function twcV238RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV238RoleRecord(value){
   value=String(value||"");
@@ -3424,7 +3432,7 @@ function twcV238MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.65 exact compatibility warning fix */
+/* v2.66 exact compatibility warning fix */
 function twcV239RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV239RoleRecord(value){
   value=String(value||"");
@@ -3532,7 +3540,7 @@ function twcV239MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.65 roster improvements */
+/* v2.66 roster improvements */
 function twcV240IsProtectedAdminMember(member){
   if(!member)return false;
   return String(member.name||"").trim().toLowerCase()==="admin" ||
@@ -3604,7 +3612,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.65 clean fair monthly multi-person role balancing */
+/* v2.66 clean fair monthly multi-person role balancing */
 
 
 
@@ -3625,7 +3633,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.65 remaining-capacity fair multi-person role balancing */
+/* v2.66 remaining-capacity fair multi-person role balancing */
 
 
 
@@ -3646,7 +3654,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.65 active generator and remaining-capacity balancing fix */
+/* v2.66 active generator and remaining-capacity balancing fix */
 function twcV244ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3747,7 +3755,7 @@ function twcV244CandidateSort(role,service,plannedAssignments){
 
 
 
-/* v2.65 month-aware batch roster planner */
+/* v2.66 month-aware batch roster planner */
 function twcV245ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3952,7 +3960,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.65 clean template role order controls */
+/* v2.66 clean template role order controls */
 function twcV253TemplateById(templateId){
   return (data.templates||[]).find(function(t){return t.id===templateId;})||null;
 }
@@ -4040,7 +4048,7 @@ function twcV253RoleOrderButtons(templateId,roleName){
 }
 
 
-/* v2.65 same-date rostering block rules */
+/* v2.66 same-date rostering block rules */
 function twcV254ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -4223,7 +4231,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.65 member availability-page max services control */
+/* v2.66 member availability-page max services control */
 function twcV255SetMyMaxPerMonth(value){
   if(!user || !user.memberId){
     alert("Please log in as a team member first.");
@@ -4249,7 +4257,7 @@ function twcV255SetMyMaxPerMonth(value){
 }
 
 
-/* v2.65 full database backup and restore */
+/* v2.66 full database backup and restore */
 function twcV256DatabaseBackupObject(){
   return {
     app:"The Worship Calendar",
@@ -4324,7 +4332,7 @@ function twcV256ImportDatabaseBackupFile(file){
 }
 
 
-/* v2.65 template ministry selection and service name auto-fill */
+/* v2.66 template ministry selection and service name auto-fill */
 function twcV257TemplateUsesMinistry(template,ministryId){
   if(!template)return false;
   if(!Array.isArray(template.ministryIds)){
@@ -4356,7 +4364,7 @@ function twcV257ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.65 override template role inclusion to respect selected ministries */
+/* v2.66 override template role inclusion to respect selected ministries */
 function twcV245RolesForService(service){
   var template=(data.templates||[]).find(function(t){return t.name===service.template;});
   var roles=(data.roles||[]).filter(function(role){
@@ -4371,7 +4379,7 @@ function twcV245RolesForService(service){
 }
 
 
-/* v2.65 default service name from pre-selected template */
+/* v2.66 default service name from pre-selected template */
 function twcV258DefaultServiceName(){
   var first=(data.templates||[])[0];
   return first&&first.name?first.name:"";
@@ -4382,7 +4390,7 @@ function twcV258ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.65 role PDF colours and PDF template sort order */
+/* v2.66 role PDF colours and PDF template sort order */
 function twcV259RoleColor(roleName){
   data.roleColors=data.roleColors||{};
   var val=data.roleColors[roleName]||"#d9eef3";
@@ -4430,7 +4438,7 @@ function twcV259PdfRoleOrder(rosters,ministryId){
 }
 
 
-/* v2.65 services form template pre-load */
+/* v2.66 services form template pre-load */
 function twcV262TemplateServiceTimes(template){
   if(!template)return "";
   var values=[];
@@ -4470,13 +4478,13 @@ function twcV262ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.65 compatibility delegates */
+/* v2.66 compatibility delegates */
 function twcV257ServiceTemplateChanged(templateName){return twcV262ServiceTemplateChanged(templateName);}
 function twcV258ServiceTemplateChanged(templateName){return twcV262ServiceTemplateChanged(templateName);}
 function twcV258DefaultServiceName(){return twcV262DefaultServiceName();}
 
 
-/* v2.65 dashboard team-member count excludes protected admin */
+/* v2.66 dashboard team-member count excludes protected admin */
 function twcV263DashboardTeamMemberCount(){
   return (data.members||[]).filter(function(member){
     if(typeof twcV240IsProtectedAdminMember==="function")return !twcV240IsProtectedAdminMember(member);
@@ -4484,5 +4492,237 @@ function twcV263DashboardTeamMemberCount(){
            String(member&&member.email||"").trim().toLowerCase()!=="admin" &&
            String(member&&member.id||"").trim().toLowerCase()!=="admin";
   }).length;
+}
+
+
+/* v2.66 Family / Linked Member Groups */
+function twcV266FamilyGroups(){
+  data.familyGroups=data.familyGroups||[];
+  return data.familyGroups;
+}
+function twcV266FamilyRule(){
+  data.settings=data.settings||{};
+  return data.settings.familyRosteringRule||"prefer";
+}
+function twcV266SetFamilyRule(value){
+  data.settings=data.settings||{};
+  data.settings.familyRosteringRule=(["off","prefer","keep"].indexOf(value)>=0)?value:"prefer";
+  save();
+  render();
+}
+function twcV266FamilyGroupById(id){
+  return twcV266FamilyGroups().find(function(g){return g.id===id;})||null;
+}
+function twcV266MemberFamilyGroupId(memberId){
+  var group=twcV266FamilyGroups().find(function(g){return (g.memberIds||[]).indexOf(memberId)>=0;});
+  return group?group.id:"";
+}
+function twcV266FamilyGroupNameForMember(memberId){
+  var g=twcV266FamilyGroupById(twcV266MemberFamilyGroupId(memberId));
+  return g?g.name:"";
+}
+function twcV266SetMemberFamilyGroup(memberId,groupId){
+  twcV266FamilyGroups().forEach(function(g){
+    g.memberIds=(g.memberIds||[]).filter(function(id){return id!==memberId;});
+  });
+  if(groupId){
+    var g=twcV266FamilyGroupById(groupId);
+    if(g){
+      g.memberIds=g.memberIds||[];
+      if(g.memberIds.indexOf(memberId)<0)g.memberIds.push(memberId);
+    }
+  }
+  save();
+  render();
+}
+function twcV266AddFamilyGroup(){
+  var input=document.getElementById("twcV266FamilyGroupName");
+  var name=(input&&input.value||"").trim();
+  if(!name){alert("Please enter a linked group name.");return;}
+  data.familyGroups=data.familyGroups||[];
+  data.familyGroups.push({id:uid(),name:name,memberIds:[]});
+  save();
+  render();
+}
+function twcV266DeleteFamilyGroup(groupId){
+  var g=twcV266FamilyGroupById(groupId);
+  if(!g)return;
+  if(!confirm("Delete linked group '"+g.name+"'? Members will not be deleted."))return;
+  data.familyGroups=twcV266FamilyGroups().filter(function(x){return x.id!==groupId;});
+  save();
+  render();
+}
+function twcV266FamilyGroupAdminPanel(){
+  var groups=twcV266FamilyGroups();
+  return `<div class="panel"><h3>Family / Linked Member Groups</h3>
+    <p class="hint">Use linked groups for families or members who should preferably be rostered together on the same services.</p>
+    <div class="inline"><input id="twcV266FamilyGroupName" placeholder="Group name, e.g. Smith Family" style="max-width:280px"><button type="button" onclick="twcV266AddFamilyGroup()">Add Linked Group</button></div>
+    ${groups.length?`<table><tr><th>Group</th><th>Members</th><th>Action</th></tr>${groups.map(g=>`<tr><td>${esc(g.name)}</td><td>${(g.memberIds||[]).map(id=>esc(((data.members||[]).find(m=>m.id===id)||{}).name||"Unknown")).join(", ")||"<span class='hint'>No members linked yet</span>"}</td><td><button type="button" onclick="twcV266DeleteFamilyGroup('${g.id}')">Delete</button></td></tr>`).join("")}</table>`:`<p class="hint">No linked groups yet.</p>`}
+  </div>`;
+}
+function twcV266FamilyGroupMateIds(memberId){
+  var gid=twcV266MemberFamilyGroupId(memberId);
+  if(!gid)return [];
+  var g=twcV266FamilyGroupById(gid);
+  return g?(g.memberIds||[]).filter(function(id){return id!==memberId;}):[];
+}
+function twcV266PlannedMemberIdsForDate(date,plannedRosters,currentRosterAssignments){
+  var ids=[];
+  (plannedRosters||[]).forEach(function(r){
+    if(!r||r.date!==date)return;
+    (r.assignments||[]).forEach(function(a){if(a.memberId&&ids.indexOf(a.memberId)<0)ids.push(a.memberId);});
+  });
+  (currentRosterAssignments||[]).forEach(function(a){if(a.memberId&&ids.indexOf(a.memberId)<0)ids.push(a.memberId);});
+  (data.rosters||[]).forEach(function(r){
+    if(!r||!r.published||r.date!==date)return;
+    (r.assignments||[]).forEach(function(a){if(a.memberId&&ids.indexOf(a.memberId)<0)ids.push(a.memberId);});
+  });
+  return ids;
+}
+function twcV266FamilyTogetherScore(member,service,plannedRosters,currentRosterAssignments){
+  var rule=twcV266FamilyRule();
+  if(rule==="off"||!member)return 0;
+  var mates=twcV266FamilyGroupMateIds(member.id);
+  if(!mates.length)return 0;
+  var planned=twcV266PlannedMemberIdsForDate(service.date,plannedRosters,currentRosterAssignments);
+  var mateAlready=mates.some(function(id){return planned.indexOf(id)>=0;});
+  if(!mateAlready)return 0;
+  return rule==="keep"?-2000:-500;
+}
+function twcV266CandidateSort(roleUsed,service,plannedRosters,currentRosterAssignments){
+  var base=twcV245CandidateSort(roleUsed);
+  return function(a,b){
+    var fa=twcV266FamilyTogetherScore(a,service,plannedRosters,currentRosterAssignments);
+    var fb=twcV266FamilyTogetherScore(b,service,plannedRosters,currentRosterAssignments);
+    return fa-fb || base(a,b);
+  };
+}
+function twcV266BuildRostersForServices(serviceList){
+  if(typeof ensureMinistries==="function")ensureMinistries();
+  var services=(serviceList||[]).slice().sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));});
+  var rostersByService={};
+  services.forEach(function(service){
+    rostersByService[service.id]={id:uid(),serviceId:service.id,serviceName:service.name,date:service.date,time:service.time,times:service.times||[service.time],published:false,assignments:[]};
+  });
+
+  var groupMap={};
+  services.forEach(function(service){
+    twcV245RolesForService(service).forEach(function(role){
+      var month=String(service.date||"").slice(0,7);
+      var key=month+"||"+role.name;
+      if(!groupMap[key])groupMap[key]={month:month,role:role,items:[]};
+      groupMap[key].items.push({service:service,minmax:twcV245RoleMinMax(service,role)});
+    });
+  });
+
+  Object.keys(groupMap).sort().forEach(function(key){
+    var group=groupMap[key];
+    group.items.sort(function(a,b){return twcV254ServiceSortKey(a.service).localeCompare(twcV254ServiceSortKey(b.service));});
+    var role=group.role;
+    var month=group.month;
+    var skipServiceIds={};
+    services.forEach(function(s){skipServiceIds[s.id]=true;});
+
+    var members=twcV240AssignableMembers().filter(function(m){return twcV240MemberCanDoRoleBasic(m,role);});
+    var roleUsed={};
+    members.forEach(function(m){roleUsed[m.id]=twcV245BaseUsed(m.id,role.name,month,skipServiceIds);});
+
+    var totalRemainingCapacity=members.reduce(function(sum,m){
+      return sum+Math.max(0,twcV245MemberLimit(m)-(roleUsed[m.id]||0));
+    },0);
+
+    var minList=group.items.map(function(x){return x.minmax.min;});
+    var maxList=group.items.map(function(x){return x.minmax.max;});
+    var targets=twcV245DistributedTargets(totalRemainingCapacity,group.items.length,minList,maxList);
+
+    group.items.forEach(function(item,index){
+      var service=item.service;
+      var roster=rostersByService[service.id];
+      var target=targets[index]||0;
+      var plannedRosters=services.map(function(s){return rostersByService[s.id];}).filter(Boolean);
+      for(var i=0;i<target;i++){
+        var person=members
+          .filter(function(m){return twcV254MemberCanTake(m,role,service,roster.assignments,roleUsed,plannedRosters);})
+          .sort(twcV266CandidateSort(roleUsed,service,plannedRosters,roster.assignments))[0];
+        if(person){
+          roster.assignments.push({roleName:role.name,memberId:person.id,memberName:person.name});
+          roleUsed[person.id]=(roleUsed[person.id]||0)+1;
+        }
+      }
+      var actual=roster.assignments.filter(function(a){return a.roleName===role.name;}).length;
+      for(var j=actual;j<item.minmax.min;j++){
+        roster.assignments.push({roleName:role.name,memberId:"",memberName:"Unfilled"});
+      }
+    });
+  });
+
+  return services.map(function(s){return rostersByService[s.id];});
+}
+function twcV266BuildSameDateBlockForSingleService(serviceId){
+  var service=(data.services||[]).find(function(s){return s.id===serviceId;});
+  if(!service)throw new Error("Service not found");
+  var services=(data.services||[]).filter(function(s){
+    return s.date===service.date && !(data.rosters||[]).some(function(r){return r.serviceId===s.id;});
+  });
+  if(!services.some(function(s){return s.id===service.id;}))services=[service];
+  var rosters=twcV266BuildRostersForServices(services);
+  return rosters.find(function(r){return r.serviceId===serviceId;})||rosters[0];
+}
+/* Override active generation to include family-linked preference */
+function twcV245BuildRostersForServices(serviceList){return twcV266BuildRostersForServices(serviceList);}
+function twcV254BuildRostersForServices(serviceList){return twcV266BuildRostersForServices(serviceList);}
+function twcV245BuildSingleRosterForService(serviceId){return twcV266BuildSameDateBlockForSingleService(serviceId);}
+function twcV254BuildSameDateBlockForSingleService(serviceId){return twcV266BuildSameDateBlockForSingleService(serviceId);}
+function buildRosterForService(serviceId){return twcV266BuildSameDateBlockForSingleService(serviceId);}
+function v152BuildRosterForService(serviceId){return twcV266BuildSameDateBlockForSingleService(serviceId);}
+function makeRoster(){
+  var serviceId=(document.getElementById("rosterSvc")||{}).value;
+  if(!serviceId){alert("Please select a service.");return}
+  var service=(data.services||[]).find(function(s){return s.id===serviceId;});
+  if(!service){alert("Service not found.");return}
+  data.rosters=data.rosters||[];
+  if(data.rosters.some(function(r){return r.serviceId===serviceId;})){alert("A roster already exists for this service.");return}
+  try{
+    var blockServices=(data.services||[]).filter(function(s){
+      return s.date===service.date && !data.rosters.some(function(r){return r.serviceId===s.id;});
+    }).sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));});
+    var rosters=twcV266BuildRostersForServices(blockServices);
+    rosters.slice().reverse().forEach(function(r){data.rosters.unshift(r);});
+    save();
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Could not generate roster: "+(err&&err.message?err.message:err));
+  }
+}
+function makeRostersForRange(){
+  var start=(document.getElementById("rosterStart")||{}).value;
+  var end=(document.getElementById("rosterEnd")||{}).value;
+  if(!start||!end){alert("Please select a start and end date.");return}
+  data.rosters=data.rosters||[];
+  var skipped=0,failed=0;
+  var services=(data.services||[])
+    .filter(function(s){return s.date>=start&&s.date<=end;})
+    .sort(function(a,b){return twcV254ServiceSortKey(a).localeCompare(twcV254ServiceSortKey(b));})
+    .filter(function(service){
+      if(data.rosters.some(function(r){return r.serviceId===service.id;})){skipped++;return false}
+      return true;
+    });
+  var createdRosters=[];
+  try{
+    createdRosters=twcV266BuildRostersForServices(services);
+    createdRosters.slice().reverse().forEach(function(r){data.rosters.unshift(r);});
+  }catch(err){
+    console.error(err);
+    failed=services.length;
+    createdRosters=[];
+  }
+  save();
+  render();
+  setTimeout(function(){
+    var msg="Created "+createdRosters.length+" roster(s). Skipped "+skipped+". Failed "+failed+".";
+    var el=document.getElementById("rangeResult");
+    if(el)el.textContent=msg; else alert(msg);
+  },0);
 }
 </script>
