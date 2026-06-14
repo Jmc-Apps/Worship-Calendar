@@ -1,16 +1,16 @@
-The Worship Calendar v2.81
+The Worship Calendar v2.82
 
-Fixes:
-- Fixed API setup persistence so the app should not ask for the API setup file every time it opens after a successful import.
-- Saves GitHub API setup into all local storage keys used by older and newer builds.
-- Hides the API setup panel once a valid GitHub setup is found locally.
-- Added a stronger GitHub 409/SHA mismatch retry for Submit Changes Online.
-- On a GitHub SHA mismatch, the app now fetches the newest file/SHA, re-merges, and retries the save up to 4 times.
-- Preserved v2.80 API import format fix and all previous features.
+Fix:
+- Added deletion-aware merge protection.
+- Deleted records are now stored in a _deleted tombstone list.
+- During GitHub merge, deleted records are filtered out instead of being restored from the remote JSON.
+- This applies to members, ministries, roles, templates, services, rosters and family/linked groups.
+- Also prunes deleted members/roles/services from family groups, availability and roster assignments.
+- Existing delete functions are wrapped where possible, and a save-time snapshot detects deletes from older delete functions.
+- Preserved v2.81 API setup persistence and GitHub 409 retry.
 - Removed icon.svg from package/cache references.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
 
 Note:
-- If two users edit the exact same item at the same time, the last merged save may still win for that item.
-- Admins should review roster/deletion changes after merging.
+- For data deleted before installing this version, delete it once more in v2.82 and submit changes online so the deletion tombstone is saved.
