@@ -149,148 +149,7 @@
       ]
     }
   ],
-  "services": [
-    {
-      "id": "b4c90f55-9033-4dbc-ab64-9ba4e96997c4",
-      "name": "Sunday Service",
-      "date": "2026-07-05",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "eb274ffa-b214-4893-953d-5c66f2b6a007",
-      "name": "Sunday Service",
-      "date": "2026-07-12",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "c7e4c96f-633b-489c-bbcf-f33b5f5c844e",
-      "name": "Sunday Service",
-      "date": "2026-07-19",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "4f7150ee-fe5e-4c84-9fb3-6ac5a2b2311f",
-      "name": "Sunday Service",
-      "date": "2026-07-26",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "fd41dd62-7f60-4419-8cda-861b59f49237",
-      "name": "Sunday Service",
-      "date": "2026-08-02",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "b2d3001c-930c-4810-874b-cc1ddd31462c",
-      "name": "Sunday Service",
-      "date": "2026-08-09",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "42f4d8da-d92c-4bb7-8215-6e4f52460108",
-      "name": "Sunday Service",
-      "date": "2026-08-16",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "6b2606ef-8364-4082-92e6-809214a37e89",
-      "name": "Sunday Service",
-      "date": "2026-08-23",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "d8816c1f-ecb4-4cac-a432-f0dba4ff8b93",
-      "name": "Sunday Service",
-      "date": "2026-08-30",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "96cccb59-09d3-48ec-b3d2-e577cbd9b303",
-      "name": "Sunday Service",
-      "date": "2026-09-06",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    }
-  ],
+  "services": [],
   "members": [
     {
       "id": "admin",
@@ -436,8 +295,8 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T11:45:23.508Z",
-    "appVersion": "2.84"
+    "lastClientMerge": "2026-06-14T11:55:51.276Z",
+    "appVersion": "2.86"
   },
   "_deleted": {
     "members": {},
@@ -446,7 +305,17 @@
     "templates": {},
     "services": {
       "0907093d-b731-4f3f-8b45-f64d782688cd": "2026-06-14T11:45:14.277Z",
-      "f8f1515d-b65f-44f0-a003-721945210fcf": "2026-06-14T11:45:14.367Z"
+      "f8f1515d-b65f-44f0-a003-721945210fcf": "2026-06-14T11:45:14.367Z",
+      "b4c90f55-9033-4dbc-ab64-9ba4e96997c4": "2026-06-14T11:55:39.022Z",
+      "eb274ffa-b214-4893-953d-5c66f2b6a007": "2026-06-14T11:55:39.674Z",
+      "c7e4c96f-633b-489c-bbcf-f33b5f5c844e": "2026-06-14T11:55:39.674Z",
+      "4f7150ee-fe5e-4c84-9fb3-6ac5a2b2311f": "2026-06-14T11:55:39.674Z",
+      "fd41dd62-7f60-4419-8cda-861b59f49237": "2026-06-14T11:55:39.674Z",
+      "b2d3001c-930c-4810-874b-cc1ddd31462c": "2026-06-14T11:55:39.674Z",
+      "42f4d8da-d92c-4bb7-8215-6e4f52460108": "2026-06-14T11:55:39.674Z",
+      "6b2606ef-8364-4082-92e6-809214a37e89": "2026-06-14T11:55:39.674Z",
+      "d8816c1f-ecb4-4cac-a432-f0dba4ff8b93": "2026-06-14T11:55:39.674Z",
+      "96cccb59-09d3-48ec-b3d2-e577cbd9b303": "2026-06-14T11:55:46.617Z"
     },
     "rosters": {
       "b6a39fca-7753-4781-93f3-37e4a0d0f62b": "2026-06-14T11:30:54.397Z",
