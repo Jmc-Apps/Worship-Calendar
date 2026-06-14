@@ -9,67 +9,93 @@
     {
       "id": "0b32b209-97eb-4e41-b8ad-ba51fb4d9487",
       "name": "Worship Leader",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#ef4444",
+      "pdfColour": "#ef4444"
     },
     {
       "id": "ff571cb5-a88b-40f5-a009-be2af3c88457",
       "name": "Piano",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#14b8a6",
+      "pdfColour": "#14b8a6"
     },
     {
       "id": "040aeef7-ac44-43a5-94fb-6c1f08d9de65",
       "name": "Rhythm Guitar",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#14b8a6",
+      "pdfColour": "#14b8a6"
     },
     {
       "id": "76d0b962-3663-4110-b79e-b52c65b24b56",
       "name": "Electric Guitar",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#14b8a6",
+      "pdfColour": "#14b8a6"
     },
     {
       "id": "aee09d1d-554d-4d06-b604-1416e8e24887",
       "name": "Bass",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#22c55e",
+      "pdfColour": "#22c55e"
     },
     {
       "id": "c8dfb169-2d25-47b1-bfb0-bdfbf424e0ca",
       "name": "Drums",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#84cc16",
+      "pdfColour": "#84cc16"
     },
     {
       "id": "015c8323-fcf9-4282-8ca8-926d4046bbcf",
       "name": "Vocal",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#0ea5e9",
+      "pdfColour": "#0ea5e9"
     },
     {
       "id": "f7d64d1c-d15d-4bee-b76d-578bde2ac6f1",
       "name": "Sound",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#f97316",
+      "pdfColour": "#f97316"
     },
     {
       "id": "d798e957-625a-4908-8b2d-ec70b2c0a663",
       "name": "Visuals AM",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#f59e0b",
+      "pdfColour": "#f59e0b"
     },
     {
       "id": "284e10fd-4535-4ca6-ad89-489ea8b8b103",
       "name": "Deacon on Duty AM",
-      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda",
+      "pdfColor": "#f59e0b",
+      "pdfColour": "#f59e0b"
     },
     {
       "id": "8bed1612-e2e3-4b98-8c18-fd259842b6b0",
       "name": "Communion",
-      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda",
+      "pdfColor": "#0ea5e9",
+      "pdfColour": "#0ea5e9"
     },
     {
       "id": "8badf8b3-e675-4562-bb02-10280095f552",
       "name": "Visuals PM",
-      "ministryId": "default"
+      "ministryId": "default",
+      "pdfColor": "#6366f1",
+      "pdfColour": "#6366f1"
     },
     {
       "id": "167928cd-b75e-4451-8593-7365f0abb836",
       "name": "Deacon on Duty PM",
-      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+      "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda",
+      "pdfColor": "#3b82f6",
+      "pdfColour": "#3b82f6"
     }
   ],
   "templates": [
@@ -295,8 +321,8 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T11:55:51.276Z",
-    "appVersion": "2.86"
+    "lastClientMerge": "2026-06-14T12:39:59.776Z",
+    "appVersion": "2.90.1"
   },
   "_deleted": {
     "members": {},
