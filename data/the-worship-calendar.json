@@ -227,6 +227,24 @@
       "history": [],
       "maxPerMonth": 99,
       "limitServicesPerMonth": true
+    },
+    {
+      "id": "939b133e-a863-4942-a425-dbbc9f889830",
+      "name": "Chelandi Lyons",
+      "email": "chelandi@gonubiebaptist.co.za",
+      "password": "1405",
+      "role": "member",
+      "ministryIds": [
+        "65cac9bf-2771-4a09-a660-e82b89cbfe62"
+      ],
+      "roles": [
+        "Sunday School 8am Service",
+        "Sunday School 10am Service",
+        "Friday Night Duty"
+      ],
+      "notes": "",
+      "history": [],
+      "maxPerMonth": 99
     }
   ],
   "availability": [],
@@ -297,13 +315,13 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-14T07:36:17.561Z",
+    "lastSync": "2026-06-14T07:39:23.204Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
     "clientId": "266422265775-4i9tc727fp6j0filku502i8usn603ebo.apps.googleusercontent.com",
     "sender": "calendargbc7@gmail.com",
-    "connectedAt": "2026-06-11T22:27:14.348Z",
+    "connectedAt": "",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
   },
