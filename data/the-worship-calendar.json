@@ -377,7 +377,7 @@
       "limitServicesPerMonth": true
     }
   ],
-  "availability": {},
+  "availability": [],
   "rosters": [
     {
       "id": "b6a39fca-7753-4781-93f3-37e4a0d0f62b",
@@ -1425,7 +1425,7 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T08:00:48.407Z",
-    "appVersion": "2.68"
+    "lastClientMerge": "2026-06-14T08:09:20.828Z",
+    "appVersion": "2.70"
   }
 }
