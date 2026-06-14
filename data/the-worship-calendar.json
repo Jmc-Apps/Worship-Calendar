@@ -233,7 +233,7 @@
       "name": "Chelandi Lyons",
       "email": "chelandi@gonubiebaptist.co.za",
       "password": "1405",
-      "role": "member",
+      "role": "admin",
       "ministryIds": [
         "65cac9bf-2771-4a09-a660-e82b89cbfe62"
       ],
@@ -315,13 +315,13 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-14T07:39:23.204Z",
+    "lastSync": "2026-06-14T07:42:57.405Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
     "clientId": "266422265775-4i9tc727fp6j0filku502i8usn603ebo.apps.googleusercontent.com",
     "sender": "calendargbc7@gmail.com",
-    "connectedAt": "",
+    "connectedAt": "2026-06-14T07:41:06.093Z",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
   },
@@ -339,5 +339,15 @@
     "Communion": "#c2f3ff",
     "Deacon on Duty PM": "#ffffff"
   },
-  "familyGroups": []
+  "familyGroups": [
+    {
+      "id": "8cffe3ff-4a29-49e4-b5ae-e432191c0a94",
+      "name": "Lyons Family",
+      "memberIds": [
+        "ff5135ee-0d41-4e13-a453-fa55b4508b88",
+        "939b133e-a863-4942-a425-dbbc9f889830"
+      ],
+      "rule": "mustTogether"
+    }
+  ]
 }
