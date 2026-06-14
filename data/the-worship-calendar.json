@@ -70,6 +70,21 @@
       "id": "167928cd-b75e-4451-8593-7365f0abb836",
       "name": "Deacon on Duty PM",
       "ministryId": "4d3677e7-ab19-4929-8e4d-150b57363cda"
+    },
+    {
+      "id": "18e82d04-eb7f-4c5c-9661-e515d66640d7",
+      "name": "Sunday School 8am Service",
+      "ministryId": "65cac9bf-2771-4a09-a660-e82b89cbfe62"
+    },
+    {
+      "id": "e24ee7bc-b38f-4909-a640-853f9dc26871",
+      "name": "Sunday School 10am Service",
+      "ministryId": "65cac9bf-2771-4a09-a660-e82b89cbfe62"
+    },
+    {
+      "id": "f2fda99f-7b3f-4c8c-a406-2a9285370bfb",
+      "name": "Friday Night Duty",
+      "ministryId": "65cac9bf-2771-4a09-a660-e82b89cbfe62"
     }
   ],
   "templates": [
@@ -104,7 +119,10 @@
         "Deacon on Duty": 1,
         "Communion": 1,
         "Visuals PM": 1,
-        "Deacon on Duty PM": 1
+        "Deacon on Duty PM": 1,
+        "Sunday School 8am Service": 1,
+        "Sunday School 10am Service": 1,
+        "Friday Night Duty": 1
       },
       "roleMax": {
         "Worship Leader": 1,
@@ -119,7 +137,10 @@
         "Deacon on Duty": 1,
         "Communion": 1,
         "Visuals PM": 1,
-        "Deacon on Duty PM": 1
+        "Deacon on Duty PM": 1,
+        "Sunday School 8am Service": 1,
+        "Sunday School 10am Service": 1,
+        "Friday Night Duty": 1
       },
       "roleTimes": {
         "Visuals AM": "08:00, 10:00",
@@ -251,7 +272,10 @@
     ],
     "Deacon on Duty PM": [
       "Communion"
-    ]
+    ],
+    "Sunday School 8am Service": [],
+    "Sunday School 10am Service": [],
+    "Friday Night Duty": []
   },
   "ministries": [
     {
@@ -261,6 +285,10 @@
     {
       "id": "4d3677e7-ab19-4929-8e4d-150b57363cda",
       "name": "Deacons"
+    },
+    {
+      "id": "65cac9bf-2771-4a09-a660-e82b89cbfe62",
+      "name": "Children's Ministry"
     }
   ],
   "github": {
@@ -269,13 +297,13 @@
     "branch": "main",
     "path": "data/the-worship-calendar.json",
     "enabled": false,
-    "lastSync": "2026-06-13T11:57:09.394Z",
+    "lastSync": "2026-06-14T07:36:17.561Z",
     "tokenStored": "local-device-only"
   },
   "gmail": {
     "clientId": "266422265775-4i9tc727fp6j0filku502i8usn603ebo.apps.googleusercontent.com",
     "sender": "calendargbc7@gmail.com",
-    "connectedAt": "",
+    "connectedAt": "2026-06-11T22:27:14.348Z",
     "accessTokenStored": "local-device-only",
     "apiKeyStored": "local-device-only"
   },
@@ -292,5 +320,6 @@
     "Deacon on Duty AM": "#ffffff",
     "Communion": "#c2f3ff",
     "Deacon on Duty PM": "#ffffff"
-  }
+  },
+  "familyGroups": []
 }
