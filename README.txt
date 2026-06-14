@@ -1,11 +1,16 @@
-The Worship Calendar v2.66
+The Worship Calendar v2.67
 
 Changes:
-- Added Family / Linked Member Groups in the Members tab.
-- Admins can create linked groups such as families and assign members to those groups.
-- Added Family / Linked Member Rostering option in Settings: Off, Prefer together, or Keep together where possible.
-- Roster generation now prioritises linked family/group members onto the same service/date block when possible.
-- All existing roster rules are still respected: availability, roles, ministries, monthly limits, compatibility, same-date blocking and published rosters.
+- Changed linked member rostering from one global setting to a per-group setting.
+- Each Family / Linked Member Group now has its own rostering rule:
+  * No special rule
+  * Prefer together
+  * Keep together where possible
+  * Must serve together
+  * Must not serve together
+- Removed the global Family / Linked Member Rostering panel from Settings.
+- Roster generation now applies each linked group's own rule.
+- Existing roster rules are still respected: availability, ministries, roles, monthly limits, compatible roles, same-date blocking and published rosters.
 - Removed icon.svg from the package and cache references.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
