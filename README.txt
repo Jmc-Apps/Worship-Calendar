@@ -1,16 +1,15 @@
-The Worship Calendar v2.87
+The Worship Calendar v2.88
 
 Change:
-- Improved the PDF row colour picker for roles.
-- The current colour preview block is larger.
-- Replaced the browser spectrum-style picker with a fixed colour palette.
-- Palette colours display at 50% opacity to better represent the PDF row colour.
-- Selected colour has a stronger border.
-- Colours are saved to the existing role PDF colour fields.
+- Converted the PDF row colour picker into a pop-up palette.
+- Role rows now show only one larger colour preview block.
+- Clicking the preview opens a palette pop-up.
+- Palette colour blocks are larger and display at 50% opacity.
+- Removed the spread-out inline colour palette layout.
+- Selected colour still saves to the existing PDF row colour fields.
 
 Preserved:
 - v2.86 compact Delete Services checklist.
-- Multiple service deletion and Delete All Past Services.
 - v2.82 deletion-aware merge protection.
 - v2.81 API setup persistence and GitHub 409 retry.
 - Previous login, Gmail, roster filtering, linked-member and merge-save features.
