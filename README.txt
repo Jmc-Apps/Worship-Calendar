@@ -1,12 +1,17 @@
-The Worship Calendar v2.79
+The Worship Calendar v2.80
 
 Fix:
-- Fixed welcome/login screen getting stuck on API setup upload.
-- The app now searches all local storage keys for saved GitHub setup details.
-- API setup import now supports more JSON formats and saves GitHub setup into multiple local keys for compatibility.
-- After API setup upload, the app immediately loads latest church data and opens the normal login form.
-- If API setup is already saved locally, the upload panel is hidden and Login loads church data directly.
-- Preserved v2.78 pre-login GitHub fallback, v2.77 Gmail panel fix, v2.75 login repair and all previous features.
+- Fixed API setup import rejecting the app's own backup/setup file format.
+- Login-screen API setup import now accepts more known app formats:
+  * top-level token/owner/repo/branch/path
+  * github, gitHub, githubConfig, githubAccess objects
+  * settings.github
+  * data.github
+  * database.github
+  * full database backups containing github settings
+  * Gmail settings in matching locations
+- Error message is now clearer if the file truly has no usable GitHub details.
+- Preserved v2.79 no-stuck welcome/API import workflow and all previous fixes.
 - Removed icon.svg from package/cache references.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
