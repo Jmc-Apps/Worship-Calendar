@@ -1,12 +1,15 @@
-The Worship Calendar v2.90.1
+The Worship Calendar v2.90.2
 
-Change:
-- Replaced the dark grey PDF row colour palette swatch with white.
-- White swatch has a visible border so it can be selected clearly.
-- Preserved the pop-up palette and 50% opacity colour display.
+Fix:
+- Fixed PDF export not using colours selected in the PDF row colour picker.
+- The picker and PDF export now use the same colour source.
+- Colour selections are saved both on the role record and in the legacy data.roleColors map.
+- Existing role colours are synced into data.roleColors on startup.
+- PDF export row backgrounds now read the selected role PDF colour first.
+- Preserved white palette swatch from v2.90.1.
 
 Preserved:
-- v2.90 fixed non-button colour swatches.
+- v2.90 non-button colour swatches.
 - v2.86 compact Delete Services checklist.
 - v2.82 deletion-aware merge protection.
 - v2.81 API setup persistence and GitHub 409 retry.
