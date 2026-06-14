@@ -1,10 +1,12 @@
-The Worship Calendar v2.69
+The Worship Calendar v2.70
 
 Fix:
-- Fixed v2.68 GitHub merge-save error: data.availability.find is not a function.
-- Availability is now preserved as the array format expected by the app.
-- Added defensive normalization if v2.68 already stored availability in object format locally or in GitHub JSON.
-- Kept the v2.68 merge-before-save GitHub workflow.
+- Fixed login failure after the v2.69 availability repair.
+- Added robust data-shape recovery before login.
+- Ensures the protected admin login remains available.
+- Repairs imported/synced data arrays safely on startup.
+- Keeps availability as the array format expected by the app.
+- Preserved v2.68 merge-before-save GitHub workflow.
 - Preserved v2.67 per-group linked member rostering rules.
 - Removed icon.svg from the package and cache references.
 - Main JavaScript syntax check passed.
