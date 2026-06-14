@@ -151,34 +151,6 @@
   ],
   "services": [
     {
-      "id": "0907093d-b731-4f3f-8b45-f64d782688cd",
-      "name": "Sunday Service",
-      "date": "2026-06-21",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
-      "id": "f8f1515d-b65f-44f0-a003-721945210fcf",
-      "name": "Sunday Service",
-      "date": "2026-06-28",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    },
-    {
       "id": "b4c90f55-9033-4dbc-ab64-9ba4e96997c4",
       "name": "Sunday Service",
       "date": "2026-07-05",
@@ -464,15 +436,18 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T11:30:57.599Z",
-    "appVersion": "2.82"
+    "lastClientMerge": "2026-06-14T11:45:23.508Z",
+    "appVersion": "2.84"
   },
   "_deleted": {
     "members": {},
     "ministries": {},
     "roles": {},
     "templates": {},
-    "services": {},
+    "services": {
+      "0907093d-b731-4f3f-8b45-f64d782688cd": "2026-06-14T11:45:14.277Z",
+      "f8f1515d-b65f-44f0-a003-721945210fcf": "2026-06-14T11:45:14.367Z"
+    },
     "rosters": {
       "b6a39fca-7753-4781-93f3-37e4a0d0f62b": "2026-06-14T11:30:54.397Z",
       "d1bf458d-8aa6-47e2-b98f-f84d645140fa": "2026-06-14T11:30:54.868Z",
