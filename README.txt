@@ -1,15 +1,12 @@
-The Worship Calendar v2.90
+The Worship Calendar v2.90.1
 
-Fix:
-- Fixed the PDF row colour palette still showing grey blocks.
-- Palette colour blocks are now plain clickable swatches, not normal buttons.
-- This prevents the app's global button styling from overriding the colour backgrounds.
-- Preview block is also a plain clickable swatch.
-- Colour swatches use visible 50% opacity backgrounds with !important inline styles.
-- Selected colour still saves to the existing PDF row colour fields.
+Change:
+- Replaced the dark grey PDF row colour palette swatch with white.
+- White swatch has a visible border so it can be selected clearly.
+- Preserved the pop-up palette and 50% opacity colour display.
 
 Preserved:
-- v2.88 pop-up PDF row colour picker.
+- v2.90 fixed non-button colour swatches.
 - v2.86 compact Delete Services checklist.
 - v2.82 deletion-aware merge protection.
 - v2.81 API setup persistence and GitHub 409 retry.
