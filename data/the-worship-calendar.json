@@ -175,7 +175,22 @@
       ]
     }
   ],
-  "services": [],
+  "services": [
+    {
+      "id": "dd02e109-c580-4329-894e-f09e1472d77b",
+      "name": "Sunday Service",
+      "date": "2026-06-21",
+      "times": [
+        "08:00",
+        "10:00",
+        "18:00"
+      ],
+      "time": "08:00",
+      "notes": "",
+      "template": "Sunday Service",
+      "type": "recurring"
+    }
+  ],
   "members": [
     {
       "id": "admin",
@@ -235,7 +250,88 @@
     }
   ],
   "availability": [],
-  "rosters": [],
+  "rosters": [
+    {
+      "id": "d3f331c2-4498-4770-824e-cc17e31d1ccf",
+      "serviceId": "dd02e109-c580-4329-894e-f09e1472d77b",
+      "serviceName": "Sunday Service",
+      "date": "2026-06-21",
+      "time": "08:00",
+      "times": [
+        "08:00",
+        "10:00",
+        "18:00"
+      ],
+      "published": false,
+      "assignments": [
+        {
+          "roleName": "Bass",
+          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
+          "memberName": "Jonathan Mc Glashan"
+        },
+        {
+          "roleName": "Communion",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Deacon on Duty AM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Deacon on Duty PM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Drums",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Electric Guitar",
+          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
+          "memberName": "Mason Lyons"
+        },
+        {
+          "roleName": "Piano",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Rhythm Guitar",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Sound",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Visuals AM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Visuals PM",
+          "memberId": "",
+          "memberName": "Unfilled"
+        },
+        {
+          "roleName": "Vocal",
+          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
+          "memberName": "Mason Lyons"
+        },
+        {
+          "roleName": "Worship Leader",
+          "memberId": "",
+          "memberName": "Unfilled"
+        }
+      ]
+    }
+  ],
   "compatibleRoles": {
     "2": [],
     "Worship Leader": [
@@ -321,7 +417,7 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T12:39:59.776Z",
+    "lastClientMerge": "2026-06-14T12:42:51.037Z",
     "appVersion": "2.90.1"
   },
   "_deleted": {
