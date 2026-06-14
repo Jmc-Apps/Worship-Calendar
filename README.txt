@@ -1,10 +1,12 @@
-The Worship Calendar v2.71
+The Worship Calendar v2.72
 
-Changes:
-- Added Connect Gmail button to the Email Team tab using the same connectGmail action as Settings.
-- Added API setup upload/import prompt on the Welcome/Login screen when GitHub API info is not saved on the device.
-- Team members viewing the Rosters tab now only see roster items for ministries they are assigned to.
-- Admin users can still see all rosters.
+Fix:
+- Fixed welcome screen getting stuck after Latest church data loaded.
+- Login button now becomes active after church data loads.
+- Clicking Login after data loads now moves to the normal username/password login form.
+- Preserved v2.71 Email Team Connect Gmail button.
+- Preserved v2.71 login screen API setup upload option.
+- Preserved v2.71 member roster ministry restriction.
 - Preserved v2.70 login/data-shape recovery.
 - Preserved v2.69 availability array fix.
 - Preserved v2.68 merge-before-save GitHub workflow.
