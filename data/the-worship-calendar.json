@@ -1423,15 +1423,20 @@
     "Communion": "#c2f3ff",
     "Deacon on Duty PM": "#ffffff"
   },
-  "familyGroups": [
-    {
-      "id": "39e1d1d1-aea7-4ab1-88e9-d95864dd072f",
-      "name": "test",
-      "memberIds": []
-    }
-  ],
+  "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T09:51:45.785Z",
-    "appVersion": "2.81"
+    "lastClientMerge": "2026-06-14T09:58:05.227Z",
+    "appVersion": "2.82"
+  },
+  "_deleted": {
+    "members": {},
+    "ministries": {},
+    "roles": {},
+    "templates": {},
+    "services": {},
+    "rosters": {},
+    "familyGroups": {
+      "39e1d1d1-aea7-4ab1-88e9-d95864dd072f": "2026-06-14T09:58:03.940Z"
+    }
   }
 }
