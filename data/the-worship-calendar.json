@@ -175,22 +175,7 @@
       ]
     }
   ],
-  "services": [
-    {
-      "id": "dd02e109-c580-4329-894e-f09e1472d77b",
-      "name": "Sunday Service",
-      "date": "2026-06-21",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "time": "08:00",
-      "notes": "",
-      "template": "Sunday Service",
-      "type": "recurring"
-    }
-  ],
+  "services": [],
   "members": [
     {
       "id": "admin",
@@ -250,88 +235,7 @@
     }
   ],
   "availability": [],
-  "rosters": [
-    {
-      "id": "d3f331c2-4498-4770-824e-cc17e31d1ccf",
-      "serviceId": "dd02e109-c580-4329-894e-f09e1472d77b",
-      "serviceName": "Sunday Service",
-      "date": "2026-06-21",
-      "time": "08:00",
-      "times": [
-        "08:00",
-        "10:00",
-        "18:00"
-      ],
-      "published": false,
-      "assignments": [
-        {
-          "roleName": "Bass",
-          "memberId": "b6c063a6-73eb-4060-ad17-5fc6112c7c94",
-          "memberName": "Jonathan Mc Glashan"
-        },
-        {
-          "roleName": "Communion",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Deacon on Duty PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Drums",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Electric Guitar",
-          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-          "memberName": "Mason Lyons"
-        },
-        {
-          "roleName": "Piano",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Rhythm Guitar",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Sound",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals AM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Visuals PM",
-          "memberId": "",
-          "memberName": "Unfilled"
-        },
-        {
-          "roleName": "Vocal",
-          "memberId": "ff5135ee-0d41-4e13-a453-fa55b4508b88",
-          "memberName": "Mason Lyons"
-        },
-        {
-          "roleName": "Worship Leader",
-          "memberId": "",
-          "memberName": "Unfilled"
-        }
-      ]
-    }
-  ],
+  "rosters": [],
   "compatibleRoles": {
     "2": [],
     "Worship Leader": [
@@ -417,8 +321,8 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T12:42:51.037Z",
-    "appVersion": "2.90.1"
+    "lastClientMerge": "2026-06-14T13:12:49.431Z",
+    "appVersion": "2.94"
   },
   "_deleted": {
     "members": {},
@@ -437,7 +341,8 @@
       "42f4d8da-d92c-4bb7-8215-6e4f52460108": "2026-06-14T11:55:39.674Z",
       "6b2606ef-8364-4082-92e6-809214a37e89": "2026-06-14T11:55:39.674Z",
       "d8816c1f-ecb4-4cac-a432-f0dba4ff8b93": "2026-06-14T11:55:39.674Z",
-      "96cccb59-09d3-48ec-b3d2-e577cbd9b303": "2026-06-14T11:55:46.617Z"
+      "96cccb59-09d3-48ec-b3d2-e577cbd9b303": "2026-06-14T11:55:46.617Z",
+      "dd02e109-c580-4329-894e-f09e1472d77b": "2026-06-14T13:12:45.919Z"
     },
     "rosters": {
       "b6a39fca-7753-4781-93f3-37e4a0d0f62b": "2026-06-14T11:30:54.397Z",
@@ -451,7 +356,8 @@
       "5a3e3b92-1275-4ba9-acd5-28bf483bf694": "2026-06-14T11:30:54.869Z",
       "6c8da2d8-9847-4d2b-af5e-fed5296cee43": "2026-06-14T11:30:54.869Z",
       "5ade9590-56f2-4152-b53c-d1d2a9703e77": "2026-06-14T11:30:54.869Z",
-      "82026c1e-a6a2-49e9-b37d-dfd8641347ed": "2026-06-14T11:30:54.869Z"
+      "82026c1e-a6a2-49e9-b37d-dfd8641347ed": "2026-06-14T11:30:54.869Z",
+      "d3f331c2-4498-4770-824e-cc17e31d1ccf": "2026-06-14T13:12:45.919Z"
     },
     "familyGroups": {
       "39e1d1d1-aea7-4ab1-88e9-d95864dd072f": "2026-06-14T09:58:03.940Z"
