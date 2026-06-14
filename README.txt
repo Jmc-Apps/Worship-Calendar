@@ -1,12 +1,14 @@
-The Worship Calendar v2.77
+The Worship Calendar v2.78
 
 Fix:
-- Removed duplicate Gmail Connection panels on the Email Team tab.
-- Ensures only one Gmail Connection section appears.
-- Kept the visible Connect Gmail button on Email Team using the same connectGmail() action as Settings.
-- Preserved v2.76 Email Team Gmail feature.
-- Preserved v2.75 robust login repair.
-- Preserved API setup import, welcome screen fix, roster ministry filtering, data recovery, availability fix, merge-before-save, and linked member rules.
+- Fixed pre-login GitHub data loading when data.github is empty or incomplete but a local imported API setup exists.
+- Pre-login loading now merges local GitHub access setup with data.github before checking settings.
+- ghConfig now falls back to locally imported GitHub setup.
+- Login welcome screen now uses the merged GitHub settings to load the latest church JSON.
+- After loading GitHub data, local GitHub/Gmail access settings are preserved.
+- After importing the API setup file, the app immediately saves it locally and enables pre-login loading.
+- Preserved v2.77 Email Team duplicate Gmail panel fix.
+- Preserved v2.75 robust login repair and all previous features.
 - Removed icon.svg from package/cache references.
 - Main JavaScript syntax check passed.
 - ZIP cleanup: only this README.txt is included.
