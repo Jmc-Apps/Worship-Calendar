@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>The Worship Calendar v2.70</title>
+<title>The Worship Calendar v2.71</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#102a43;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#d9e2ec;color:#102a43;cursor:pointer}.primary,.active{background:#243b53;color:white}input,select,textarea{width:100%;padding:11px;border:1px solid #bcccdc;border-radius:10px;background:white;margin:5px 0}textarea{min-height:70px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#243b53,#486581)}.loginCard{width:min(480px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0004;text-align:center}.logo{max-width:115px;max-height:90px}.topbar{background:#243b53;color:white;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 18px}.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}.sidebar{background:white;border-right:1px solid #d9e2ec;padding:14px;display:flex;flex-direction:column;gap:8px}.sidebar button{text-align:left}.content{padding:24px;max-width:1200px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card,.panel{background:white;border:1px solid #d9e2ec;border-radius:18px;padding:18px;box-shadow:0 8px 24px #102a4312;margin-bottom:12px}.card small{display:block;color:#627d98;margin-bottom:8px}.card strong{font-size:1.25rem}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:white;border:1px solid #d9e2ec;border-radius:14px;padding:12px;margin:8px 0}.inline,.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip.on{background:#2f855a;color:white}table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.hint,.notice{color:#52606d}.badge{display:inline-block;background:#e6fffa;color:#234e52;border:1px solid #81e6d9;border-radius:999px;padding:4px 10px;font-size:.85rem;margin-top:6px}.warn{background:#fffaf0;border-color:#fbd38d}.danger{background:#fff5f5;border-color:#feb2b2}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:70px;background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:8px}.small{font-size:.85rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #d9e2ec}.content{padding:14px}.sidebar button{white-space:nowrap}.row{align-items:flex-start;flex-direction:column}table{font-size:.9rem}.calendar{grid-template-columns:1fr}}
 
@@ -40,7 +40,7 @@
 
 .badge:empty,.chip:empty,.pill:empty,.mode:empty{display:none!important}
 
-/* v2.70 approved cosmetic refresh */
+/* v2.71 approved cosmetic refresh */
 :root{
   --twc-forest-950:#081c15;
   --twc-forest-900:#123524;
@@ -147,7 +147,7 @@ main > br{
 }
 
 
-/* v2.70 approved light-grey cosmetic refresh and top-gap fix */
+/* v2.71 approved light-grey cosmetic refresh and top-gap fix */
 :root{
   --twc-grey-950:#1f2937;
   --twc-grey-900:#2f343a;
@@ -317,7 +317,7 @@ button[onclick*="submitChangesOnline"]{
 }
 
 
-/* v2.70 approved button styling: normal light grey, selected dark grey */
+/* v2.71 approved button styling: normal light grey, selected dark grey */
 button,
 button.primary,
 .primary,
@@ -373,7 +373,7 @@ button:disabled,
 }
 
 
-/* v2.70 login background and version badge readability */
+/* v2.71 login background and version badge readability */
 .login,
 body:has(.login){
   background:#2f343a!important;
@@ -396,7 +396,7 @@ body:has(.login){
 }
 
 </style><script src="https://accounts.google.com/gsi/client" async defer>
-/* v2.70 max-services display + GitHub SHA save fixes */
+/* v2.71 max-services display + GitHub SHA save fixes */
 function twcMaxServicesDisplay(value){
   let n=0;
   if(value!==undefined&&value!==null&&String(value).trim()!==""){
@@ -475,7 +475,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.70",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-70-local";
+const VERSION="2.71",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-71-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -520,7 +520,7 @@ function cleanDemoTeamMembersV175(){
     }
     localStorage.setItem("twc-v175-demo-members-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.70 demo member cleanup failed",e)}
+  }catch(e){console.error("v2.71 demo member cleanup failed",e)}
 }
 
 function cleanAllDemoDataOnceV176(){
@@ -540,7 +540,7 @@ function cleanAllDemoDataOnceV176(){
     data.gmail=keepGmail;
     localStorage.setItem("twc-v176-demo-data-cleaned","yes");
     if(typeof save==="function")save();
-  }catch(e){console.error("v2.70 demo data cleanup failed",e)}
+  }catch(e){console.error("v2.71 demo data cleanup failed",e)}
 }
 
 function confirmDeleteAction(type){
@@ -627,7 +627,7 @@ function twcRemoveDemoData(){
   data.services=(data.services||[]).filter(x=>!String(x.name||"").toLowerCase().includes("demo")&&!String(x.name||"").toLowerCase().includes("sample"));
 }
 
-/* v2.70 safe welcome screen before login */
+/* v2.71 safe welcome screen before login */
 let twcLoginScreenReady=false;
 
 function twcWelcomeScreen(){
@@ -2418,7 +2418,7 @@ function exportRostersPDF(){
   let list=data.rosters.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>(a.date+(a.time||((a.times||[])[0])||"")).localeCompare(b.date+(b.time||((b.times||[])[0])||"")));
   if(!list.length){alert("No rosters found in that date range.");return}
   let ministries=exportSelectedMinistryIds(list);
-  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.70</title><style>
+  let htmlDoc=`<!doctype html><html><head><meta charset="utf-8"><title>The Worship Calendar v2.71</title><style>
 @page{size:A4 landscape;margin:8mm}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;padding:10px;background:white}
 button{margin-bottom:10px;padding:8px 12px}
@@ -2489,10 +2489,10 @@ button{margin-bottom:10px;padding:8px 12px}
   w.document.close();
   setTimeout(()=>w.print(),500);
 }
-function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.70-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
+function uploadLogo(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{data.settings.logo=reader.result;render()};reader.readAsDataURL(f)}function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="the-worship-calendar-v2.71-local-data.json";a.click();URL.revokeObjectURL(url)}function resetApp(){if(confirm("Reset all app data?")){localStorage.removeItem(KEY);sessionStorage.removeItem("twc-user");location.reload()}}
 if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});render();
 
-/* v2.70 roster generation repair: final overrides */
+/* v2.71 roster generation repair: final overrides */
 function twc51Times(s){return (s&&s.times&&s.times.length?s.times:[(s&&s.time)||""]).filter(Boolean)}
 function twc51Month(dateStr){return (dateStr||"").slice(0,7)}
 function twc51Available(memberId,serviceId){
@@ -2547,7 +2547,7 @@ function twcChurchName(){
   return ((data.settings&&data.settings.churchName)||"The Worship Calendar").trim()||"The Worship Calendar";
 }
 
-/* v2.70 real login-details email workflow overrides */
+/* v2.71 real login-details email workflow overrides */
 function twcBase64UrlUnicode(str){
   return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
@@ -2736,7 +2736,7 @@ function deleteMember(mid){
 }
 
 
-/* v2.70 Members tab login-details email button */
+/* v2.71 Members tab login-details email button */
 function twcIsProtectedAdminForLoginEmail(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2766,7 +2766,7 @@ function twcSendLoginDetailsFromMembers(memberId){
 }
 
 
-/* v2.70 Edit Member workflow */
+/* v2.71 Edit Member workflow */
 function twcIsProtectedAdminForEdit(member){
   return !!(member&&(member.id==="admin"||String(member.email||"").toLowerCase()==="admin"));
 }
@@ -2868,7 +2868,7 @@ function twcSaveEditedMember(memberId){
 }
 
 
-/* v2.70 Personalized roster + Gmail restore fixes */
+/* v2.71 Personalized roster + Gmail restore fixes */
 function twcProtectedSystemAdminId(){
   return "admin";
 }
@@ -2919,7 +2919,7 @@ async function twcRestoreGmailConnection(){
 }
 
 
-/* v2.70 compatible-role roster warning helpers */
+/* v2.71 compatible-role roster warning helpers */
 function twcNormalizeRoleNameForCompat(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -2968,7 +2968,7 @@ function twcMemberHasIncompatibleAssignments(assignments,memberId){
 }
 
 
-/* v2.70 max services per month: blank/0 = unlimited */
+/* v2.71 max services per month: blank/0 = unlimited */
 function twcParseMaxServicesPerMonth(value){
   if(value===undefined||value===null)return 0;
   let s=String(value).trim();
@@ -2988,7 +2988,7 @@ function twcMemberMaxLimit(member){
 
 
 
-/* v2.70 main app patch */
+/* v2.71 main app patch */
 function twcV232MaxDisplay(value){
   var n = 0;
   if(value !== undefined && value !== null && String(value).trim() !== ""){
@@ -3030,7 +3030,7 @@ function twcV232DeleteTemplateButton(template){
 }
 
 
-/* v2.70 max service limit checkbox + Gmail 401 retry */
+/* v2.71 max service limit checkbox + Gmail 401 retry */
 function twcV233HasServiceLimit(member){
   return !!(member && (member.limitServicesPerMonth===true || (Number(member.maxPerMonth||0)>0 && member.limitServicesPerMonth!==false)));
 }
@@ -3114,7 +3114,7 @@ async function twcV233SendWith401Retry(sendFn){
 }
 
 
-/* v2.70 member-card monthly limit controls */
+/* v2.71 member-card monthly limit controls */
 function twcV234MemberLimitControls(member){return "";}
 
 function twcV234UpdateMemberLimit(memberId){
@@ -3141,7 +3141,7 @@ function twcV234UpdateMemberLimit(memberId){
 }
 
 
-/* v2.70 max-services numeric + compatible-role warning helpers */
+/* v2.71 max-services numeric + compatible-role warning helpers */
 function twcV235ParseMax(value){
   var n=parseInt(value||0,10);
   return (!Number.isFinite(n)||isNaN(n)||n<0)?0:n;
@@ -3184,7 +3184,7 @@ function twcV235MemberHasIncompatibleMultipleRoles(assignments,memberId){
 }
 
 
-/* v2.70 roster warning compatibility patch */
+/* v2.71 roster warning compatibility patch */
 function twcV236NormRole(roleName){
   return String(roleName||"").trim().toLowerCase();
 }
@@ -3258,7 +3258,7 @@ function twcV236RoleCompatibleFromRoleRecords(roleA,roleB){
 }
 
 
-/* v2.70 exact warning compatibility helpers */
+/* v2.71 exact warning compatibility helpers */
 function twcV237NormRoleName(x){return String(x||"").trim().toLowerCase();}
 function twcV237RoleByAny(value){
   value=String(value||"");
@@ -3335,7 +3335,7 @@ function twcV237MemberDuplicateCount(assignments,memberId){
 }
 
 
-/* v2.70 robust role compatibility checker for roster warnings */
+/* v2.71 robust role compatibility checker for roster warnings */
 function twcV238RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV238RoleRecord(value){
   value=String(value||"");
@@ -3425,7 +3425,7 @@ function twcV238MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.70 exact compatibility warning fix */
+/* v2.71 exact compatibility warning fix */
 function twcV239RoleKey(value){return String(value||"").trim().toLowerCase();}
 function twcV239RoleRecord(value){
   value=String(value||"");
@@ -3533,7 +3533,7 @@ function twcV239MemberHasIncompatibleDuplicate(assignments,memberId){
 }
 
 
-/* v2.70 roster improvements */
+/* v2.71 roster improvements */
 function twcV240IsProtectedAdminMember(member){
   if(!member)return false;
   return String(member.name||"").trim().toLowerCase()==="admin" ||
@@ -3605,7 +3605,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.70 clean fair monthly multi-person role balancing */
+/* v2.71 clean fair monthly multi-person role balancing */
 
 
 
@@ -3626,7 +3626,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.70 remaining-capacity fair multi-person role balancing */
+/* v2.71 remaining-capacity fair multi-person role balancing */
 
 
 
@@ -3647,7 +3647,7 @@ function twcV240ClearProtectedAdminAssignments(){
 
 
 
-/* v2.70 active generator and remaining-capacity balancing fix */
+/* v2.71 active generator and remaining-capacity balancing fix */
 function twcV244ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3748,7 +3748,7 @@ function twcV244CandidateSort(role,service,plannedAssignments){
 
 
 
-/* v2.70 month-aware batch roster planner */
+/* v2.71 month-aware batch roster planner */
 function twcV245ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -3953,7 +3953,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.70 clean template role order controls */
+/* v2.71 clean template role order controls */
 function twcV253TemplateById(templateId){
   return (data.templates||[]).find(function(t){return t.id===templateId;})||null;
 }
@@ -4041,7 +4041,7 @@ function twcV253RoleOrderButtons(templateId,roleName){
 }
 
 
-/* v2.70 same-date rostering block rules */
+/* v2.71 same-date rostering block rules */
 function twcV254ServiceSortKey(service){
   return String((service&&service.date||"")+(service&&service.time||((service&&service.times||[])[0])||""));
 }
@@ -4224,7 +4224,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.70 member availability-page max services control */
+/* v2.71 member availability-page max services control */
 function twcV255SetMyMaxPerMonth(value){
   if(!user || !user.memberId){
     alert("Please log in as a team member first.");
@@ -4250,7 +4250,7 @@ function twcV255SetMyMaxPerMonth(value){
 }
 
 
-/* v2.70 full database backup and restore */
+/* v2.71 full database backup and restore */
 function twcV256DatabaseBackupObject(){
   return {
     app:"The Worship Calendar",
@@ -4325,7 +4325,7 @@ function twcV256ImportDatabaseBackupFile(file){
 }
 
 
-/* v2.70 template ministry selection and service name auto-fill */
+/* v2.71 template ministry selection and service name auto-fill */
 function twcV257TemplateUsesMinistry(template,ministryId){
   if(!template)return false;
   if(!Array.isArray(template.ministryIds)){
@@ -4357,7 +4357,7 @@ function twcV257ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.70 override template role inclusion to respect selected ministries */
+/* v2.71 override template role inclusion to respect selected ministries */
 function twcV245RolesForService(service){
   var template=(data.templates||[]).find(function(t){return t.name===service.template;});
   var roles=(data.roles||[]).filter(function(role){
@@ -4372,7 +4372,7 @@ function twcV245RolesForService(service){
 }
 
 
-/* v2.70 default service name from pre-selected template */
+/* v2.71 default service name from pre-selected template */
 function twcV258DefaultServiceName(){
   var first=(data.templates||[])[0];
   return first&&first.name?first.name:"";
@@ -4383,7 +4383,7 @@ function twcV258ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.70 role PDF colours and PDF template sort order */
+/* v2.71 role PDF colours and PDF template sort order */
 function twcV259RoleColor(roleName){
   data.roleColors=data.roleColors||{};
   var val=data.roleColors[roleName]||"#d9eef3";
@@ -4431,7 +4431,7 @@ function twcV259PdfRoleOrder(rosters,ministryId){
 }
 
 
-/* v2.70 services form template pre-load */
+/* v2.71 services form template pre-load */
 function twcV262TemplateServiceTimes(template){
   if(!template)return "";
   var values=[];
@@ -4471,13 +4471,13 @@ function twcV262ServiceTemplateChanged(templateName){
 }
 
 
-/* v2.70 compatibility delegates */
+/* v2.71 compatibility delegates */
 function twcV257ServiceTemplateChanged(templateName){return twcV262ServiceTemplateChanged(templateName);}
 function twcV258ServiceTemplateChanged(templateName){return twcV262ServiceTemplateChanged(templateName);}
 function twcV258DefaultServiceName(){return twcV262DefaultServiceName();}
 
 
-/* v2.70 dashboard team-member count excludes protected admin */
+/* v2.71 dashboard team-member count excludes protected admin */
 function twcV263DashboardTeamMemberCount(){
   return (data.members||[]).filter(function(member){
     if(typeof twcV240IsProtectedAdminMember==="function")return !twcV240IsProtectedAdminMember(member);
@@ -4488,7 +4488,7 @@ function twcV263DashboardTeamMemberCount(){
 }
 
 
-/* v2.70 Family / Linked Member Groups */
+/* v2.71 Family / Linked Member Groups */
 function twcV266FamilyGroups(){
   data.familyGroups=data.familyGroups||[];
   return data.familyGroups;
@@ -4720,7 +4720,7 @@ function makeRostersForRange(){
 }
 
 
-/* v2.70 Per-group Family / Linked Member Rostering Rules */
+/* v2.71 Per-group Family / Linked Member Rostering Rules */
 function twcV267GroupRuleOptions(){
   return [
     {value:"none",label:"No special rule"},
@@ -4935,7 +4935,7 @@ function twcV267BuildSameDateBlockForSingleService(serviceId){
   var rosters=twcV267BuildRostersForServices(services);
   return rosters.find(function(r){return r.serviceId===serviceId;})||rosters[0];
 }
-/* Override active generation to include v2.70 per-group linked member rules */
+/* Override active generation to include v2.71 per-group linked member rules */
 function twcV245BuildRostersForServices(serviceList){return twcV267BuildRostersForServices(serviceList);}
 function twcV254BuildRostersForServices(serviceList){return twcV267BuildRostersForServices(serviceList);}
 function twcV266BuildRostersForServices(serviceList){return twcV267BuildRostersForServices(serviceList);}
@@ -4996,11 +4996,11 @@ function makeRostersForRange(){
 }
 
 
-/* v2.70 Merge-before-save GitHub workflow */
+/* v2.71 Merge-before-save GitHub workflow */
 function twcV268Clone(obj){try{return JSON.parse(JSON.stringify(obj||{}));}catch(e){return obj||{};}}
 function twcV268Now(){return new Date().toISOString();}
 function twcV268CleanPath(path){return String(path||"").replace(/^\/+/,"");}
-function twcV268EnsureMergeMeta(db){db=db||{};db._mergeMeta=db._mergeMeta||{};db._mergeMeta.lastClientMerge=twcV268Now();db._mergeMeta.appVersion=(typeof VERSION!=="undefined"?VERSION:"v2.70");return db;}
+function twcV268EnsureMergeMeta(db){db=db||{};db._mergeMeta=db._mergeMeta||{};db._mergeMeta.lastClientMerge=twcV268Now();db._mergeMeta.appVersion=(typeof VERSION!=="undefined"?VERSION:"v2.71");return db;}
 function twcV268ArrayByIdMerge(remoteArr,localArr,keyName){
   keyName=keyName||"id";
   var output=[], seen={};
@@ -5119,7 +5119,7 @@ async function saveGithub(){return await submitChangesOnline();}
 async function pushToGitHub(){return await submitChangesOnline();}
 
 
-/* v2.70 Availability-array safe merge fix */
+/* v2.71 Availability-array safe merge fix */
 function twcV269AvailabilityKey(item){
   if(!item)return "";
   return [
@@ -5215,16 +5215,16 @@ async function twcV268MergeAndSaveToGitHub(){
   setTimeout(function(){twcV268SetSyncMessage("Latest GitHub data loaded, merged and saved successfully.","ok");},50);
   return merged;
 }
-/* Defensive startup normalization in case v2.70 already saved object-shaped availability locally */
+/* Defensive startup normalization in case v2.71 already saved object-shaped availability locally */
 try{
   if(typeof data!=="undefined" && data && !Array.isArray(data.availability)){
     data=twcV269NormalizeDatabaseShapes(data);
     if(typeof save==="function")save();
   }
-}catch(e){console.warn("v2.70 availability normalization warning",e);}
+}catch(e){console.warn("v2.71 availability normalization warning",e);}
 
 
-/* v2.70 Login and data-shape recovery patch */
+/* v2.71 Login and data-shape recovery patch */
 function twcV270Array(value){
   if(Array.isArray(value))return value;
   if(!value)return [];
@@ -5352,5 +5352,198 @@ try{
     twcV270EnsureAdminMember();
     if(typeof save==="function")save();
   }
-}catch(e){console.warn("v2.70 startup repair warning",e);}
+}catch(e){console.warn("v2.71 startup repair warning",e);}
+
+
+/* v2.71 Email Team Gmail connect, login API import, and member roster ministry visibility */
+function twcV271GithubInfoSaved(){
+  try{
+    var g=ghConfig();
+    return !!(g&&g.token&&g.owner&&g.repo&&g.path);
+  }catch(e){return false;}
+}
+function twcV271GmailInfoSaved(){
+  try{
+    var g=gmailConfig();
+    return !!(g&&(g.clientId||g.apiKey||g.sender));
+  }catch(e){return false;}
+}
+function twcV271ApiInfoSaved(){
+  return twcV271GithubInfoSaved();
+}
+function twcV271LoginApiImportHtml(){
+  if(twcV271ApiInfoSaved())return "";
+  return `<div class="panel" style="margin-top:12px;text-align:left">
+    <h3>Online setup needed on this device</h3>
+    <p class="hint">This device does not have the GitHub/API setup saved yet. Import the API setup JSON file from your administrator, then log in.</p>
+    <div class="inline"><button type="button" onclick="twcV271ImportApiSetupButton()">Upload API Setup File</button></div>
+    <input id="twcV271ApiSetupFile" type="file" accept="application/json,.json" style="display:none" onchange="twcV271ImportApiSetupFile(this.files&&this.files[0])">
+  </div>`;
+}
+function twcV271ImportApiSetupButton(){
+  var input=document.getElementById("twcV271ApiSetupFile");
+  if(input){input.value="";input.click();return;}
+  if(typeof importApiBackupButton==="function")return importApiBackupButton();
+  if(typeof importGithubAccessSetupButton==="function")return importGithubAccessSetupButton();
+  alert("Import control not available.");
+}
+async function twcV271ImportApiSetupFile(file){
+  if(!file)return;
+  try{
+    var text=await file.text();
+    var obj=JSON.parse(text);
+    data.settings=data.settings||{};
+    if(obj.settings)obj=obj.settings;
+    if(obj.github||obj.gitHub||obj.githubConfig){
+      data.settings.github=obj.github||obj.gitHub||obj.githubConfig;
+    }
+    if(obj.gmail||obj.gmailConfig){
+      data.settings.gmail=obj.gmail||obj.gmailConfig;
+    }
+    if(obj.token||obj.owner||obj.repo||obj.path){
+      data.settings.github={
+        token:obj.token||"",
+        owner:obj.owner||"",
+        repo:obj.repo||"",
+        branch:obj.branch||"main",
+        path:obj.path||"data/the-worship-calendar.json"
+      };
+    }
+    if(obj.clientId||obj.apiKey||obj.sender){
+      data.settings.gmail=Object.assign({},data.settings.gmail||{},{
+        clientId:obj.clientId||((data.settings.gmail||{}).clientId)||"",
+        apiKey:obj.apiKey||((data.settings.gmail||{}).apiKey)||"",
+        sender:obj.sender||((data.settings.gmail||{}).sender)||""
+      });
+    }
+    save();
+    alert("API setup imported. You can now log in.");
+    if(typeof render==="function")render();
+  }catch(err){
+    console.error(err);
+    alert("Could not import API setup file: "+((err&&err.message)?err.message:String(err)));
+  }
+}
+/* Override login page so missing API info can be imported before login */
+function loginPage(){
+  var apiImport=twcV271LoginApiImportHtml();
+  return `<div class="login"><div class="loginCard">${typeof logo==="function"?logo():""}<h1>${APP}</h1><h2>${TAG}</h2><p class="badge">v${VERSION}</p><p class="hint"><br></p>
+    ${apiImport}
+    <form onsubmit="login(event)"><input id="loginEmail" placeholder="Email or username" autocomplete="username"><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password"><button class="primary" type="submit">Login</button></form>
+  </div></div>`;
+}
+/* Extra safety for apps that use welcome() instead of loginPage() */
+function twcV271LoginApiImportPanelForExistingScreens(){
+  setTimeout(function(){
+    try{
+      if(twcV271ApiInfoSaved())return;
+      var card=document.querySelector(".loginCard");
+      if(!card||document.getElementById("twcV271ApiSetupFile"))return;
+      var holder=document.createElement("div");
+      holder.innerHTML=twcV271LoginApiImportHtml();
+      var form=card.querySelector("form");
+      if(form)card.insertBefore(holder,form); else card.appendChild(holder);
+    }catch(e){}
+  },50);
+}
+try{twcV271LoginApiImportPanelForExistingScreens();}catch(e){}
+
+/* Email Team connect Gmail support */
+function twcV271EmailTeamConnectPanel(){
+  var connected=false;
+  try{connected=!!(gmailConfig()&&gmailConfig().accessToken);}catch(e){}
+  return `<div class="panel"><h3>Gmail Connection</h3>
+    <p class="hint">${connected?"Gmail is connected for sending team emails.":"Gmail is not connected on this device. Connect Gmail before sending team emails."}</p>
+    <div class="inline"><button type="button" onclick="connectGmail()">Connect Gmail</button><button type="button" onclick="testGmailConnection()">Test Gmail Connection</button></div>
+    <p id="emailTeamGmailStatus" class="syncStatus">${connected?"Gmail connected":"Gmail not connected"}</p>
+  </div>`;
+}
+function twcV271EnhanceEmailTeamHtml(html){
+  if(typeof html!=="string")return html;
+  if(html.indexOf("twcV271EmailTeamPanelAdded")>=0)return html;
+  return html.replace(/<h1[^>]*>\s*Email Team\s*<\/h1>/i, function(m){return m+`<span id="twcV271EmailTeamPanelAdded"></span>`+twcV271EmailTeamConnectPanel();});
+}
+if(typeof emailTeam==="function"){
+  var twcV271OriginalEmailTeam=emailTeam;
+  emailTeam=function(){
+    return twcV271EnhanceEmailTeamHtml(twcV271OriginalEmailTeam.apply(this,arguments));
+  };
+}
+
+/* Member roster ministry visibility */
+function twcV271CurrentMember(){
+  try{
+    if(!user||!user.memberId)return null;
+    return (data.members||[]).find(function(m){return m.id===user.memberId;})||null;
+  }catch(e){return null;}
+}
+function twcV271CurrentMemberMinistryIds(){
+  var m=twcV271CurrentMember();
+  if(!m)return [];
+  return Array.isArray(m.ministryIds)?m.ministryIds.slice():[];
+}
+function twcV271RoleMinistryId(roleName){
+  var role=(data.roles||[]).find(function(r){return r.name===roleName;});
+  if(role&&role.ministryId)return role.ministryId;
+  return ((data.ministries||[])[0]||{}).id||"";
+}
+function twcV271AssignmentAllowedForCurrentMember(assignment){
+  if(!assignment)return false;
+  if(!user||user.role==="admin")return true;
+  var allowed=twcV271CurrentMemberMinistryIds();
+  if(!allowed.length)return false;
+  return allowed.indexOf(twcV271RoleMinistryId(assignment.roleName))>=0;
+}
+function twcV271RosterAllowedForCurrentMember(roster){
+  if(!user||user.role==="admin")return true;
+  if(!roster)return false;
+  var assigns=(roster.assignments||[]).filter(twcV271AssignmentAllowedForCurrentMember);
+  return assigns.length>0;
+}
+function twcV271FilterRosterForCurrentMember(roster){
+  if(!roster||!user||user.role==="admin")return roster;
+  var clone=twcV268Clone?twcV268Clone(roster):JSON.parse(JSON.stringify(roster));
+  clone.assignments=(clone.assignments||[]).filter(twcV271AssignmentAllowedForCurrentMember);
+  return clone;
+}
+function twcV271RestrictRosterHtmlForMembers(html){
+  if(!html||!user||user.role==="admin")return html;
+  var allowedNames=(twcV271CurrentMemberMinistryIds().map(function(id){
+    var min=(data.ministries||[]).find(function(m){return m.id===id;});
+    return min?min.name:"";
+  }).filter(Boolean).join(", "));
+  return `<p class="hint"><b>Member view:</b> You are seeing only roster roles for your assigned ministries${allowedNames?": "+esc(allowedNames):"."}</p>`+html;
+}
+if(typeof rosters==="function"){
+  var twcV271OriginalRosters=rosters;
+  rosters=function(){
+    if(!user||user.role==="admin")return twcV271OriginalRosters.apply(this,arguments);
+    var originalDataRosters=data.rosters;
+    try{
+      data.rosters=(data.rosters||[]).filter(twcV271RosterAllowedForCurrentMember).map(twcV271FilterRosterForCurrentMember);
+      return twcV271RestrictRosterHtmlForMembers(twcV271OriginalRosters.apply(this,arguments));
+    }finally{
+      data.rosters=originalDataRosters;
+    }
+  };
+}
+/* If the app uses another roster render function name, wrap common alternatives */
+["rosterTab","renderRosters","rostersTab"].forEach(function(fn){
+  try{
+    if(typeof window!=="undefined"&&typeof window[fn]==="function"&&!window["twcV271Wrapped_"+fn]){
+      var old=window[fn];
+      window["twcV271Wrapped_"+fn]=true;
+      window[fn]=function(){
+        if(!user||user.role==="admin")return old.apply(this,arguments);
+        var originalDataRosters=data.rosters;
+        try{
+          data.rosters=(data.rosters||[]).filter(twcV271RosterAllowedForCurrentMember).map(twcV271FilterRosterForCurrentMember);
+          return twcV271RestrictRosterHtmlForMembers(old.apply(this,arguments));
+        }finally{
+          data.rosters=originalDataRosters;
+        }
+      };
+    }
+  }catch(e){}
+});
 </script>

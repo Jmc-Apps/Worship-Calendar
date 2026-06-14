@@ -1,11 +1,12 @@
-The Worship Calendar v2.70
+The Worship Calendar v2.71
 
-Fix:
-- Fixed login failure after the v2.69 availability repair.
-- Added robust data-shape recovery before login.
-- Ensures the protected admin login remains available.
-- Repairs imported/synced data arrays safely on startup.
-- Keeps availability as the array format expected by the app.
+Changes:
+- Added Connect Gmail button to the Email Team tab using the same connectGmail action as Settings.
+- Added API setup upload/import prompt on the Welcome/Login screen when GitHub API info is not saved on the device.
+- Team members viewing the Rosters tab now only see roster items for ministries they are assigned to.
+- Admin users can still see all rosters.
+- Preserved v2.70 login/data-shape recovery.
+- Preserved v2.69 availability array fix.
 - Preserved v2.68 merge-before-save GitHub workflow.
 - Preserved v2.67 per-group linked member rostering rules.
 - Removed icon.svg from the package and cache references.
