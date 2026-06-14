@@ -475,7 +475,7 @@ async function twcGithubSaveWithFreshSha(){
 </script>
 </head><body><div id="app"></div>
 <script>
-const VERSION="2.94",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-94-local";
+const VERSION="2.95",APP="The Worship Calendar",TAG="Plan • Schedule • Serve",KEY="the-worship-calendar-v2-95-local";
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
 const roleNames=["","","","",""," Guitar","","","","",""];
 const defaultRoles=[["",1,1],["",1,2],["",0,4],["",0,2],["",0,2],[" Guitar",1,1],["",1,2],["",1,2],["",1,2],["",1,3],["",0,2]].map(r=>({id:uid(),name:r[0],min:r[1],max:r[2]}));
@@ -7383,4 +7383,12 @@ setInterval(twcV294RemoveServiceDeletionPanelOutsideServices,700);
 setTimeout(twcV294RemoveServiceDeletionPanelOutsideServices,100);
 
 try{document.title="The Worship Calendar";}catch(e){}
+
+
+/* v2.95 App naming cleanup: browser/PWA title has no version number */
+try{
+  document.title="The Worship Calendar";
+  var titleEl=document.querySelector("title");
+  if(titleEl)titleEl.textContent="The Worship Calendar";
+}catch(e){}
 </script>
