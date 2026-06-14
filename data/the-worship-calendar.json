@@ -1423,9 +1423,15 @@
     "Communion": "#c2f3ff",
     "Deacon on Duty PM": "#ffffff"
   },
-  "familyGroups": [],
+  "familyGroups": [
+    {
+      "id": "39e1d1d1-aea7-4ab1-88e9-d95864dd072f",
+      "name": "test",
+      "memberIds": []
+    }
+  ],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T08:50:14.224Z",
-    "appVersion": "2.76"
+    "lastClientMerge": "2026-06-14T09:15:33.771Z",
+    "appVersion": "2.80"
   }
 }
