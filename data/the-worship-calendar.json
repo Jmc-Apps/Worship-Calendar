@@ -232,6 +232,22 @@
       "history": [],
       "maxPerMonth": 99,
       "limitServicesPerMonth": true
+    },
+    {
+      "id": "e696a616-4ca2-4005-9b8b-a03a17347196",
+      "name": "Meghan Aereboe",
+      "email": "megzun@gmail.com",
+      "password": "12345678",
+      "role": "member",
+      "ministryIds": [
+        "default"
+      ],
+      "roles": [
+        "Vocal"
+      ],
+      "notes": "",
+      "history": [],
+      "maxPerMonth": 2
     }
   ],
   "availability": [],
@@ -321,8 +337,8 @@
   },
   "familyGroups": [],
   "_mergeMeta": {
-    "lastClientMerge": "2026-06-14T13:12:49.431Z",
-    "appVersion": "2.94"
+    "lastClientMerge": "2026-06-17T08:34:17.790Z",
+    "appVersion": "2.80"
   },
   "_deleted": {
     "members": {},
